@@ -7,7 +7,6 @@ import styles from '../../styles/Layout.module.css';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
-  console.log(fid);
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -23,7 +22,6 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const fixture = _get(props, "data.0", {});
-  console.log(fixture);
   return (
     <div className={styles.container}>
       <Stack spacing={2}>
