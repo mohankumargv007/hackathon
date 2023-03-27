@@ -2,12 +2,11 @@ import Link from 'next/link';
 import _get from 'lodash/get';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { supabaseConnection } from '../../utils/supabase';
-import styles from '../../styles/Layout.module.css';
+import { supabaseConnection } from '../../../utils/supabase';
+import styles from '../../../styles/Layout.module.css';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
-  console.log(fid);
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -23,15 +22,15 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const fixture = _get(props, "data.0", {});
-  console.log(fixture);
   return (
     <div className={styles.container}>
       <Stack spacing={2}>
-        <h2>{fixture.name}</h2>
-        <h3>{fixture.type}</h3>
-        <img src={fixture.front_image} width="100%" />
-        <Link href={`/fixture/barcode/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Generate Bar Code</Button></Link>
-        <Link href={`/fixture/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
+        <p>4 way new format stand 125CM</p>
+        {`Bar code
+        |||||||||||||||||||||||||
+        |||||||||||||||||||||||||`}
+        <Button variant="contained">Print</Button>
+        <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
       </Stack>
     </div>
   )
