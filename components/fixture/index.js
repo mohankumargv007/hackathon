@@ -50,7 +50,7 @@ export default function Home(props) {
             onInputChange={(event, newInputName) => {
               setInputName(newInputName);
             }}
-            id="free-solo-demo"
+            id="search-fixture-name"
             autoComplete
             options={fixtures.map((option) => option.name)}
             renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
@@ -65,7 +65,7 @@ export default function Home(props) {
             onInputChange={(event, newInputType) => {
               setInputType(newInputType);
             }}
-            id="free-solo-demo"
+            id="search-fixture-type"
             autoComplete
             options={fixtures.map((option) => option.type)}
             renderInput={(params) => <TextField {...params} label="Filter via type" />}
