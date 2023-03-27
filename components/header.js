@@ -7,11 +7,20 @@ import { useRouter } from 'next/router'
 export default function Header() {
   const router = useRouter();
   let title = "SMT";
+  console.log(router.route);
   if(router.route === "/fixture/barcode/[fid]") {
     title = "Barcode Fixture";
   } else if (router.route === "/fixture/search") {
     title = "Select Fixture";
   } else if(router.route  === "/fixture/[fid]") {
+    title = "Review Fixture Details";
+  } else if (router.route  === "/merchandise/scan-fixture") {
+    title = "Scan Fixture";
+  } else if (router.route  === "/merchandise/search") {
+    title = "Select Fixture";
+  } else if (router.route  === "/merchandise/review") {
+    title = "Review Fixture Details";
+  } else if (router.route  === "/merchandise/scan-products") {
     title = "Review Fixture Details";
   }
   return (

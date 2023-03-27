@@ -1,15 +1,15 @@
 import * as React from 'react';
 import _get from 'lodash/get';
 import _cloneDeep from 'lodash/cloneDeep';
+import styles from '../../styles/Search.module.css';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import Card from './card';
-import styles from '../../styles/Search.module.css';
+import Card from '../../components/fixture/card';
 
 export default function Home(props) {
-  const allfixtures = _get(props, "data");
+  const allfixtures = _get(props, "data", []);
   let fixtures = _cloneDeep(allfixtures);
 
   const [name, setName] = React.useState('');
@@ -74,11 +74,13 @@ export default function Home(props) {
               renderInput={(params) => <TextField {...params} label="Filter via type" />}
             />
           </div>
-          <h3>Fixtures</h3>
           <div>
-            <Grid container spacing={1}>
-              {listItems}
-            </Grid>
+            <h3>Fixtures</h3>
+            <div>
+              <Grid container spacing={1}>
+                {listItems}
+              </Grid>
+            </div>
           </div>
         </Stack>
       </main>
