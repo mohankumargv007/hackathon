@@ -15,10 +15,7 @@ export async function getServerSideProps() {
 
 export default function Fixture(props) {
   return (
-    <FixtureProvider value={{
-      languageSelected: languageSelected,
-      setLanguageSelected: setLanguageSelected
-    }}>
+    <FixtureProvider>
       <SearchFixture {...props} />
     </FixtureProvider>
   )
