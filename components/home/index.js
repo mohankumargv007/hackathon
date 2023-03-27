@@ -8,7 +8,7 @@ export default function Home(props) {
     <div className={styles.container}>
       <main className={styles.main}>
         <Stack spacing={2} sx={{ width: "100%" }}>
-          <Link className={styles.btn} href="/searchFixture" passHref legacyBehavior>
+          <Link className={styles.btn} href="/fixture/search" passHref legacyBehavior>
             <Button variant="contained" className={styles.btn}>Barcode a fixtue</Button>
           </Link>
           <Button variant="contained" className={styles.btn}>Map Merchandise</Button>

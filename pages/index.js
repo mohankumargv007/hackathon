@@ -7,12 +7,12 @@ export async function getServerSideProps() {
   // Fetch data from external API
   const supabase = supabaseConnection();
 
-  let { data: test, error } = await supabase
-  .from('test')
-  .select('*');
+  let { data, error } = await supabase
+  .from('fixture_library')
+  .select('*')
 
   // Pass data to the page via props
-  return { props: { data: test } };
+  return { props: { data: data } };
 }
 
 export default function Home(props) {
