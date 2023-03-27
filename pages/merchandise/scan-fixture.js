@@ -1,16 +1,16 @@
 import Link from 'next/link';
 import _get from 'lodash/get';
+import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import styles from '../../styles/Layout.module.css';
 
 export default function Fixture(props) {
   return (
-    <div className={styles.container}>
+    <Box paddingX="20px" paddingY="40px">
       <Stack spacing={4}>
         <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
         <Link href={`/merchandise/review`} passHref legacyBehavior><Button variant="contained">Scan Fixture</Button></Link>
       </Stack>
-    </div>
+    </Box>
   )
 }
