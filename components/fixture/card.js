@@ -7,7 +7,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 export default function MuiCard(props) {
-  console.log(props);
   return (
     <Link href={`/fixture/${props.id}`} passHref legacyBehavior>
       <Card sx={{ maxWidth: 345 }}>

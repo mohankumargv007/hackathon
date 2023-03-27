@@ -6,10 +6,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router'
 export default function Header() {
   const router = useRouter();
-  console.log(router);
   let title = "SMT";
   if(router.route === "/fixture/barcode/[fid]") {
     title = "Barcode Fixture";
+  } else if (router.route === "/fixture/search") {
+    title = "Select Fixture";
+  } else if(router.route  === "/fixture/[fid]") {
+    title = "Review Fixture Details";
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
