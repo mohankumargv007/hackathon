@@ -1,5 +1,5 @@
 import { supabaseConnection } from '../../utils/supabase';
-import SearchFixture from '../../components/fixture/search';
+import SearchFixture from '../../components/merchandise/search';
 import { FixtureProvider } from '../../contexts/fixtureContext';
 
 export async function getServerSideProps() {

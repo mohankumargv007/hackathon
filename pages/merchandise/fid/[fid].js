@@ -3,7 +3,7 @@ import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { supabaseConnection } from '../../utils/supabase';
+import { supabaseConnection } from '../../../utils/supabase';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
@@ -28,8 +28,8 @@ export default function Fixture(props) {
         <h2>{fixture.name}</h2>
         <h3>{fixture.type}</h3>
         <img src={fixture.front_image} width="100%" />
-        <Link href={`/fixture/barcode/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Generate Bar Code</Button></Link>
-        <Link href={`/fixture/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
+        <Link href={`/merchandise/scan/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Confirm</Button></Link>
+        <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
       </Stack>
     </Box>
   )
