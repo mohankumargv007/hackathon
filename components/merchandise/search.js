@@ -9,9 +9,9 @@ import Card from './card';
 import styles from '../../styles/Search.module.css';
 
 const merchadiseTypes = [{
-    type: "Arms"
+    type: "Arm"
   }, {
-    type: "Prongs"
+    type: "Prong"
   }, {
     type: "Shelves"
   }];
@@ -19,7 +19,6 @@ const merchadiseTypes = [{
 export default function Home(props) {
   const allfixtures = _get(props, "data");
   let fixtures = _cloneDeep(allfixtures);
-
   const [name, setName] = React.useState('');
   const [inputName, setInputName] = React.useState('');
 
