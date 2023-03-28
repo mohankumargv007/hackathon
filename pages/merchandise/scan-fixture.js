@@ -31,8 +31,8 @@ const _onDetected = result => {
         <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
         <Button onClick = {handleScanner} variant="contained" >Scan Fixture</Button>
 
-      {scanner ? ( <Paper variant="outlined" style={{marginTop:30, width:640, height:320}}>
-      <Scanner onDetected={_onDetected}/>
+      {scanner ? ( <Paper variant="outlined" style={{display:"none"}}>
+      <Scanner onDetected={_onDetected} />
         </Paper>): null}
 
         <TextareaAutosize
