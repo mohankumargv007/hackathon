@@ -8,7 +8,7 @@ class Scanner extends Component {
         inputStream: {
           type: 'LiveStream',
           constraints: {
-            width: 640,
+            width: 320,
             height: 320,
             facingMode: 'environment',
           },
@@ -59,7 +59,6 @@ class Scanner extends Component {
 
 
     Quagga.onDetected(this._onDetected);
-    console.log("undeteced calling", this);
   }
 
   componentWillUnmount() {
@@ -67,7 +66,6 @@ class Scanner extends Component {
   }
 
   _onDetected = result => {
-    console.log(result,"fdgdfgdfg");
     this.props.onDetected(result)
   };
   

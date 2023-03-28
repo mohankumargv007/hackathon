@@ -54,7 +54,7 @@ const _onDetected = result => {
         <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
         <Button onClick = {handleScanner} variant="contained" >Scan Fixture</Button>
 
-        {scanner ? (<Paper variant="outlined" style={{marginTop:30, width:640, height:320}}>
+        {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
       <Scanner onDetected={_onDetected} />
         </Paper>): null}
 

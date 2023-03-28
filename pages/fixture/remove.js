@@ -26,7 +26,7 @@ export default function Fixture(props) {
       <Stack spacing={4}>
         <Button onClick = {handleScanner} variant="contained" >Scan Fixture</Button>
 
-      {scanner ? (<Paper variant="outlined" style={{marginTop:30, width:640, height:320}}>
+      {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
       <Scanner onDetected={_onDetected} />
         </Paper>): null}
 
