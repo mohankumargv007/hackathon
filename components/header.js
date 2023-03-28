@@ -24,7 +24,7 @@ export default function Header() {
     title = "Scan Products";
   } else if (router.route === "/fixture/remove") {
     title = "Remove Fixture";
-  } else if (router.route === "/fixture/remove/[fid") {
+  } else if (router.route === "/fixture/remove/[fid]") {
     title = "Remove Fixture";
   }
   return (
