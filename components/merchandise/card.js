@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 export default function MuiCard(props) {
   return (
-    <Link href={`/fixture/${props.id}`} passHref legacyBehavior>
+    <Link href={`/merchandise/fid/${props.id}`} passHref legacyBehavior>
       <Card sx={{ maxWidth: 345 }}>
         <CardMedia
           sx={{ height: 140 }}

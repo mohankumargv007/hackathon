@@ -12,16 +12,16 @@ export default function Header() {
     title = "Barcode Fixture";
   } else if (router.route === "/fixture/search") {
     title = "Select Fixture";
-  } else if(router.route  === "/fixture/[fid]") {
+  } else if(router.route === "/fixture/[fid]") {
     title = "Review Fixture Details";
-  } else if (router.route  === "/merchandise/scan-fixture") {
+  } else if (router.route === "/merchandise/scan-fixture") {
     title = "Scan Fixture";
-  } else if (router.route  === "/merchandise/search") {
+  } else if (router.route === "/merchandise/search") {
     title = "Select Fixture";
-  } else if (router.route  === "/merchandise/review") {
+  } else if (router.route === "/merchandise/fid/[fid]") {
     title = "Review Fixture Details";
-  } else if (router.route  === "/merchandise/scan-products") {
-    title = "Review Fixture Details";
+  } else if (router.route === "/merchandise/scan/[fid]") {
+    title = "Scan Products";
   }
   return (
     <Box sx={{ flexGrow: 1 }}>

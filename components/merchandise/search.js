@@ -8,6 +8,14 @@ import Grid from '@mui/material/Grid';
 import Card from './card';
 import styles from '../../styles/Search.module.css';
 
+const merchadiseTypes = [{
+    type: "Arms"
+  }, {
+    type: "Prongs"
+  }, {
+    type: "Shelves"
+  }];
+
 export default function Home(props) {
   const allfixtures = _get(props, "data");
   let fixtures = _cloneDeep(allfixtures);
@@ -69,9 +77,9 @@ export default function Home(props) {
                 setInputType(newInputType);
               }}
               id="search-fixture-type"
-              autoComplete
-              options={fixtures.map((option) => option.type)}
-              renderInput={(params) => <TextField {...params} label="Filter via type" />}
+              disableCloseOnSelect
+              options={merchadiseTypes.map((option) => option.type)}
+              renderInput={(params) => <TextField {...params} label="Filter via Type" />}
             />
           </div>
           <h3>Fixtures</h3>
