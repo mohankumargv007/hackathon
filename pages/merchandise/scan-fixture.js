@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
@@ -9,8 +11,26 @@ import Scanner from '../../utils/scanner'
 
 
 export default function Fixture(props) {
+  const router = useRouter();
   const [scanner,setScanner] = useState(false)
-const [results,setResults] = useState([])
+  const [results,setResults] = useState([])
+
+  useEffect(() => {
+    try {
+      if(results[0]) {
+        const code = _get(results, "0.codeResult.code");
+        if(code) {
+          const codearr = code.split("&");
+          const id = _get(codearr, "2");
+          if(id) {
+            router.push(`/merchandise/fid/${id}`);
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, [results]);
 
 const handleScanner = ( ) =>{
     setScanner(true)
