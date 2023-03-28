@@ -15,10 +15,13 @@ const [results,setResults] = useState([])
 const handleScanner = ( ) =>{
     setScanner(true)
 }
+// useEffect(() => {
+//   return () => {
+      
+//   }
+// }, [])
 
-// const _scan = () => {
-//   this.setState({ scanning: !this.state.scanning })
-// }
+
 
 const _onDetected = result => {
   setResults( [] )
@@ -31,9 +34,9 @@ const _onDetected = result => {
         <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
         <Button onClick = {handleScanner} variant="contained" >Scan Fixture</Button>
 
-      {scanner ? (<><p>scanner on</p> <div style={{display:"none"}}>
+        {scanner ? (<Paper variant="outlined" style={{marginTop:30, width:640, height:320}}>
       <Scanner onDetected={_onDetected} />
-        </div></>): null}
+        </Paper>): null}
 
         <TextareaAutosize
             style={{fontSize:32, width:320, height:100, marginTop:30}}

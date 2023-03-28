@@ -56,7 +56,10 @@ class Scanner extends Component {
         Quagga.start()
       },
     )
-    Quagga.onDetected(this._onDetected)
+
+
+    Quagga.onDetected(this._onDetected);
+    console.log("undeteced calling", this);
   }
 
   componentWillUnmount() {
@@ -64,8 +67,11 @@ class Scanner extends Component {
   }
 
   _onDetected = result => {
+    console.log(result,"fdgdfgdfg");
     this.props.onDetected(result)
-  }
+  };
+  
+//    this.props.onUnmount ? (()=>{Quagga.stop()}) : null
 
   render() {
     return <div id="interactive" className="viewport"/>
