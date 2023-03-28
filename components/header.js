@@ -22,6 +22,8 @@ export default function Header() {
     title = "Review Fixture Details";
   } else if (router.route === "/merchandise/scan/[fid]") {
     title = "Scan Products";
+  } else if (router.route === "/fixture/remove") {
+    title = "Remove Fixture"
   }
   return (
     <Box sx={{ flexGrow: 1 }}>

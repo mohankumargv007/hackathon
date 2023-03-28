@@ -14,7 +14,9 @@ export default function Home(props) {
           <Link className={styles.btn} href="/merchandise/scan-fixture" passHref legacyBehavior>
             <Button variant="contained" className={styles.btn}>Map Merchandise</Button>
           </Link>
-          <Button variant="contained" className={styles.btn}>Remove Fixture</Button>
+          <Link className={styles.btn} href="/fixture/remove" passHref legacyBehavior>
+            <Button variant="contained" className={styles.btn}>Remove Fixture</Button>
+          </Link>
           <Button variant="contained" className={styles.btn}>Map Adjacencies</Button>
           <Button variant="contained" className={styles.btn}>Reports</Button>
         </Stack>
