@@ -19,6 +19,7 @@ const merchadiseTypes = [{
 export default function Home(props) {
   const allfixtures = _get(props, "data");
   let fixtures = _cloneDeep(allfixtures);
+
   const [name, setName] = React.useState('');
   const [inputName, setInputName] = React.useState('');
 
@@ -76,7 +77,7 @@ export default function Home(props) {
                 setInputType(newInputType);
               }}
               id="search-fixture-type"
-              disableCloseOnSelect
+              autoComplete
               options={merchadiseTypes.map((option) => option.type)}
               renderInput={(params) => <TextField {...params} label="Filter via Type" />}
             />
