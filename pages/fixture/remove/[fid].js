@@ -8,7 +8,7 @@ import { supabaseConnection } from '../../../utils/supabase';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
-  console.log(fid);
+
   // Fetch data from external API
   const supabase = supabaseConnection();
 
@@ -22,8 +22,16 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
-  console.log(props);
   const fixture = _get(props, "data.0", {});
+  const removeFixture = (fixture) => async () => {
+    const url = `/api/fixture/remove/${fixture.id}`;
+    const options = {
+      method: "put"
+    };
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log(response, data);
+  }
   return (
     <Box paddingX={"20px"}>
       <Stack spacing={2}>
@@ -32,7 +40,7 @@ export default function Fixture(props) {
         <img src={fixture.front_image} width="100%" />
         <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>
 
-        <Link href={`/fixture/remove/success/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Yes</Button></Link>
+        <Button variant="contained" onClick={removeFixture(fixture)}>Yes</Button>
         <Link href={`/fixture/remove`} passHref legacyBehavior><Button variant="contained">No</Button></Link>
       </Stack>
     </Box>

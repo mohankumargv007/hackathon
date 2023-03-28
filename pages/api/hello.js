@@ -5,11 +5,12 @@ export default async function handler(req, res) {
   const supabase = supabaseConnection();
 
   try {
-    let { data: test, error } = await supabase
-    .from('test')
+    let { data, error } = await supabase
+    .from('fixture_library')
     .select('*')
 
-    res.status(200).json({data: test});
+    console.log(error);
+    res.status(200).json({data: data});
   } catch(error) {
     res.status(500).send();
   }

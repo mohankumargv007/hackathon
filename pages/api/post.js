@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
     try {
       let { data: test, error } = await supabase
-      .from('test')
+      .from('fixture_library')
       .select('*')
 
       res.status(200).json({data: test});
