@@ -7,10 +7,10 @@ import styles from '../../../styles/Layout.module.css';
 import Barcode from 'react-barcode';
 import { useEffect,useState } from 'react';
 
-
+const handlePrint = () =>{
+  window.print();
+}
 export async function getServerSideProps(context) {
-
-
   const { fid } = context.query;
 
   // Fetch data from external API
@@ -38,7 +38,7 @@ export default function Fixture(props) {
         
             <Barcode value={Code} />;
             
-        <Button onClick={window.print} variant="contained">Print</Button>
+        <Button onClick={handlePrint} variant="contained">Print</Button>
         <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
       </Stack>
     </div>
