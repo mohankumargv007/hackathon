@@ -32,21 +32,18 @@ export default function Fixture(props) {
     }
   }, [results]);
 
-const handleScanner = ( ) =>{
+  const handleScanner = ( ) =>{
     setScanner(true)
-}
-// useEffect(() => {
-//   return () => {
-      
-//   }
-// }, [])
+  }
+  // useEffect(() => {
+  //   return () => {
+  //   }
+  // }, [])
 
-
-
-const _onDetected = result => {
-  setResults( [] )
-  setResults([...results].concat([result]))
-}
+  const _onDetected = result => {
+    setResults( [] )
+    setResults([...results].concat([result]))
+  }
 
   return (
     <Box paddingX="20px" paddingY="40px">
@@ -60,8 +57,8 @@ const _onDetected = result => {
 
         <TextareaAutosize
             style={{fontSize:32, width:320, height:100, marginTop:30}}
-            rowsMax={4}
-            defaultValue={'No data scanned'}
+            rowsmax={4}
+            // defaultValue={'No data scanned'}
             value={results[0] ? results[0].codeResult.code : 'No data scanned'}
         />
       </Stack>
