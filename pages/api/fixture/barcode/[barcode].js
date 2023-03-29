@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       const { data, error } = await supabase
       .from('fixture_barcode')
       .insert([{
-        store_id: 6,
+        store_id: 60318,
         fixture_key: _get(body, "key"),
         counter: 3,
         fixture_barcode: barcode,

@@ -18,24 +18,41 @@ export async function getServerSideProps(context) {
   // Fetch data from external API
   const supabase = supabaseConnection();
 
-  let { data, error } = await supabase
+  let { data: fldata, error: flerror } = await supabase
   .from('fixture_library')
   .select('*')
   .eq("id", fid)
 
+  const fixture_library = _get(fldata, "0", {});
+
+  let { data: fbdata, error: fberror } = await supabase
+  .from('fixture_barcode')
+  .select('*')
+  .eq("store_id", 60318)
+  .eq("fixture_key", fixture_library.key)
+  .order("counter", {ascending: false})
+  .range(0,0)
+
+  const fixture_barcode = _get(fbdata, '0', {});
+
   // Pass data to the page via props
-  return { props: { data: data } };
+  return { props: {
+    data: fixture_library,
+    error: flerror,
+    fbdata: fixture_barcode,
+    fberror: fberror
+  } };
 }
 
 export default function Fixture(props) {
-  const data = props.data[0]
-  const barCode =  `${data.key}&${data.concept_code}&${data.id}`
+  const fixture = _get(props, "data", {});
+  const fixture_barcode = _get(props, "fbdata", {});
+
+  const barCode =  `${fixture.key}&${fixture.concept_code}&${fixture.id}`
   const [code, setCode] = useState(barCode);
   const [saved, setSaved] = useState(false);
-  const fixture = _get(props, "data.0", {});
 
   const saveBarcode = (code) => async () => {
-    console.log(code);
     const url = `/api/fixture/barcode/${code}`;
     const options = {
       method: "post",
