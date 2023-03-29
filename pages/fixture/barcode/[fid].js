@@ -47,6 +47,7 @@ export async function getServerSideProps(context) {
 export default function Fixture(props) {
   const fixture = _get(props, "data", {});
   const fixture_barcode = _get(props, "fbdata", {});
+  const store_code = 60318;
 
   const barCode =  `${fixture.key}&${fixture.concept_code}&${fixture.id}`
   const [code, setCode] = useState(barCode);
