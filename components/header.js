@@ -30,6 +30,8 @@ export default function Header() {
     title = "Scan Product";
   } else if (router.route === "/adjacencies/[pcode]") {
     title = "Scan Products";
+  } else if (router.route === "/reports") {
+    title = "Reports";
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
