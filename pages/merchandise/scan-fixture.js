@@ -32,14 +32,13 @@ export default function Fixture(props) {
     }
   }, [results]);
 
-const handleScanner = ( ) =>{
+  const handleScanner = ( ) =>{
     setScanner(true)
-}
-// useEffect(() => {
-//   return () => {
-      
-//   }
-// }, [])
+  }
+  // useEffect(() => {
+  //   return () => {
+  //   }
+  // }, [])
 
 
 
@@ -55,14 +54,14 @@ const _onDetected = result => {
         <Button onClick = {handleScanner} variant="contained" >Scan Fixture</Button>
 
         {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
-      <Scanner onDetected={_onDetected} />
+        <Scanner onDetected={_onDetected} />
         </Paper>): null}
 
         <TextareaAutosize
-            style={{fontSize:32, width:320, height:100, marginTop:30}}
-            rowsMax={4}
-            defaultValue={'No data scanned'}
-            value={results[0] ? results[0].codeResult.code : 'No data scanned'}
+          style={{fontSize:32, width:320, height:100, marginTop:30}}
+          rowsmax={4}
+          // defaultValue={'No data scanned'}
+          value={results[0] ? results[0].codeResult.code : 'No data scanned'}
         />
       </Stack>
     </Box>
