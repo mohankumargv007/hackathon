@@ -46,7 +46,9 @@ export default function Fixture(props) {
   return (
     <Box paddingX={"20px"}>
       <Stack spacing={2}>
-        <h3>Add products</h3>
+        <h3>{fixture.name}</h3>
+        Type: {fixture.type}
+        <h4>Add products</h4>
         ////////////////////
         <TableContainer component={Paper}>
           <Table aria-label="caption table">
