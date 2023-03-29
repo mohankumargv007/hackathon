@@ -86,7 +86,7 @@ export default function Fixture(props) {
         </Paper>): null}
         <TableContainer component={Paper}>
           <Table aria-label="caption table">
-            <caption>Added 3/5 products</caption>
+            <caption>Added {Products.length}/5 products</caption>
             <TableHead>
               <TableRow>
                 <TableCell>Item Code</TableCell>

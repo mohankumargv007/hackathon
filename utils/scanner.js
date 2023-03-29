@@ -12,12 +12,12 @@ class Scanner extends Component {
             height: 320,
             facingMode: 'environment',
           },
-        //   area: { // defines rectangle of the detection/localization area
-        //     top: "10%",    // top offset
-        //     right: "10%",  // right offset
-        //     left: "10%",   // left offset
-        //     bottom: "10%"  // bottom offset
-        //   },
+          // area: { // defines rectangle of the detection/localization area
+          //   top: "10%",    // top offset
+          //   right: "10%",  // right offset
+          //   left: "10%",   // left offset
+          //   bottom: "10%"  // bottom offset
+          // },
         },
         locator: {
             halfSample: true,
