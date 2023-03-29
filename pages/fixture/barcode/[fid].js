@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import _get from 'lodash/get';
+import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { supabaseConnection } from '../../../utils/supabase';
@@ -33,12 +34,25 @@ export default function Fixture(props) {
   const [saved, setSaved] = useState(false);
   const fixture = _get(props, "data.0", {});
 
-  const saveBarcode = (code) => () => {
+  const saveBarcode = (code) => async () => {
     console.log(code);
+    const url = `/api/fixture/barcode/${code}`;
+    const options = {
+      method: "post",
+      body: JSON.stringify(fixture)
+    };
+    const response = await fetch(url, options);
+    const data = await response.json();
+    if(_get(data, "data.0.id")) {
+      setSaved(true);
+    }
   }
   return (
     <div className={styles.container}>
       <Stack spacing={2}>
+        {saved &&
+        <Alert severity="success">Barcode saved successfully!</Alert>
+        }
         <p>4 way new format stand 125CM</p>
         <Barcode value={code} />;
         <Button onClick={handlePrint} variant="contained">Print</Button>

@@ -1,19 +1,27 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import _get from 'lodash/get';
 import { supabaseConnection } from '../../../../utils/supabase';
 
-// Disable barcode
+// Save barcode
 export default async function handler(req, res) {
-  if (req.method === 'PUT') {
+  if (req.method === 'POST') {
     const supabase = supabaseConnection();
-    const fid = req.query.fid;
+    const barcode = req.query.barcode;
+    const body = JSON.parse(req.body);
+
     try {
       const { data, error } = await supabase
-      .from('fixture_library')
-      .update({ status: false })
-      .eq('id', fid)
+      .from('fixture_barcode')
+      .insert([{
+        store_id: 6,
+        fixture_key: _get(body, "key"),
+        counter: 3,
+        fixture_barcode: barcode,
+        concept_code: _get(body, "concept_code")
+      }])
       .select()
 
-      res.status(200).json({data: data, error: error});
+      res.status(200).json({data, error});
     } catch(error) {
       res.status(500).send();
     }
