@@ -40,10 +40,12 @@ export default function Fixture(props) {
   //   }
   // }, [])
 
-  const _onDetected = result => {
-    setResults( [] )
-    setResults([...results].concat([result]))
-  }
+
+
+const _onDetected = result => {
+  setResults([])
+  setResults([result])
+}
 
   return (
     <Box paddingX="20px" paddingY="40px">

@@ -33,8 +33,8 @@ export default function Fixture(props) {
   }
 
   const _onDetected = result => {
-    setResults( [] )
-    setResults([...results].concat([result]))
+    setResults([])
+    setResults([result])
   }
 
   return (
