@@ -12,7 +12,6 @@ export default async function handler(req, res) {
       .eq('id', fid)
       .select()
 
-      console.log(data, error);
       res.status(200).json({data: data, error: error});
     } catch(error) {
       res.status(500).send();
