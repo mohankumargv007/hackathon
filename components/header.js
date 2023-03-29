@@ -28,6 +28,8 @@ export default function Header() {
     title = "Remove Fixture";
   } else if (router.route === "/adjacencies") {
     title = "Scan Product";
+  } else if (router.route === "/adjacencies/[pcode]") {
+    title = "Scan Products";
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
