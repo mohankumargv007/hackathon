@@ -44,8 +44,8 @@ const handleScanner = ( ) =>{
 
 
 const _onDetected = result => {
-  setResults( [] )
-  setResults([...results].concat([result]))
+  setResults([])
+  setResults([result])
 }
 
   return (
