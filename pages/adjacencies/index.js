@@ -12,8 +12,8 @@ import Scanner from '../../utils/scanner'
 
 export default function Fixture(props) {
   const router = useRouter();
-  const [scanner,setScanner] = useState(false);
-  const [results,setResults] = useState([]);
+  const [scanner, setScanner] = useState(false);
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
     try {
@@ -48,10 +48,14 @@ export default function Fixture(props) {
 
         <TextareaAutosize
           style={{fontSize:32, width:320, height:100, marginTop:30}}
-          rowsMax={4}
-          defaultValue={'No procust scanned'}
+          rowsmax={4}
+          // defaultValue={'No procust scanned'}
           value={results[0] ? results[0].codeResult.code : 'No product scanned'}
         />
+
+        {_get(results, "0.codeResult.code") &&
+          <Link href={`/adjacencies/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior><Button variant="contained">Proceed</Button></Link>
+        }
       </Stack>
     </Box>
   )
