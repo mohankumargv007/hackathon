@@ -3,16 +3,25 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { theme } from "../styles/theme";
 import Layout from '../components/layout';
 import '../styles/globals.css';
+import AdminLayout from '../components/admin/admin-layout';
+import { useRouter } from 'next/router'
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ThemeProvider>
-  );
-}
-
-export default MyApp
+	const router = useRouter();
+	return (
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			{
+				router.pathname.includes('admin') ? 
+				<AdminLayout>
+					<Component {...pageProps} />
+				</AdminLayout> :
+				<Layout>
+					<Component {...pageProps} />
+				</Layout> 
+			}
+		</ThemeProvider>
+		);
+	}
+	
+	export default MyApp

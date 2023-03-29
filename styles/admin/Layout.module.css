@@ -1,0 +1,33 @@
+.listItem {
+    padding: 12px;
+}
+
+.listItem:hover {
+    background-color: #2582c5;
+    color: white;
+    border-radius: 5px;
+}
+
+.listItem .active {
+    background-color: #2582c5;
+    color: white;
+    border-radius: 5px;
+}
+
+.mainLayout {
+    margin: 16px;
+    padding: 35px 20px;
+    background-color: #d9dcd3;
+    color: black;
+    border-radius: 5px;
+}
+
+.blockMainHight {
+    min-height: 100px;
+    background-color: white;
+}
+
+.tablePadding {
+    padding: 25px;
+    margin-top: 25px;
+}
