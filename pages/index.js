@@ -20,7 +20,9 @@ export default function Home(props) {
         <Link className={styles.btn} href="/adjacencies" passHref legacyBehavior>
           <Button variant="contained" className={styles.btn}>Map Adjacencies</Button>
         </Link>
-        <Button variant="contained" className={styles.btn}>Reports</Button>
+        <Link className={styles.btn} href="/reports" passHref legacyBehavior>
+          <Button variant="contained" className={styles.btn}>Reports</Button>
+        </Link>
       </Stack>
     </Box>
   )
