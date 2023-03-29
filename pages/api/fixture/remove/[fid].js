@@ -6,18 +6,14 @@ export default async function handler(req, res) {
     const supabase = supabaseConnection();
     const fid = req.query.fid;
     try {
-      // let { data, error } = await supabase
-      // .from('fixture_library')
-      // .select('*')
-      // .eq('id', fid);
-      
       const { data, error } = await supabase
       .from('fixture_library')
       .update({ status: false })
       .eq('id', fid)
+      .select()
 
       console.log(data, error);
-      res.status(200).json({data: data});
+      res.status(200).json({data: data, error: error});
     } catch(error) {
       res.status(500).send();
     }
