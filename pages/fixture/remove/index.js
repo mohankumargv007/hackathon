@@ -16,10 +16,6 @@ export default function Fixture(props) {
   //   try {
   //     if(results[0]) {
   //       const code = _get(results, "0.codeResult.code");
-  //       if(code) {
-  //         const codearr = code.split("&");
-  //         const id = _get(codearr, "2");
-  //       }
   //     }
   //   } catch (err) {
   //     console.log(err);
@@ -52,7 +48,7 @@ export default function Fixture(props) {
         />
       </Stack>
       {_get(results, "0.codeResult.code") &&
-        <Link href={`/fixture/remove/${_get(results, "0.codeResult.code").split("&")[2]}`} passHref legacyBehavior>
+        <Link href={`/fixture/remove/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior>
           <Box paddingY="20px">
             <Button variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
           </Box>

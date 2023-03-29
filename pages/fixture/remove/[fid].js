@@ -9,6 +9,7 @@ import { supabaseConnection } from '../../../utils/supabase';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
+  const farr = fid.split('&');
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -16,10 +17,10 @@ export async function getServerSideProps(context) {
   let { data, error } = await supabase
   .from('fixture_library')
   .select('*')
-  .eq("id", fid)
+  .eq("id", farr[2])
 
   // Pass data to the page via props
-  return { props: { data: data } };
+  return { props: { data: data, error: error } };
 }
 
 export default function Fixture(props) {
