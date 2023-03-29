@@ -31,7 +31,7 @@ export default function Fixture(props) {
     };
     const response = await fetch(url, options);
     const data = await response.json();
-    setFixture(_get(data, "0", {}));
+    setFixture(_get(data, "data.0", {}));
   }
   return (
     <>
