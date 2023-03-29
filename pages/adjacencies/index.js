@@ -12,19 +12,15 @@ import Scanner from '../../utils/scanner'
 
 export default function Fixture(props) {
   const router = useRouter();
-  const [scanner,setScanner] = useState(false)
-  const [results,setResults] = useState([])
+  const [scanner, setScanner] = useState(false);
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
     try {
       if(results[0]) {
         const code = _get(results, "0.codeResult.code");
         if(code) {
-          const codearr = code.split("&");
-          const id = _get(codearr, "2");
-          if(id) {
-            router.push(`/merchandise/fid/${id}`);
-          }
+          router.push(`/adjacencies/${code}`);
         }
       }
     } catch (err) {
@@ -35,23 +31,16 @@ export default function Fixture(props) {
   const handleScanner = ( ) =>{
     setScanner(true)
   }
-  // useEffect(() => {
-  //   return () => {
-  //   }
-  // }, [])
 
-
-
-const _onDetected = result => {
-  setResults([])
-  setResults([result])
-}
+  const _onDetected = result => {
+    setResults([])
+    setResults([result])
+  }
 
   return (
     <Box paddingX="20px" paddingY="40px">
       <Stack spacing={4}>
-        <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
-        <Button onClick = {handleScanner} variant="contained" >Scan Fixture</Button>
+        <Button onClick = {handleScanner} variant="contained" >Scan Product</Button>
 
         {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
         <Scanner onDetected={_onDetected} />
@@ -60,9 +49,13 @@ const _onDetected = result => {
         <TextareaAutosize
           style={{fontSize:32, width:320, height:100, marginTop:30}}
           rowsmax={4}
-          // defaultValue={'No data scanned'}
-          value={results[0] ? results[0].codeResult.code : 'No data scanned'}
+          // defaultValue={'No procust scanned'}
+          value={results[0] ? results[0].codeResult.code : 'No product scanned'}
         />
+
+        {_get(results, "0.codeResult.code") &&
+          <Link href={`/adjacencies/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior><Button variant="contained">Proceed</Button></Link>
+        }
       </Stack>
     </Box>
   )

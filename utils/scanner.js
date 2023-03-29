@@ -8,16 +8,16 @@ class Scanner extends Component {
         inputStream: {
           type: 'LiveStream',
           constraints: {
-            width: 640,
+            width: 320,
             height: 320,
             facingMode: 'environment',
           },
-        //   area: { // defines rectangle of the detection/localization area
-        //     top: "10%",    // top offset
-        //     right: "10%",  // right offset
-        //     left: "10%",   // left offset
-        //     bottom: "10%"  // bottom offset
-        //   },
+          // area: { // defines rectangle of the detection/localization area
+          //   top: "10%",    // top offset
+          //   right: "10%",  // right offset
+          //   left: "10%",   // left offset
+          //   bottom: "10%"  // bottom offset
+          // },
         },
         locator: {
             halfSample: true,
@@ -56,7 +56,9 @@ class Scanner extends Component {
         Quagga.start()
       },
     )
-    Quagga.onDetected(this._onDetected)
+
+
+    Quagga.onDetected(this._onDetected);
   }
 
   componentWillUnmount() {
@@ -65,7 +67,9 @@ class Scanner extends Component {
 
   _onDetected = result => {
     this.props.onDetected(result)
-  }
+  };
+  
+//    this.props.onUnmount ? (()=>{Quagga.stop()}) : null
 
   render() {
     return <div id="interactive" className="viewport"/>

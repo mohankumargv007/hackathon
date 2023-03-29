@@ -9,6 +9,7 @@ export async function getServerSideProps() {
   let { data, error } = await supabase
   .from('fixture_library')
   .select('*')
+  .eq('status', true)
 
   return { props: { data: data } };
 }

@@ -1,4 +1,6 @@
+import { useState } from "react";
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -10,10 +12,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {TextareaAutosize} from '@mui/material'
-import { useState } from 'react';
-import Scanner from '../../../utils/scanner';
-import { supabaseConnection } from '../../../utils/supabase';
+import {TextareaAutosize} from '@mui/material';
+import Scanner from '../../utils/scanner';
+import { supabaseConnection } from '../../utils/supabase';
 
 function createData(
   code,
@@ -29,24 +30,25 @@ const rows = [
   createData('12345676', "Kids", "Basic3"),
 ];
 
-
 export async function getServerSideProps(context) {
-  const { fid } = context.query;
-
+  const { pcode } = context.query;
+  console.log(pcode);
+ 
   // Fetch data from external API
-  const supabase = supabaseConnection();
+  // const supabase = supabaseConnection();
 
-  let { data, error } = await supabase
-  .from('fixture_library')
-  .select('*')
-  .eq("id", fid)
+  // let { data, error } = await supabase
+  // .from('fixture_library')
+  // .select('*')
+  // .eq("id", fid)
 
   // Pass data to the page via props
-  return { props: { data: data } };
+  // return { props: { data: data } };
+  return {props: {}};
 }
 
 export default function Fixture(props) {
-  const fixture = _get(props, "data.0", {});
+  const router = useRouter();
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
   const [Products,setProducts] = useState([])
@@ -66,13 +68,12 @@ export default function Fixture(props) {
     setResults([])
 
   }
-  
+  // const [fixture, setFixture] = useState(_get(props, "data.0", {}));
   return (
     <Box paddingX={"20px"}>
       <Stack spacing={2}>
-        <h3>{fixture.name}</h3>
-        Type: {fixture.type}
-        <h4>Add products</h4>
+        {router.query.pcode}
+        <h3>Add Products</h3>
         <Box >
         <TextareaAutosize
             style={{fontSize:20, width:320, height:70, marginTop:30}}
@@ -107,9 +108,8 @@ export default function Fixture(props) {
             </TableBody>
           </Table>
         </TableContainer>
-        {/* <Link href={`/merchandise/barcode/${fixture.id}`} passHref legacyBehavior><Button onClick={(e)=>handleScanner(e)} variant="contained">Scan More</Button></Link> */}
         <Button onClick={(e)=>handleScanner(e)} variant="contained">Scan More</Button>
-        <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Submit</Button></Link>
+        <Button variant="contained">Submit</Button>
       </Stack>
     </Box>
   )
