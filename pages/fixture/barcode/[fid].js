@@ -10,6 +10,7 @@ import { useEffect,useState } from 'react';
 const handlePrint = () =>{
   window.print();
 }
+
 export async function getServerSideProps(context) {
   const { fid } = context.query;
 
@@ -27,18 +28,21 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const data = props.data[0]
- const barCode =  `${data.key}&${data.concept_code}&${data.id}`
-  const [Code, setCode] = useState(barCode);
+  const barCode =  `${data.key}&${data.concept_code}&${data.id}`
+  const [code, setCode] = useState(barCode);
+  const [saved, setSaved] = useState(false);
+  const fixture = _get(props, "data.0", {});
 
-    const fixture = _get(props, "data.0", {});
+  const saveBarcode = (code) => () => {
+    console.log(code);
+  }
   return (
     <div className={styles.container}>
       <Stack spacing={2}>
         <p>4 way new format stand 125CM</p>
-        
-            <Barcode value={Code} />;
-            
+        <Barcode value={code} />;
         <Button onClick={handlePrint} variant="contained">Print</Button>
+        <Button onClick={saveBarcode(code)} variant="contained">Save Barcode</Button>
         <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
       </Stack>
     </div>
