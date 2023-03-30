@@ -14,29 +14,44 @@ export async function getServerSideProps(context) {
   // Fetch data from external API
   const supabase = supabaseConnection();
 
-  let { data, error } = await supabase
+  let { data: fldata, error: flerror } = await supabase
   .from('fixture_library')
   .select('*')
   .eq("id", farr[2])
 
+  const fixture_library = _get(fldata, "0", {});
+
+  let { data: fbdata, error: fberror } = await supabase
+  .from('fixture_barcode')
+  .select('*')
+  .eq("fixture_barcode", fid)
+
+  const fixture_barcode = _get(fbdata, '0', {});
+
   // Pass data to the page via props
-  return { props: { data: data, error: error } };
+  return { props: {
+    data: fixture_library,
+    error: flerror,
+    fbdata: fixture_barcode,
+    fberror: fberror
+  } };
 }
 
 export default function Fixture(props) {
-  const [fixture, setFixture] = useState(_get(props, "data.0", {}));
+  const [fixture, setFixture] = useState(_get(props, "data", {}));
+  const [fixtureBarcode, setFixtureBarcode] = useState(_get(props, "fbdata", {}));
   const removeFixture = (fixture) => async () => {
-    const url = `/api/fixture/remove/${fixture.id}`;
+    const url = `/api/fixture/remove/${fixtureBarcode.fixture_barcode}`;
     const options = {
       method: "put"
     };
     const response = await fetch(url, options);
     const data = await response.json();
-    setFixture(_get(data, "data.0", {}));
+    setFixtureBarcode(_get(data, "data.0", {}));
   }
   return (
     <>
-    {!fixture.status &&
+    {!fixtureBarcode.status &&
       <Alert severity="info">Fixture removed successfully!</Alert>
     }
     <Box paddingX={"20px"}>
@@ -44,7 +59,7 @@ export default function Fixture(props) {
         <h2>{fixture.name}</h2>
         <h3>{fixture.type}</h3>
         <img src={fixture.front_image} width="100%" />
-        {fixture.status ?
+        {fixtureBarcode.status ?
         <>
         <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>
 

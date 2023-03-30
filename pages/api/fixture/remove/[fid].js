@@ -8,9 +8,9 @@ export default async function handler(req, res) {
     const fid = req.query.fid;
     try {
       const { data, error } = await supabase
-      .from('fixture_library')
+      .from('fixture_barcode')
       .update({ status: false })
-      .eq('id', fid)
+      .eq('fixture_barcode', fid)
       .select()
 
       res.status(200).json({data: data, error: error});
