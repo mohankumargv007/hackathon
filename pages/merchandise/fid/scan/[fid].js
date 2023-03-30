@@ -13,8 +13,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {TextareaAutosize} from '@mui/material'
 import { useState } from 'react';
-import Scanner from '../../../utils/scanner';
-import { supabaseConnection } from '../../../utils/supabase';
+import Scanner from '../../../../utils/scanner';
+import { supabaseConnection } from '../../../../utils/supabase';
 
 function createData(
   code,
@@ -32,8 +32,7 @@ const rows = [
 
 
 export async function getServerSideProps(context) {
-  const { barcode } = context.query;
-  const fid = barcode.split('&')[1];
+  const { fid } = context.query;
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -50,7 +49,7 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const router = useRouter();
-  const barcode = _get(router, "query.barcode", "");
+  const fid = _get(router, "query.fid", "");
 
   const fixture = _get(props, "data.0", {});
   const [scanner, setScanner] = useState(false);
