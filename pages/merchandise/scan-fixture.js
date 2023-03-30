@@ -21,7 +21,7 @@ export default function Fixture(props) {
         const code = _get(results, "0.codeResult.code");
         const codeArray = code.split("&")
         if(codeArray.length == 3) {
-          router.push(`/merchandise/fid/${code}`);
+          router.push(`/merchandise/barcode/${code}`);
         }
       }
     } catch (err) {

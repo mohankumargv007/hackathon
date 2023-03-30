@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import { supabaseConnection } from '../../../utils/supabase';
 
 export async function getServerSideProps(context) {
-  const { fid } = context.query;
+  const { barcode } = context.query;
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -15,7 +15,7 @@ export async function getServerSideProps(context) {
   let { data, error } = await supabase
   .from('fixture_library')
   .select('*')
-  .eq("id", fid)
+  .eq("id", barcode.split("&")[1])
 
   // Pass data to the page via props
   return { props: { data: data } };
@@ -23,7 +23,7 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const router = useRouter();
-  const fid = _get(router, "query.fid", "");
+  const barcode = _get(router, "query.barcode", "");
   const fixture = _get(props, "data.0", {});
   return (
     <Box paddingX={"20px"}>
@@ -31,7 +31,7 @@ export default function Fixture(props) {
         <h2>{fixture.name}</h2>
         <h3>{fixture.type}</h3>
         <img src={fixture.front_image} width="100%" />
-        <Link href={`/merchandise/scan/${fid}`} passHref legacyBehavior><Button variant="contained">Confirm</Button></Link>
+        <Link href={`/merchandise/scan/${barcode}`} passHref legacyBehavior><Button variant="contained">Confirm</Button></Link>
         <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
       </Stack>
     </Box>

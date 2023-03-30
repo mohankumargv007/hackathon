@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
   let { data: fldata, error: flerror } = await supabase
   .from('fixture_library')
   .select('*')
-  .eq("id", farr[2])
+  .eq("id", farr[1])
 
   const fixture_library = _get(fldata, "0", {});
 

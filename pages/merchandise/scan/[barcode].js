@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -31,7 +32,8 @@ const rows = [
 
 
 export async function getServerSideProps(context) {
-  const { fid } = context.query;
+  const { barcode } = context.query;
+  const fid = barcode.split('&')[1];
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -41,11 +43,15 @@ export async function getServerSideProps(context) {
   .select('*')
   .eq("id", fid)
 
+  console.log(data);
   // Pass data to the page via props
   return { props: { data: data } };
 }
 
 export default function Fixture(props) {
+  const router = useRouter();
+  const barcode = _get(router, "query.barcode", "");
+
   const fixture = _get(props, "data.0", {});
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);

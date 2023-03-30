@@ -8,10 +8,6 @@ import styles from '../../../styles/Layout.module.css';
 import Barcode from 'react-barcode';
 import { useEffect,useState } from 'react';
 
-const handlePrint = () =>{
-  window.print();
-}
-
 export async function getServerSideProps(context) {
   const { fid } = context.query;
 
@@ -66,6 +62,12 @@ export default function Fixture(props) {
       setSaved(true);
     }
   }
+
+  const handlePrint = () => {
+    saveBarcode(code)();
+    window.print();
+  }
+
   return (
     <div className={styles.container}>
       <Stack spacing={2}>
