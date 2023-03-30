@@ -42,7 +42,6 @@ export async function getServerSideProps(context) {
   .select('*')
   .eq("id", fid)
 
-  console.log(data);
   // Pass data to the page via props
   return { props: { data: data } };
 }
@@ -81,8 +80,7 @@ export default function Fixture(props) {
         <Box >
         <TextareaAutosize
             style={{fontSize:20, width:320, height:70, marginTop:30}}
-            rowsMax={4}
-            defaultValue={'No product scanned'}
+            rowsmax={4}
             value={results[0] ? results[0].codeResult.code : Products.length ==0 ? 'No product scanned' : 'scan next product'}/>
             {results[0] ? <Button onClick={()=>handleProduct(results[0].codeResult.code)} variant="contained">add product</Button> : null}
         </Box>

@@ -18,9 +18,9 @@ export default function Header() {
     title = "Scan Fixture";
   } else if (router.route === "/merchandise/search") {
     title = "Select Fixture";
-  } else if (router.route === "/merchandise/barcode/[barcode]") {
+  } else if (router.route === "/merchandise/barcode/[barcode]" || router.route === "/merchandise/fid/[fid]") {
     title = "Review Fixture Details";
-  } else if (router.route === "/merchandise/scan/[barcode]") {
+  } else if (router.route === "/merchandise/barcode/scan/[barcode]" || router.route === "/merchandise/fid/scan/[fid]") {
     title = "Scan Products";
   } else if (router.route === "/fixture/remove") {
     title = "Remove Fixture";
