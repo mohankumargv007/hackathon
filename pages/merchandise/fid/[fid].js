@@ -14,7 +14,7 @@ export async function getServerSideProps(context) {
   let { data, error } = await supabase
   .from('fixture_library')
   .select('*')
-  .eq("id", fid)
+  .eq("id", fid.split("&")[1])
 
   // Pass data to the page via props
   return { props: { data: data } };

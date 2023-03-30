@@ -34,7 +34,6 @@ export async function getServerSideProps(context) {
   .range(0,0)
 
   const fixture_barcode = _get(fbdata, '0', {});
-
   // Pass data to the page via props
   return { props: {
     data: fixture_library,
@@ -49,8 +48,10 @@ export default function Fixture(props) {
   const fixture_barcode = _get(props, "fbdata", {});
   const store_code = 60318;
 
-  const barCode =  `${fixture.key}&${fixture.concept_code}&${fixture.id}`
+//generating the barcode
+  const barCode =  `${store_code}&${fixture.id}&${fixture_barcode?.counter ? (fixture_barcode.counter+1):1}`
   const [code, setCode] = useState(barCode);
+  
   const [saved, setSaved] = useState(false);
 
   const saveBarcode = (code) => async () => {

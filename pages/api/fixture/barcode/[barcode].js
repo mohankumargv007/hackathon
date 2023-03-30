@@ -8,14 +8,15 @@ export default async function handler(req, res) {
     const supabase = supabaseConnection();
     const barcode = req.query.barcode;
     const body = JSON.parse(req.body);
-
+    const barcodeArray = barcode.split("&")
+    const counter = barcodeArray[[barcodeArray.length-1]]
     try {
       const { data, error } = await supabase
       .from('fixture_barcode')
       .insert([{
         store_id: 60318,
         fixture_key: _get(body, "key"),
-        counter: 3,
+        counter ,
         fixture_barcode: barcode,
         concept_code: _get(body, "concept_code")
       }])

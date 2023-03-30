@@ -19,12 +19,9 @@ export default function Fixture(props) {
     try {
       if(results[0]) {
         const code = _get(results, "0.codeResult.code");
-        if(code) {
-          const codearr = code.split("&");
-          const id = _get(codearr, "2");
-          if(id) {
-            router.push(`/merchandise/fid/${id}`);
-          }
+        const codeArray = code.split("&")
+        if(codeArray.length == 3) {
+          router.push(`/merchandise/fid/${code}`);
         }
       }
     } catch (err) {
