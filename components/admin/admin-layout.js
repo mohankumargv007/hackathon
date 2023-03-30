@@ -2,7 +2,7 @@ import Sidebar from './../admin/admin-sidebar';
 import Topmenu from './../admin/admin-topmenu';
 import { Box } from '@mui/system';
 import { Grid } from '@mui/material';
-import styles from '../../styles/admin/Layout.module.css'
+import styles from '../../styles/admin/Layout.module.css';
 import Paper from '@mui/material/Paper';
 import Table from '../reusable-components/table';
 
