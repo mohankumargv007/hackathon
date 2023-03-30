@@ -5,12 +5,12 @@ import { supabaseConnection } from '../../../../utils/supabase';
 export default async function handler(req, res) {
   if (req.method === 'PUT') {
     const supabase = supabaseConnection();
-    const fid = req.query.fid;
+    const barcode = req.query.barcode;
     try {
       const { data, error } = await supabase
       .from('fixture_barcode')
       .update({ status: false })
-      .eq('fixture_barcode', fid)
+      .eq('fixture_barcode', barcode)
       .select()
 
       res.status(200).json({data: data, error: error});

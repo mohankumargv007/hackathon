@@ -8,8 +8,8 @@ import Button from '@mui/material/Button';
 import { supabaseConnection } from '../../../utils/supabase';
 
 export async function getServerSideProps(context) {
-  const { fid } = context.query;
-  const farr = fid.split('&');
+  const { barcode } = context.query;
+  const farr = barcode.split('&');
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -24,7 +24,7 @@ export async function getServerSideProps(context) {
   let { data: fbdata, error: fberror } = await supabase
   .from('fixture_barcode')
   .select('*')
-  .eq("fixture_barcode", fid)
+  .eq("fixture_barcode", barcode)
 
   const fixture_barcode = _get(fbdata, '0', {});
 
