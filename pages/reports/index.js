@@ -14,8 +14,8 @@ export default function Fixture(props) {
   return (
     <Box paddingX="20px" paddingY="40px">
       <BarChart
-        width={300}
-        height={200}
+        width={500}
+        height={500}
         data={data}
         margin={{
           top: 20,
@@ -29,8 +29,10 @@ export default function Fixture(props) {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-        <Bar dataKey="uv" stackId="a" fill="#82ca9d" />
+        <Bar dataKey="Arms&Hooks&Bars" stackId="a" fill="#8884d8" />
+        <Bar dataKey="Rails&Stands" stackId="a" fill="#82ca9d" />
+        <Bar dataKey="Shelves&Bins" stackId="a" fill="#82fa9d" />
+        <Bar dataKey="Tables" stackId="a" fill="#82fa9d" />
       </BarChart>
     </Box>
   )
@@ -38,45 +40,80 @@ export default function Fixture(props) {
 
 const data = [
   {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400
+    "Group": "Footwear",
+    "Arms&Hooks&Bars": 2295,
+    "Rails&Stands": "",
+    "Shelves&Bins": 58,
+    "Tables": ""
   },
   {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210
+    "Group": "Accessories",
+    "Arms&Hooks&Bars": 1409,
+    "Rails&Stands": "",
+    "Shelves&Bins": 22,
+    "Tables": ""
   },
   {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290
+    "Group": "Lingerie & Sleepwear",
+    "Arms&Hooks&Bars": 728,
+    "Rails&Stands": 30,
+    "Shelves&Bins": "",
+    "Tables": 5
   },
   {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000
+    "Group": "Children",
+    "Arms&Hooks&Bars": 497,
+    "Rails&Stands": 85,
+    "Shelves&Bins": 6,
+    "Tables": 10
   },
   {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181
+    "Group": "Men",
+    "Arms&Hooks&Bars": 248,
+    "Rails&Stands": 99,
+    "Shelves&Bins": 55,
+    "Tables": 9
   },
   {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500
+    "Group": "Toys & Luggage",
+    "Arms&Hooks&Bars": 294,
+    "Rails&Stands": "",
+    "Shelves&Bins": 55,
+    "Tables": ""
   },
   {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100
+    "Group": "Women",
+    "Arms&Hooks&Bars": 200,
+    "Rails&Stands": 120,
+    "Shelves&Bins": 15,
+    "Tables": 11
+  },
+  {
+    "Group": "Home",
+    "Arms&Hooks&Bars": 28,
+    "Rails&Stands": "",
+    "Shelves&Bins": 111,
+    "Tables": 3
+  },
+  {
+    "Group": "Basics Non Apparels",
+    "Arms&Hooks&Bars": "",
+    "Rails&Stands": 6,
+    "Shelves&Bins": "",
+    "Tables": ""
+  },
+  {
+    "Group": "Toys Boys & Girls",
+    "Arms&Hooks&Bars": "",
+    "Rails&Stands": 2,
+    "Shelves&Bins": "",
+    "Tables": ""
+  },
+  {
+    "Group": "SM-Accessories",
+    "Arms&Hooks&Bars": "",
+    "Rails&Stands": 1,
+    "Shelves&Bins": "",
+    "Tables": ""
   }
 ];
