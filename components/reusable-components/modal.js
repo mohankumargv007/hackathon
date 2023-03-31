@@ -41,11 +41,6 @@ export default function Modal(props) {
         status                  : true
     });
 
-    const cad_image = useRef();
-    const front_image = useRef();
-    const lateral_image = useRef();
-    const inputFileRef = useRef(null);
-
     const formFields = [
         {
             'fieldName' : 'concept_code',
@@ -122,6 +117,12 @@ export default function Modal(props) {
         }
     ];
 
+    //Storage Bucket
+    const bucket = props.storage;
+
+    //Storage URL
+    const storage_url = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL;
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -163,12 +164,16 @@ export default function Modal(props) {
     }
 
     //Upload File To Supabase Storage
-    async function uploadFileToStorage(type, e) {
+    async function uploadFileToStorage(type, e, edit) {
         const imageFile = e.target.files;
 
         if(imageFile.length <= 0) {
             alert('Please select an image.');
             return false;
+        }
+
+        if(edit) {
+            deleteUploadedImage(type);
         }
 
         try {
@@ -177,9 +182,7 @@ export default function Modal(props) {
 
             //File Name = Type Of Image + Current Timestamp + _ + Upload Image Name From Browser
             const fileName  = type.field.fieldName+'/'+Date.now()+'_'+imageFile[0].name;
-            
-            //Storage Bucket
-            const bucket    = props.storage;
+        
 
             //Supabase Connection
             const supabase  = supabaseConnection();
@@ -195,21 +198,46 @@ export default function Modal(props) {
                 .getPublicUrl(fileName)
 
 
-            const PUBLIC_IMAGE_URL = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL+bucket+'/'+data.path;
+            const PUBLIC_IMAGE_URL = storage_url+bucket+'/'+data.path;
 
             //Set Image URL For Data Saving
             setFormData((prevState) => ({
                 ...prevState,
                 [type_of_image]: PUBLIC_IMAGE_URL
             }));
-            console.log(formData);
         } catch (error) {
             alert('Error Uploading Image')
             console.log(error)
         } finally {
             console.log(2121);
         }
-    }   
+    } 
+    
+    //Delete Uploaded Image
+    async function deleteUploadedImage(type) {
+        try {
+            //Type Of Image
+            const type_of_image = type.field.fieldName;
+            
+            let stroage_path = storage_url+bucket+'/';
+            let fileName = formData[type_of_image].split(stroage_path)[1];
+
+            //Supabase Connection
+            const supabase  = supabaseConnection();
+
+            const { data, error } = await supabase.storage
+                .from(bucket)
+                .remove([fileName])
+
+            //Set Image URL For Data Saving
+            setFormData((prevState) => ({
+                ...prevState,
+                [type_of_image]: ""
+            }));
+        } catch (error) {
+
+        }
+    }
 
     return (
         <div>
@@ -314,14 +342,16 @@ export default function Modal(props) {
                                                                 id="outlined-size-small"
                                                                 name={field.fieldName}
                                                                 onChange={(e) => 
-                                                                    uploadFileToStorage({field}, e)
+                                                                    uploadFileToStorage({field}, e, true)
                                                                 }
                                                                 size="small"
                                                                 margin="dense"
                                                             />
                                                         </Button>
                                                         <Button color='error' variant="contained" component="label" endIcon={<DeleteIcon />} sx={{width : "100"}}
-                                                            
+                                                            onClick={(e) => 
+                                                                deleteUploadedImage({field})
+                                                            }
                                                         >    
                                                             
                                                         </Button>
