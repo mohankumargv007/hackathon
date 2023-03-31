@@ -15,18 +15,18 @@ export default function Fixture(props) {
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
 
-  useEffect(() => {
-    try {
-      if(results[0]) {
-        const code = _get(results, "0.codeResult.code");
-        if(code) {
-          router.push(`/adjacencies/${code}`);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }, [results]);
+  // useEffect(() => {
+  //   try {
+  //     if(results[0]) {
+  //       const code = _get(results, "0.codeResult.code");
+  //       if(code) {
+  //         router.push(`/adjacencies/${code}`);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [results]);
 
   const handleScanner = ( ) =>{
     setScanner(true)
@@ -36,6 +36,8 @@ export default function Fixture(props) {
     setResults([])
     setResults([result])
   }
+
+ 
 
   return (
     <Box paddingX="20px" paddingY="40px">

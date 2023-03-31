@@ -43,9 +43,23 @@ export default function Fixture(props) {
   const fixture = _get(props, "data", {});
   const fixture_barcode = _get(props, "fbdata", {});
   const store_code = 60318;
+  let counter = ''
+  if(fixture_barcode.counter){
+    if(fixture_barcode.counter < 10){
+      counter = `00${fixture_barcode.counter}`
+    } else if (fixture_barcode.counter < 100){
+      counter = `0${fixture_barcode.counter}`
+    } else if (fixture_barcode.counter < 1000){
+      counter = `${fixture_barcode}`
+    }
+  } else {
+    counter = `001`
+  }
+
+
 
 //generating the barcode
-  const barCode =  `${store_code}&${fixture.id}&${fixture_barcode?.counter ? (fixture_barcode.counter+1):1}`
+  const barCode =  `${store_code}${fixture.key}${counter}`
   const [code, setCode] = useState(barCode);
   
   const [saved, setSaved] = useState(false);
@@ -53,7 +67,7 @@ export default function Fixture(props) {
   const saveBarcode = (code) => async () => {
     const url = `/api/fixture/barcode/${code}`;
     const options = {
-      method: "post",
+      method: "POST",
       body: JSON.stringify(fixture)
     };
     const response = await fetch(url, options);

@@ -8,17 +8,14 @@ export default async function handler(req, res) {
     const supabase = supabaseConnection();
     const barcode = req.query.barcode;
     const body = JSON.parse(req.body);
-    const barcodeArray = barcode.split("&")
-    const counter = barcodeArray[[barcodeArray.length-1]]
     try {
       const { data, error } = await supabase
       .from('fixture_barcode')
       .insert([{
-        store_id: 60318,
+        store_id: barcode.slice(0,5),
         fixture_key: _get(body, "key"),
-        counter ,
+        counter : barcode.slice(-3,) ,
         fixture_barcode: barcode,
-        concept_code: _get(body, "concept_code")
       }])
       .select()
 
@@ -27,7 +24,7 @@ export default async function handler(req, res) {
       res.status(500).send();
     }
   } else {
-    // Handle any other HTTP method
-    res.status(405).send({ message: 'Only PUT requests allowed' })
+     // Handle any other HTTP method
+     res.status(405).send({ message: 'Only PUT requests allowed' })
   }
 }

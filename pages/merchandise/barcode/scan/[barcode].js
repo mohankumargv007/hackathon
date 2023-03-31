@@ -18,7 +18,7 @@ import { supabaseConnection } from '../../../../utils/supabase';
 
 export async function getServerSideProps(context) {
   const { barcode } = context.query;
-  const fid = barcode.split('&')[1];
+  const fkey = barcode.slice(5,10)
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -26,9 +26,8 @@ export async function getServerSideProps(context) {
   let { data, error } = await supabase
   .from('fixture_library')
   .select('*')
-  .eq("id", fid)
+  .eq('key', fkey)
 
-  console.log(data);
   // Pass data to the page via props
   return { props: { data: data } };
 }
@@ -74,7 +73,6 @@ const options ={
 }
 const response = await fetch(url, options);
 const data = await response.json();
-console.log(data,"sasasa");
   }
   
   return (

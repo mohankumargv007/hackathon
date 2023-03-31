@@ -6,12 +6,12 @@ import { supabaseConnection } from '../../../../utils/supabase';
 export default async function handler(req, res) {
   if (req.method === 'GET') {
     const supabase = supabaseConnection();
-    const pid = req.query.pid;
+    const pcode = req.query.pcode;
     try {
       const { data, error } = await supabase
       .from('product_list')
       .select('*')
-      .eq('item',pid)
+      .eq('item',pcode)
       res.status(200).json({data, error});
     } catch(error) {
       res.status(500).send();
@@ -20,23 +20,23 @@ export default async function handler(req, res) {
 
     const supabase = supabaseConnection();
     const body = JSON.parse(req.body);
+    const {parentProd} = body
     const dataFeed = await body.products.map((product,i,a)=>{
       return  {
-        fixture_barcode: body.barcode,
-        store_id : body.barcode.slice(0,5),
-        item : product.item,
-        group : product.group,
-        department : product.department,
-        class : product.class,
-        sub_class : product.sub_class,
-        fixture_type : body.fixture.type,
-        linear_meter : body.fixture.linear_meter
+        store_id : 60318,
+        username : 'userName',
+        parent_item : parentProd.item,
+        parent_group : parentProd.group,
+        parent_department : parentProd.department,
+        adjacent_item : product.item,
+        adjacent_group : product.group,
+        adjacent_department : product.department
       }
     })
     try {
         const {data,error} = await supabase
-        .from('fixture_product_list')
-        //fixture_barcode  store_id  item  group  department  class  sub_class  fixture_type  linear_meter
+        .from('adjacencies_list')
+        //  store_id  username  parent_item  parent_group  parent_department  adjacent_item  adjacent_group  adjacent_department 
         .insert([...dataFeed])
         .select()
         res.status(200).json({data, error});

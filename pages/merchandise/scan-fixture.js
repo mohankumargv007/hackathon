@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import Scanner from '../../utils/scanner'
+import { verify } from 'crypto';
 
 
 export default function Fixture(props) {
@@ -15,33 +16,40 @@ export default function Fixture(props) {
   const [scanner,setScanner] = useState(false)
   const [results,setResults] = useState([])
 
-  useEffect(() => {
-    try {
-      if(results[0]) {
-        const code = _get(results, "0.codeResult.code");
-        const codeArray = code.split("&")
-        if(codeArray.length == 3) {
-          router.push(`/merchandise/barcode/${code}`);
-        }
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }, [results]);
+  // useEffect( async () => {
+  //   try {
+  //     if(results[0]) {
+  //       const code = _get(results, "0.codeResult.code");
+  //       if(code.length == 13){
+  //         const url = `/api/fixture/merchandise/${productCode}`;
+  //         const response = await fetch(url);
+  //         const data = await response.json();
+  //         router.push(`/merchandise/barcode/${code}`);
+  //       }
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [results]);
 
   const handleScanner = ( ) =>{
     setScanner(true)
   }
-  // useEffect(() => {
-  //   return () => {
-  //   }
-  // }, [])
 
-
+  const handleProceed = async () =>{
+    if(results[0]) {
+            const code = _get(results, "0.codeResult.code");
+                      
+              router.push(`/merchandise/barcode/${code}`);
+    }
+            
+  }
 
 const _onDetected = result => {
   setResults([])
+  if(result.codeResult.code .length == 13){
   setResults([result])
+  }
 }
 
   return (
@@ -61,6 +69,8 @@ const _onDetected = result => {
           value={results[0] ? results[0].codeResult.code : 'No data scanned'}
         />
       </Stack>
+      {results[0] ? <Button onClick = {handleProceed} variant="contained" >Proceed</Button> : null}
+
     </Box>
   )
 }

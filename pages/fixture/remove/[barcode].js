@@ -58,7 +58,7 @@ export default function Fixture(props) {
       <Stack spacing={2}>
         <h2>{fixture.name}</h2>
         <h3>{fixture.type}</h3>
-        <img src={fixture.front_image} width="100%" />
+        <img src={fixture.front_image} width="400" length="400" />
         {fixtureBarcode.status ?
         <>
         <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>
