@@ -54,13 +54,12 @@ const columns = [
             <GridActionsCellItem icon={<DeleteIcon />} label="Delete" />,
         ],
     },
-  ];
+];
 
 //Fetch Fixture Library
 export async function getServerSideProps() {
     // Fetch data from external API
     const supabase = supabaseConnection();
-    debugger;
     let { data, error } = await supabase
     .from('fixture_library')
     .select('*')
@@ -69,14 +68,15 @@ export async function getServerSideProps() {
 }
 
 function FixtureLibrary(props) {
-    
-    const handleClickOpen = (e) => {
-        e.preventDefault();
-        return (
-            <div>
-                <Modal name="Mohan"/>
-            </div>
-        )
+    const [showModal, setShowModal] = React.useState('');
+    const [formName, setFormName] = React.useState('Create Fixture');
+
+    const handleClose = (e) => {
+        setShowModal(false);
+    }
+
+    const handleClickOpen = () => {
+        setShowModal(true);
     };
     return (
         <div>
@@ -92,7 +92,7 @@ function FixtureLibrary(props) {
                     <Grid item lg={3} md={3} textAlign="center"></Grid>
                     <Grid item lg={3} md={3} textAlign="center"></Grid>
                     <Grid item lg={3} md={3} sm={12} xs={12} textAlign="center">
-                        <Button onClick={handleClickOpen} variant="contained" size="medium">
+                        <Button variant="contained" size="medium" onClick={handleClickOpen}>
                             Create Fixture
                         </Button>
                     </Grid>
@@ -102,6 +102,11 @@ function FixtureLibrary(props) {
             <Paper className={styles.tablePadding}>
                 <Table columns={columns} {...props}></Table>
             </Paper>
+            {
+                showModal == true ? 
+                <Modal show="true" key="1" form_name={formName} handleClose={handleClose} storage="fixture-library-images"></Modal> : ''
+            }
+            
         </div>
     )
 }
