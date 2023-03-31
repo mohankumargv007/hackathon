@@ -36,8 +36,42 @@ export async function getServerSideProps(context) {
   .select('*')
   .eq("id", fid)
 
-  // Pass data to the page via props
-  return { props: { data: data } };
+  const fixture = _get(data, "0", {});
+
+  const { data: fbdata, error: fberror } = await supabase
+  .from('fixture_barcode')
+  .select('*')
+  .eq('fixture_key', fixture.key)
+  .order("id", {ascending: false})
+  .range(0,0)
+
+  if(fbdata.length === 0) {
+    const { data: fbndata, fbnerror } = await supabase
+    .from('fixture_barcode')
+    .insert([{
+      store_id: 60318,
+      fixture_key: fixture.key,
+      counter : "001",
+      fixture_barcode: `60318${fixture.key}001`,
+    }])
+    .select()
+
+    // Pass data to the page via props
+    return {
+      props: {
+        data: data,
+        fbdata: fbndata
+      }
+    };
+  } else {
+    // Pass data to the page via props
+    return {
+      props: {
+        data: data,
+        fbdata: fbdata
+      }
+    };
+  }
 }
 
 export default function Fixture(props) {

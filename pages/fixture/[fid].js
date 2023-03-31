@@ -28,7 +28,7 @@ export default function Fixture(props) {
         <h2>{fixture.name}</h2>
         <h3>{fixture.type}</h3>
         <img src={fixture.front_image} width="400" length="400" />
-        <Link href={`/fixture/barcode/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Generate Bar Code</Button></Link>
+        <Link href={`/fixture/barcode/${fixture.id}?key=${fixture.key}`} passHref legacyBehavior><Button variant="contained">Generate Bar Code</Button></Link>
         <Link href={`/fixture/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
       </Stack>
     </Box>
