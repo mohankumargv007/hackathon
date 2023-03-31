@@ -30,9 +30,15 @@ function Sidebar() {
                     <ListItemIcon>
                         <ContentCopy fontSize="small"/>
                     </ListItemIcon>
-                    <ListItemText className={styles.listItem} onClick={() => router.push('/'+page.path)}>
-                    {page.title}
-                    </ListItemText>
+                    {
+                        router.pathname.includes(page.path) ? 
+                        <ListItemText className={styles.listItemActive} onClick={() => router.push('/'+page.path)}>
+                            {page.title}
+                        </ListItemText> :
+                        <ListItemText className={styles.listItem} onClick={() => router.push('/'+page.path)}>
+                            {page.title}
+                        </ListItemText>
+                    }
                 </MenuItem>
             ))}
         </MenuList>

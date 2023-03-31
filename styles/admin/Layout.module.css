@@ -1,8 +1,8 @@
-.listItem {
+.listItem, .listItemActive {
     padding: 12px;
 }
 
-.listItem:hover {
+.listItemActive {
     background-color: #2582c5;
     color: white;
     border-radius: 5px;
@@ -30,4 +30,8 @@
 .tablePadding {
     padding: 25px;
     margin-top: 25px;
+}
+
+.innderModalPadd {
+    padding: 40px !important;
 }
