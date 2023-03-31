@@ -24,12 +24,6 @@ function createData(
   return { code, group, department };
 }
 
-const rows = [
-  createData('12345678', "Women", "Basic"),
-  createData('12345677', "Men", "Basic2"),
-  createData('12345676', "Kids", "Basic3"),
-];
-
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;

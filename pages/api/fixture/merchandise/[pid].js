@@ -29,7 +29,7 @@ export default async function handler(req, res) {
         department : product.department,
         class : product.class,
         sub_class : product.sub_class,
-        fixture_type : body.fixture.type,
+        fixture_key : body.fixture.key,
         linear_meter : body.fixture.linear_meter
       }
     })
