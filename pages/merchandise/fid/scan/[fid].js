@@ -16,14 +16,6 @@ import { useState } from 'react';
 import Scanner from '../../../../utils/scanner';
 import { supabaseConnection } from '../../../../utils/supabase';
 
-function createData(
-  code,
-  group,
-  department
-) {
-  return { code, group, department };
-}
-
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
@@ -77,11 +69,14 @@ export async function getServerSideProps(context) {
 export default function Fixture(props) {
   const router = useRouter();
   const fid = _get(router, "query.fid", "");
-
+  const count = _get(router, "query.count","")
+  const fbdata = _get(props, "fbdata.0", {});
   const fixture = _get(props, "data.0", {});
+  const barcode = fbdata.fixture_barcode
+
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
-  const [Products,setProducts] = useState([])
+  const [products,setProducts] = useState([])
 
   
   const handleScanner =() =>{
@@ -93,10 +88,30 @@ export default function Fixture(props) {
     setResults([result])
   }
 
-  const handleProduct  = (productCode) =>{
-    setProducts([createData(productCode),...Products])
+  const handleProduct  = async (productCode) =>{
+    const url = `/api/fixture/merchandise/${productCode}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const group = _get(data,"data.0.group",'');
+    const department =  _get(data,"data.0.department",'');
+    setProducts([{code : productCode, group, department,...data.data[0]?data.data[0]:''},...products])
     setResults([])
 
+  }
+
+  const handleSubmit = async () => {
+const url =`/api/fixture/merchandise/${barcode}`;
+const options ={
+  method : "POST",
+  body : JSON.stringify({
+    barcode,
+    fixture,
+    products,
+    count
+  })
+}
+const response = await fetch(url, options);
+const data = await response.json();
   }
   
   return (
@@ -109,7 +124,7 @@ export default function Fixture(props) {
         <TextareaAutosize
             style={{fontSize:20, width:320, height:70, marginTop:30}}
             rowsmax={4}
-            value={results[0] ? results[0].codeResult.code : Products.length ==0 ? 'No product scanned' : 'scan next product'}/>
+            value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}/>
             {results[0] ? <Button onClick={()=>handleProduct(results[0].codeResult.code)} variant="contained">add product</Button> : null}
         </Box>
         {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
@@ -117,7 +132,7 @@ export default function Fixture(props) {
         </Paper>): null}
         <TableContainer component={Paper}>
           <Table aria-label="caption table">
-            <caption>Added {Products.length}/5 products</caption>
+            <caption>Added {products.length}/5 products</caption>
             <TableHead>
               <TableRow>
                 <TableCell>Item Code</TableCell>
@@ -126,7 +141,7 @@ export default function Fixture(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Products.map((row, index) => (
+              {products.map((row, index) => (
                 <TableRow key={`${row.code}-${index}`}>
                   <TableCell component="th" scope="row">
                     {row.code}
@@ -140,7 +155,7 @@ export default function Fixture(props) {
         </TableContainer>
         {/* <Link href={`/merchandise/barcode/${fixture.id}`} passHref legacyBehavior><Button onClick={(e)=>handleScanner(e)} variant="contained">Scan More</Button></Link> */}
         <Button onClick={(e)=>handleScanner(e)} variant="contained">Scan More</Button>
-        <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Submit</Button></Link>
+        <Button onClick={handleSubmit} variant="contained">Submit</Button>
       </Stack>
     </Box>
   )

@@ -17,10 +17,10 @@ export default async function handler(req, res) {
       res.status(500).send();
     }
   } else if (req.method === 'POST') {
-
+    
     const supabase = supabaseConnection();
     const body = JSON.parse(req.body);
-    const dataFeed = await body.products.map((product,i,a)=>{
+    const dataFeed = await body.products.map((product,i,arr)=>{
       return  {
         fixture_barcode: body.barcode,
         store_id : body.barcode.slice(0,5),
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         class : product.class,
         sub_class : product.sub_class,
         fixture_key : body.fixture.key,
-        linear_meter : body.fixture.linear_meter
+        linear_meter : body.count ? ((body.count*body.fixture.linear_meter)/arr.length) : (body.fixture.linear_meter/arr.length)
       }
     })
     try {
