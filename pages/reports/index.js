@@ -54,18 +54,8 @@ export async function getServerSideProps() {
     let spaceTypes = {}
     data.forEach(function (item, index) {
       spaceTypes[item.fixture_library.type] = item.fixture_library.type
-      if (finalResult.hasOwnProperty(item.group)) {
-        if (finalResult[item.group].hasOwnProperty(item.group)) {
-          finalResult[item.group][item.fixture_library.type] = finalResult[item.group][item.fixture_library.type] + item.linear_meter
-        } else {
-          finalResult[item.group][item.fixture_library.type] =  item.linear_meter;
-        }
-      } else {
-        finalResult[item.group] = {
-          "Group" : item.group
-        }
-        finalResult[item.group][item.fixture_library.type] =  item.linear_meter;
-      }
+      finalResult[item.group] = finalResult[item.group] ?? {"Group" : item.group}
+      finalResult[item.group][item.fixture_library.type] =  finalResult[item.group][item.fixture_library.type] ? (finalResult[item.group][item.fixture_library.type] + item.linear_meter) : item.linear_meter
     });
     return { props: { data: Object.values(finalResult), "key_values" : Object.keys(spaceTypes)} };
 }
