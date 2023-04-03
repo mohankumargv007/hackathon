@@ -11,10 +11,19 @@ export async function getServerSideProps(context) {
   // Fetch data from external API
   const supabase = supabaseConnection();
 
-  let { data, error } = await supabase
-  .from('fixture_library')
-  .select('*')
-  .eq('key', `${barcode.slice(5,10)}`)
+  // let { data, error } = await supabase
+  // .from('fixture_library')
+  // .select('*')
+  // .eq('key', `${barcode.slice(5,10)}`)
+
+  const { data, error } = await supabase
+  .from('fixture_barcode')
+  .select(`
+    *,
+    fixture_library:fixture_key ( * )
+  `)
+  .eq('fixture_barcode', barcode)
+
   // Pass data to the page via props
   return { props: { data: data } };
 }
@@ -22,7 +31,7 @@ export async function getServerSideProps(context) {
 export default function Fixture(props) {
   const router = useRouter();
   const barcode = _get(router, "query.barcode", "");
-  const fixture = _get(props, "data.0", {});
+  const fixture = _get(props, "data.0.fixture_library", {});
   return (
     <Box paddingX={"20px"}>
       <Stack spacing={2}>

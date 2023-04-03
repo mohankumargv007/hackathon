@@ -14,32 +14,40 @@ export async function getServerSideProps(context) {
   // Fetch data from external API
   const supabase = supabaseConnection();
 
-  let { data: fbdata, error: fberror } = await supabase
+  // let { data: fbdata, error: fberror } = await supabase
+  // .from('fixture_barcode')
+  // .select('*')
+  // .eq("fixture_barcode", barcode)
+
+  // const fixture_barcode = _get(fbdata, '0', {});
+
+  // let { data: fldata, error: flerror } = await supabase
+  // .from('fixture_library')
+  // .select('*')
+  // .eq("key", fixture_barcode.fixture_key)
+
+  // const fixture_library = _get(fldata, "0", {});
+
+  const { data, error } = await supabase
   .from('fixture_barcode')
-  .select('*')
-  .eq("fixture_barcode", barcode)
+  .select(`
+    *,
+    fixture_library:fixture_key ( * )
+  `)
+  .eq('fixture_barcode', barcode);
 
-  const fixture_barcode = _get(fbdata, '0', {});
-
-  let { data: fldata, error: flerror } = await supabase
-  .from('fixture_library')
-  .select('*')
-  .eq("key", fixture_barcode.fixture_key)
-
-  const fixture_library = _get(fldata, "0", {});
+  const fixture_barcode = _get(data, '0', {});
 
   // Pass data to the page via props
   return { props: {
-    data: fixture_library,
-    error: flerror,
     fbdata: fixture_barcode,
-    fberror: fberror
+    fberror: error
   } };
 }
 
 export default function Fixture(props) {
-  const [fixture, setFixture] = useState(_get(props, "data", {}));
   const [fixtureBarcode, setFixtureBarcode] = useState(_get(props, "fbdata", {}));
+  const [fixture, setFixture] = useState(_get(fixtureBarcode, "fixture_library", {}));
   const removeFixture = (fixture) => async () => {
     const url = `/api/fixture/remove/${fixtureBarcode.fixture_barcode}`;
     const options = {
