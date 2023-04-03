@@ -9,7 +9,7 @@ import styles from '../styles/Home.module.css';
 export default function Home(props) {
   const { setTitle } = useAppContext();
   useEffect(() => {
-    setTitle("RMT");
+    setTitle("SMT");
   }, []);
   return (
     <Box paddingX="20px" paddingY="30px">
