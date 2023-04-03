@@ -19,15 +19,23 @@ import { supabaseConnection } from '../../../../utils/supabase';
 
 export async function getServerSideProps(context) {
   const { barcode } = context.query;
-  const fkey = barcode.slice(5,10)
+  // const fkey = barcode.slice(5,10);
 
   // Fetch data from external API
   const supabase = supabaseConnection();
 
-  let { data, error } = await supabase
-  .from('fixture_library')
-  .select('*')
-  .eq('key', fkey)
+  // let { data, error } = await supabase
+  // .from('fixture_library')
+  // .select('*')
+  // .eq('key', fkey)
+
+  const { data, error } = await supabase
+  .from('fixture_barcode')
+  .select(`
+    *,
+    fixture_library:fixture_key ( * )
+  `)
+  .eq('fixture_barcode', barcode)
 
   // Pass data to the page via props
   return { props: { data: data } };
@@ -37,7 +45,7 @@ export default function Fixture(props) {
   const router = useRouter();
   const barcode = _get(router, "query.barcode", "");
 
-  const fixture = _get(props, "data.0", {});
+  const fixture = _get(props, "data.0.fixture_library", {});
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
   const [products,setProducts] = useState([])
@@ -65,20 +73,20 @@ export default function Fixture(props) {
   }
 
   const handleSubmit = async () =>{
-const url =`/api/fixture/merchandise/${barcode}`;
-const options ={
-  method : "POST",
-  body : JSON.stringify({
-    barcode,
-    fixture,
-    products
-  })
-}
-const response = await fetch(url, options);
-const {data,error} = await response.json();
-  console.log("data",data,"error",error);
-   data.length && setSaved(true) ;
-   setResults([])
+    const url =`/api/fixture/merchandise/${barcode}`;
+    const options ={
+      method : "POST",
+      body : JSON.stringify({
+        barcode,
+        fixture,
+        products
+      })
+    }
+
+    const response = await fetch(url, options);
+    const {data,error} = await response.json();
+    data.length && setSaved(true);
+    setResults([])
   }
   
   return (
@@ -91,9 +99,9 @@ const {data,error} = await response.json();
         {/* <TextareaAutosize
             style={{fontSize:20, width:320, height:70, marginTop:30}}
             rowsmax={4}
-  value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}/>*/}
+            value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}/>*/}
 
-                     <TextField
+          <TextField
             style={{fontSize:50, width:320, height:70, marginTop:30}}
             rowsmax={4}
             type='number'
