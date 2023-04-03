@@ -45,12 +45,13 @@ export default function Fixture(props) {
   const store_code = 60318;
   let counter = ''
   if(fixture_barcode.counter){
+    console.log(typeof fixture_barcode.counter,fixture_barcode.counter,"gggggggg");
     if(fixture_barcode.counter < 10){
-      counter = `00${fixture_barcode.counter}`
+      counter = `00${fixture_barcode.counter + 1}`
     } else if (fixture_barcode.counter < 100){
-      counter = `0${fixture_barcode.counter}`
+      counter = `0${fixture_barcode.counter + 1}`
     } else if (fixture_barcode.counter < 1000){
-      counter = `${fixture_barcode}`
+      counter = `${fixture_barcode.counter + 1}`
     }
   } else {
     counter = `001`
@@ -78,7 +79,7 @@ export default function Fixture(props) {
   }
 
   const handlePrint = () => {
-    saveBarcode(code)();
+    !saved && saveBarcode(code)();
     window.print();
   }
 
@@ -91,7 +92,7 @@ export default function Fixture(props) {
         <p>4 way new format stand 125CM</p>
         <Barcode value={code} />;
         <Button onClick={handlePrint} variant="contained">Print</Button>
-        <Button onClick={saveBarcode(code)} variant="contained">Save Barcode</Button>
+        {!saved && <Button onClick={saveBarcode(code)} variant="contained">Save Barcode</Button>}
         <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
       </Stack>
     </div>

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
-import {TextareaAutosize, Paper} from '@mui/material'
+import {TextareaAutosize, Paper,TextField} from '@mui/material'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
@@ -40,12 +40,21 @@ export default function Fixture(props) {
       <Scanner onDetected={_onDetected} />
         </Paper>): null}
 
-        <TextareaAutosize
+        {/* <TextareaAutosize
             style={{fontSize:32, width:320, height:100, marginTop:30}}
             rowsmax={4}
             // defaultValue={'No data scanned'}
             value={results[0] ? results[0].codeResult.code : 'No data scanned'}
-        />
+        /> */}
+         <TextField
+            style={{fontSize:50, width:320, height:70, marginTop:30}}
+            rowsmax={4}
+            type='number'
+            value={results[0] ? results[0].codeResult.code : 'No data scanned'}
+            onChange={event => {
+              setResults([{codeResult:{code:event.target.value}}]);
+            }}
+          /> 
       </Stack>
       {_get(results, "0.codeResult.code") &&
         <Link href={`/fixture/remove/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior>

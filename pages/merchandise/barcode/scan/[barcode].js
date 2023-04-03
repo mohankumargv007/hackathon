@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
@@ -11,7 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {TextareaAutosize} from '@mui/material'
+import {TextareaAutosize,TextField} from '@mui/material'
 import { useState } from 'react';
 import Scanner from '../../../../utils/scanner';
 import { supabaseConnection } from '../../../../utils/supabase';
@@ -40,6 +41,8 @@ export default function Fixture(props) {
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
   const [products,setProducts] = useState([])
+  const [saved,setSaved] = useState(false)
+
 
   const handleScanner =() =>{
     setScanner(true)
@@ -53,10 +56,10 @@ export default function Fixture(props) {
   const handleProduct  = async (productCode) =>{
     const url = `/api/fixture/merchandise/${productCode}`;
     const response = await fetch(url);
-    const data = await response.json();
+    const {data,error} = await response.json();
     const group = _get(data,"data.0.group",'');
     const department =  _get(data,"data.0.department",'');
-    setProducts([{code : productCode, group, department,...data.data[0]?data.data[0]:''},...products])
+    data.length && setProducts([{code : productCode, group, department,...data[0]},...products])
     setResults([])
 
   }
@@ -72,7 +75,10 @@ const options ={
   })
 }
 const response = await fetch(url, options);
-const data = await response.json();
+const {data,error} = await response.json();
+  console.log("data",data,"error",error);
+   data.length && setSaved(true) ;
+   setResults([])
   }
   
   return (
@@ -82,11 +88,21 @@ const data = await response.json();
         Type: {fixture.type}
         <h4>Add products</h4>
         <Box >
-        <TextareaAutosize
+        {/* <TextareaAutosize
             style={{fontSize:20, width:320, height:70, marginTop:30}}
             rowsmax={4}
-            value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}/>
-            {results[0] ? <Button onClick={()=>handleProduct(results[0].codeResult.code)} variant="contained">add product</Button> : null}
+  value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}/>*/}
+
+                     <TextField
+            style={{fontSize:50, width:320, height:70, marginTop:30}}
+            rowsmax={4}
+            type='number'
+            value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}
+            onChange={event => {
+              setResults([{codeResult:{code:event.target.value}}]);
+            }}
+          />             
+          {results[0] ? <Button onClick={()=>handleProduct(results[0].codeResult.code)} variant="contained">add product</Button> : null} 
         </Box>
         {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
       <Scanner onDetected={_onDetected} />
@@ -114,8 +130,11 @@ const data = await response.json();
             </TableBody>
           </Table>
         </TableContainer>
-        <Button onClick={(e)=>handleScanner(e)} variant="contained">Scan More</Button>
-        <Button onClick={handleSubmit} variant="contained">Submit</Button>
+        {saved &&
+        <Alert severity="success">Product merchandised successfully!</Alert>
+        }        
+        {!saved && <Button onClick={(e)=>handleScanner(e)} variant="contained">Scan More</Button>}
+        {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> :<Button onClick={handleSubmit} variant="contained">Submit</Button>}
       </Stack>
     </Box>
   )
