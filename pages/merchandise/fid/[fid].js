@@ -41,7 +41,7 @@ export default function Fixture(props) {
       <Stack spacing={2}>
         <h2>{fixture.name}</h2>
         <h3>{fixture.type}</h3>
-        <img src={fixture.front_image} width="400" length="400" />
+        <img src={fixture.front_image} width="100%" maxWidth="400px" />
         <p>Enter count of Fixtures</p>
         <OutlinedInput placeholder="Please enter fixtures count" type="number" value={fcount} onChange={handleChange} />
         <Link href={`/merchandise/fid/scan/${fid}?count=${fcount}`} passHref legacyBehavior><Button variant="contained">Confirm</Button></Link>

@@ -3,6 +3,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
+import { useAppContext } from '../contexts/appContext';
 import styles from '../styles/Home.module.css';
 
 export default function Home(props) {

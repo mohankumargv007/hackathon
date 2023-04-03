@@ -5,15 +5,18 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import _get from 'lodash/get';
 
 export default function MuiCard(props) {
   return (
     <Link href={`/fixture/${props.id}`} passHref legacyBehavior>
       <Card sx={{ maxWidth: 345 }}>
         <CardMedia
+          component="img"
+          height="140"
           sx={{ height: 140 }}
-          image={props.front_image}
-          title="green iguana"
+          image={_get(props, "front_image", "")}
+          alt="green iguana"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
