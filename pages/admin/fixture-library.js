@@ -1,5 +1,4 @@
 import React from "react";
-import next from "next";
 import { Grid } from "@mui/material";
 import { Button } from "@mui/material";
 import Modal from "../../components/reusable-components/modal";
@@ -8,79 +7,13 @@ import { Paper } from "@mui/material";
 import styles from '../../styles/admin/Layout.module.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { DataGrid, GridActionsCellItem, GridRenderCellParams } from '@mui/x-data-grid';
 import { supabaseConnection } from '../../utils/supabase';
-import { useRouter } from 'next/router' 
+import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
+/* import Modal from "../admin/modal"; */
 
 
-const PAGE_NAME = "Fixture Library";
-
-const columns = [
-    { 
-        field: 'concept_code', 
-        headerName: 'Concept Code',
-        width: 150, 
-        editable: true 
-    },
-    { 
-        field: 'type', 
-        headerName: 'Fixture Type', 
-        width: 160, 
-        editable: true 
-    },
-    { 
-        field: 'name', 
-        headerName: 'Fixture Name',
-        width: 250, 
-        editable: true 
-    },
-    { 
-        field: 'key', 
-        headerName: 'Fixture Key', 
-        width: 100,
-        editable: true
-    },
-    {
-        field: 'component_code',
-        headerName: 'Component Code',
-        width: 180,
-        editable: true,
-    },
-    {
-        field: 'actions',
-        headerName: 'Edit',
-        type: 'actions',
-        width: 70,
-        renderCell: (params) => (
-            <EditIcon 
-                onClick={(e) => 
-                    editFixtureLibrary(params)
-                }
-            />
-          ),
-    },
-    {
-        field: 'delete',
-        headerName: 'Delete',
-        type: 'actions',
-        width: 70,
-        renderCell: (params) => (
-              <DeleteIcon 
-                onClick={(e) => 
-                    inactiveSelectedFixture(params)
-                }
-              />
-          ),
-    },
-];
-
-
-function editFixtureLibrary(params) {
-    FixtureLibrary.setRowData(params.row);
-    FixtureLibrary.setFormName("Update Fixture");
-    FixtureLibrary.handleClickOpen();
-}
-
+//InActive Fixture Library On Click Of Delete
 async function inactiveSelectedFixture(row) {
     // Fetch data from external API
     const supabase = supabaseConnection();
@@ -109,31 +42,127 @@ export async function getServerSideProps() {
 function FixtureLibrary(props) {
     const [showModal, setShowModal] = React.useState(false);
     const [formName, setFormName] = React.useState('Create Fixture');
+    const [isUpdate, setIsUpdate] = React.useState(false);
     const [typeOfUpdate, setTypeOfUpdate] = React.useState('Create');
-    const [rowData, setRowData] = React.useState();
     const router = useRouter();
+    const record = {
+        concept_code            : "",
+        type                    : "",
+        name                    : "",
+        component_name          : "",
+        component_count         : "",
+        key                     : "",
+        component_code          : "",
+        components              : "",
+        cad_image               : "",
+        front_image             : "",
+        lateral_image           : "",
+        component_length        : "",
+        component_width         : "",
+        component_height        : "",
+        status                  : true
+    };
 
+    const [rowData, setRowData] = React.useState(record);
+
+    //Close Modal
     const handleClose = (e) => {
         setFormName("Create Fixture");
         setShowModal(false);
+        setIsUpdate(false);
+        setRowData(record);
+        refreshData();
     }
 
-    const handleClickOpen = () => {
+    //Open Model
+    const handleClickOpen = (e) => {
         setShowModal(true);
     };
 
+    //Refresh Fixture Table
     const refreshData = () => {
         router.replace(router.asPath);
     }
 
-    FixtureLibrary.handleClose          = handleClose;
-    FixtureLibrary.handleClickOpen      = handleClickOpen;
-    FixtureLibrary.setFormName          = setFormName;
-    FixtureLibrary.setRowData           = setRowData;
-    FixtureLibrary.refreshData          = refreshData
+    //Edit Fixture 
+    const editFixtureLibrary = (params) => {
+        setRowData(params.row);
+        setFormName("Update Fixture");
+        setIsUpdate(true);
+        setShowModal(true); 
+    }
+
+    //Page Name
+    const PAGE_NAME = "Fixture Library";
+
+    //Table Columns
+    const columns = [
+        { 
+            field: 'concept_code', 
+            headerName: 'Concept Code',
+            width: 150, 
+            editable: true 
+        },
+        { 
+            field: 'type', 
+            headerName: 'Fixture Type', 
+            width: 160, 
+            editable: true 
+        },
+        { 
+            field: 'name', 
+            headerName: 'Fixture Name',
+            width: 250, 
+            editable: true 
+        },
+        { 
+            field: 'key', 
+            headerName: 'Fixture Key', 
+            width: 100,
+            editable: true
+        },
+        {
+            field: 'component_code',
+            headerName: 'Component Code',
+            width: 180,
+            editable: true,
+        },
+        {
+            field: 'actions',
+            headerName: 'Edit',
+            type: 'actions',
+            width: 70,
+            renderCell: (params) => (
+                <EditIcon 
+                    sx={{cursor:"pointer"}}
+                    onClick={(e) => 
+                        editFixtureLibrary(params)
+                    }
+                />
+            ),
+        },
+        {
+            field: 'delete',
+            headerName: 'Delete',
+            type: 'actions',
+            width: 70,
+            renderCell: (params) => (
+                <DeleteIcon 
+                    sx={{cursor:"pointer"}}
+                    onClick={(e) => 
+                        inactiveSelectedFixture(params)
+                    }
+                />
+            ),
+        },
+    ];
+
+    //Refresh Data
+    FixtureLibrary.refreshData          = refreshData;
 
     return (
         <div>
+            {/* <CircularProgress /> */}
             <Paper className={styles.blockMainHight}>
                 <Grid container spacing={2}
                 direction="row"
@@ -157,12 +186,19 @@ function FixtureLibrary(props) {
                 <Table columns={columns} {...props}></Table>
             </Paper>
             {
-                showModal == true ? 
-                <React.StrictMode>
-                    <Modal show="true" key="1" form_name={formName} rowData={rowData} handleClose={handleClose} storage="fixture-library-images"></Modal>
-                </React.StrictMode> : ''
+                showModal == true 
+                ?
+                    <Modal 
+                        show="true" 
+                        isUpdate={isUpdate} 
+                        key="1" 
+                        formName={formName} 
+                        rowData={rowData} 
+                        handleClose={handleClose}
+                        storage="fixture-library-images"
+                    ></Modal>
+                : ''
             }
-            
         </div>
     )
 }
