@@ -3,14 +3,13 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
-import {TextareaAutosize, Paper,TextField} from '@mui/material'
+import {TextareaAutosize, Paper,TextField,Alert} from '@mui/material'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import Scanner from '../../utils/scanner'
 import { useAppContext } from '../../contexts/appContext';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
@@ -18,6 +17,7 @@ export default function Fixture(props) {
   const router = useRouter();
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
+  const [error,setError] = useState(false);
 
   // useEffect(() => {
   //   try {
@@ -40,12 +40,10 @@ export default function Fixture(props) {
                       
               router.push(`/adjacencies/${productCode}`);
     } else {
-      toast.error('Product not found !', {
-        position: toast.POSITION.TOP_LEFT
-    });
-      setResults([])
+      setError(true);
+      setResults([]);
     }
-            
+     
   }
 
   const handleScanner = ( ) =>{
@@ -67,7 +65,6 @@ export default function Fixture(props) {
         {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
         <Scanner onDetected={_onDetected} />
         </Paper>): null}
-        <ToastContainer />
         {/* <TextareaAutosize
           style={{fontSize:32, width:320, height:100, marginTop:30}}
           rowsmax={4}
@@ -81,9 +78,10 @@ export default function Fixture(props) {
             value={results[0] ? results[0].codeResult.code : 'No product scanned'}
             onChange={event => {
               setResults([{codeResult:{code:event.target.value}}]);
+              error && setError(false);
             }}
           /> 
-
+          {error && <Alert severity="error">Barcode not found !</Alert>}
         {_get(results, "0.codeResult.code") &&
           // <Link href={`/adjacencies/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior>
             <Button onClick={handleProceed} variant="contained">Proceed</Button>

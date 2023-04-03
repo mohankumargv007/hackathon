@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
-import {TextareaAutosize, Paper,TextField} from '@mui/material'
+import {TextareaAutosize, Paper,TextField,Alert} from '@mui/material'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
@@ -11,8 +11,7 @@ import Scanner from '../../utils/scanner'
 import { verify } from 'crypto';
 import Quagga from 'quagga'
 import { useAppContext } from '../../contexts/appContext';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
@@ -20,6 +19,7 @@ export default function Fixture(props) {
   const router = useRouter();
   const [scanner,setScanner] = useState(false)
   const [results,setResults] = useState([])
+  const [error,setError] = useState(false)
 
   // useEffect( async () => {
   //   try {
@@ -42,9 +42,7 @@ export default function Fixture(props) {
   }
 
   const handleProceed = async () =>{
-    if(results[0]) {
       const code = _get(results, "0.codeResult.code");
-      router.push(`/merchandise/barcode/${code}`);
       const url = `/api/fixture/barcode/${results[0].codeResult.code}`;
       const response = await fetch(url);
       const {data,error} = await response.json();
@@ -52,12 +50,10 @@ export default function Fixture(props) {
         const code = _get(results, "0.codeResult.code");        
         router.push(`/merchandise/barcode/${code}`);
       } else {
-        toast.error('Barcode not found !', {
-          position: toast.POSITION.TOP_LEFT
-        });
-        setResults([])
+       setError(true);
+        setResults([]);
       }
-    }
+    
   }
 
   const _onDetected = result => {
@@ -72,7 +68,6 @@ export default function Fixture(props) {
       <Stack spacing={4}>
         <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
         <Button onClick = {handleScanner} variant="contained" >Scan Fixture</Button>
-        <ToastContainer />
         {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
         <Scanner onDetected={_onDetected} />
         </Paper>): null}
@@ -90,8 +85,10 @@ export default function Fixture(props) {
             value={results[0] ? results[0].codeResult.code : 'No data scanned'}
             onChange={event => {
               setResults([{codeResult:{code:event.target.value}}]);
+              error && setError(false);
             }}
           /> 
+          {error && <Alert severity="error">Barcode not found !</Alert>}
       </Stack>
       {results[0] ? <Button onClick = {handleProceed} variant="contained" >Proceed</Button> : null}
 

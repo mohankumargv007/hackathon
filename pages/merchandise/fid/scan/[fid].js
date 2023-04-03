@@ -81,6 +81,7 @@ export default function Fixture(props) {
   const [results, setResults] = useState([]);
   const [products,setProducts] = useState([])
   const [saved,setSaved] = useState(false)
+  const [error,setError] = useState(false)
 
   const handleScanner =() =>{
     setScanner(true)
@@ -98,7 +99,7 @@ export default function Fixture(props) {
       const {data,error} = await response.json();
       const group = _get(data,"data.0.group",'');
       const department =  _get(data,"data.0.department",'');
-      data.length && setProducts([{code : productCode, group, department,...data[0]},...products])
+      data.length ? setProducts([{code : productCode, group, department,...data[0]},...products]) : setError(true)
       setResults([])
     } catch (error) {
       console.log(error);
@@ -143,8 +144,10 @@ setResults([])
             value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}
             onChange={event => {
               setResults([{codeResult:{code:event.target.value}}]);
+              error && setError(false);
             }}
           /> 
+          {error && <Alert severity="error">Product not found !</Alert>}
             {results[0] ? <Button onClick={()=>handleProduct(results[0].codeResult.code)} variant="contained">add product</Button> : null}
         </Box>
         {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
