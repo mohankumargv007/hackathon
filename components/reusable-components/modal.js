@@ -23,48 +23,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function Modal(props) {
     const [open, setOpen] = React.useState(true);
-    const record = {
-        concept_code            : "",
-        type                    : "",
-        name                    : "",
-        component_name          : "",
-        component_count         : "",
-        key                     : "",
-        component_code          : "",
-        components              : "",
-        cad_image               : "",
-        front_image             : "",
-        lateral_image           : "",
-        component_length        : "",
-        component_width         : "",
-        component_height        : "",
-        status                  : true
-    };
 
-    const [formData, setFormData] = React.useState(record);
-    //const [formData, setFormData] = React.useState([]);
-
-    /* if(props.hasOwnProperty('rowData') && props.rowData.hasOwnProperty('id') ) {
-        setFormData( () => {  return [...formData, 
-                Object.keys(props.rowData).forEach((key, val) => {
-                    props.rowData[key]
-                })
-            ]
-        });
-    } else {
-        const [formData, setFormData] = React.useState(record);
-    } */
-
-    /* const [formData, setFormData] = React.useState([]);
-    useEffect(() => {
-        createArray();
-    }, [record]);
-
-    const createArray = () => {
-        debugger;
-        setFormData( () => {  return [...formData, record.map((item) => item.name)] });
-    }; */
-
+    const [formData, setFormData] = React.useState(props.rowData);
 
     const formFields = [
         {
@@ -170,18 +130,10 @@ export default function Modal(props) {
     //Storage URL
     const storage_url = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL;
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
     const handleClose = () => {
         setOpen(false);
         props.handleClose(false);
     };
-
-    const clickFileEvent = () => {
-        inputFileRef.current.click();
-    }
   
     const handleInput = (e) => {
         const fieldName = e.target.name;
@@ -198,6 +150,12 @@ export default function Modal(props) {
     async function saveFixtureInformation(e) {
         e.preventDefault();
         try {
+            //From Validations
+            const is_valid_data = validateFormFields();
+            if(!is_valid_data) {
+                alert("All fields are required along with image uploads.");
+                return false;
+            }
             const supabase = supabaseConnection();
             let { error } = await supabase.from('fixture_library').insert([formData])
             if (error) throw error
@@ -286,8 +244,14 @@ export default function Modal(props) {
         }
     }
 
-    const isUrlValid = (field) => {
-        debugger;
+    const validateFormFields = () => {
+        let result = true;
+        Object.keys(formData).forEach((key, val) => {
+            if(key != 'status' && formData[key] == '') {
+                result = false;
+            }
+        })
+        return result;
     };
 
     return (
@@ -338,6 +302,7 @@ export default function Modal(props) {
                                 margin="dense"
                                 variant="standard"
                                 required
+                                value={formData[field.fieldName]}
                                 /* error={field.is_valid == false ? field.helper_text : ''}
                                 helperText={field.is_valid == false ? field.helper_text : ''} */
                                 />
@@ -356,7 +321,7 @@ export default function Modal(props) {
                                         {
                                         formData[field.fieldName] == '' ?
                                             <Button variant="contained" component="label" endIcon={<FileUploadIcon />} sx={{width : "100%"}}>
-                                                {field.fieldName}
+                                                {field.label}
                                                 <input hidden 
                                                     accept="image/*" 
                                                     type="file" 
