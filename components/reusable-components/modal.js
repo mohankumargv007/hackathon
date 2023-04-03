@@ -157,15 +157,26 @@ export default function Modal(props) {
                 return false;
             }
             const supabase = supabaseConnection();
-            let { error } = await supabase.from('fixture_library').insert([formData])
-            if (error) throw error
-            alert('Fixture Created!');
+
+            if(props.isUpdate) {
+                let { error } = await supabase
+                    .from('fixture_library')
+                    .update(formData)
+                    .eq('id', props.rowData.id)
+
+                if (error) throw error
+                alert('Fixture Updated Successfully!');
+            } else {
+                let { error } = await supabase.from('fixture_library').insert([formData])
+                if (error) throw error
+                alert('Fixture Created Successfully!');
+            }
             handleClose();
         } catch (error) {
-            alert('Error Creating Fixture!')
+            alert('Something went wrong.Please contact developer')
             console.log(error)
         } finally {
-            console.log(121)
+            console.log(121);
         }
     }
 
@@ -275,7 +286,7 @@ export default function Modal(props) {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            {props.form_name}
+                            {props.formName}
                         </Typography>
                         <Button autoFocus color="inherit" onClick={saveFixtureInformation}>
                             save

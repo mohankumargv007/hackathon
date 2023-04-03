@@ -42,6 +42,7 @@ export async function getServerSideProps() {
 function FixtureLibrary(props) {
     const [showModal, setShowModal] = React.useState(false);
     const [formName, setFormName] = React.useState('Create Fixture');
+    const [isUpdate, setIsUpdate] = React.useState(false);
     const [typeOfUpdate, setTypeOfUpdate] = React.useState('Create');
     const router = useRouter();
     const record = {
@@ -64,23 +65,30 @@ function FixtureLibrary(props) {
 
     const [rowData, setRowData] = React.useState(record);
 
+    //Close Modal
     const handleClose = (e) => {
         setFormName("Create Fixture");
         setShowModal(false);
+        setIsUpdate(false);
         setRowData(record);
+        refreshData();
     }
 
+    //Open Model
     const handleClickOpen = (e) => {
         setShowModal(true);
     };
 
+    //Refresh Fixture Table
     const refreshData = () => {
         router.replace(router.asPath);
     }
 
+    //Edit Fixture 
     const editFixtureLibrary = (params) => {
         setRowData(params.row);
         setFormName("Update Fixture");
+        setIsUpdate(true);
         setShowModal(true); 
     }
 
@@ -149,6 +157,7 @@ function FixtureLibrary(props) {
         },
     ];
 
+    //Refresh Data
     FixtureLibrary.refreshData          = refreshData;
 
     return (
@@ -177,8 +186,17 @@ function FixtureLibrary(props) {
                 <Table columns={columns} {...props}></Table>
             </Paper>
             {
-                showModal == true ?
-                <Modal show="true" key="1" form_name={formName} rowData={rowData} handleClose={handleClose} storage="fixture-library-images"></Modal>
+                showModal == true 
+                ?
+                    <Modal 
+                        show="true" 
+                        isUpdate={isUpdate} 
+                        key="1" 
+                        formName={formName} 
+                        rowData={rowData} 
+                        handleClose={handleClose}
+                        storage="fixture-library-images"
+                    ></Modal>
                 : ''
             }
         </div>
