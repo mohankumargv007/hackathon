@@ -23,7 +23,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function Modal(props) {
     const [open, setOpen] = React.useState(true);
-    const [formData, setFormData] = React.useState({
+    const record = {
         concept_code            : "",
         type                    : "",
         name                    : "",
@@ -39,80 +39,127 @@ export default function Modal(props) {
         component_width         : "",
         component_height        : "",
         status                  : true
-    });
+    };
+
+    const [formData, setFormData] = React.useState(record);
+    //const [formData, setFormData] = React.useState([]);
+
+    /* if(props.hasOwnProperty('rowData') && props.rowData.hasOwnProperty('id') ) {
+        setFormData( () => {  return [...formData, 
+                Object.keys(props.rowData).forEach((key, val) => {
+                    props.rowData[key]
+                })
+            ]
+        });
+    } else {
+        const [formData, setFormData] = React.useState(record);
+    } */
+
+    /* const [formData, setFormData] = React.useState([]);
+    useEffect(() => {
+        createArray();
+    }, [record]);
+
+    const createArray = () => {
+        debugger;
+        setFormData( () => {  return [...formData, record.map((item) => item.name)] });
+    }; */
+
 
     const formFields = [
         {
-            'fieldName' : 'concept_code',
-            'type'      : 'number',
-            'label'     : 'Concept Code'
+            'fieldName'     : 'concept_code',
+            'type'          : 'number',
+            'label'         : 'Concept Code',
+            'helper_text'   : 'Please enter concept code',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'type',
-            'type'      : 'text',
-            'label'     : 'Fixture Type'
+            'fieldName'     : 'type',
+            'type'          : 'text',
+            'label'         : 'Fixture Type',
+            'helper_text'   : 'Please enter fixture type',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'name',
-            'type'      : 'text',
-            'label'     : 'Fixture Name'
+            'fieldName'     : 'name',
+            'type'          : 'text',
+            'label'         : 'Fixture Name',
+            'helper_text'   : 'Please enter fixture name',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'component_name',
-            'type'      : 'text',
-            'label'     : 'Component Name'
+            'fieldName'     : 'component_name',
+            'type'          : 'text',
+            'label'         : 'Component Name',
+            'helper_text'   : 'Please enter component name',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'component_count',
-            'type'      : 'number',
-            'label'     : 'Component Count'
+            'fieldName'     : 'component_count',
+            'type'          : 'number',
+            'label'         : 'Component Count',
+            'helper_text'   : 'Please enter component count',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'key',
-            'type'      : 'number',
-            'label'     : 'Key'
+            'fieldName'     : 'key',
+            'type'          : 'number',
+            'label'         : 'Key',
+            'helper_text'   : 'Please enter fixture key',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'component_code',
-            'type'      : 'text',
-            'label'     : 'Component Code'
+            'fieldName'     : 'component_code',
+            'type'          : 'text',
+            'label'         : 'Component Code',
+            'helper_text'   : 'Please enter component code',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'components',
-            'type'      : 'number',
-            'label'     : 'No.of Components'
+            'fieldName'     : 'components',
+            'type'          : 'number',
+            'label'         : 'No.of Components',
+            'helper_text'   : 'Please enter no.of component',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'component_length',
-            'type'      : 'number',
-            'label'     : 'Component Length'
+            'fieldName'     : 'component_length',
+            'type'          : 'number',
+            'label'         : 'Component Length',
+            'helper_text'   : 'Please enter component length',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'component_width',
-            'type'      : 'number',
-            'label'     : 'Component Width'
+            'fieldName'     : 'component_width',
+            'type'          : 'number',
+            'label'         : 'Component Width',
+            'helper_text'   : 'Please enter component width',
+            'is_valid'      : false,
         },
         {
-            'fieldName' : 'component_height',
-            'type'      : 'number',
-            'label'     : 'Component Height'
+            'fieldName'     : 'component_height',
+            'type'          : 'number',
+            'label'         : 'Component Height',
+            'helper_text'   : 'Please enter component height',
+            'is_valid'      : false,
         }
     ];
 
     const imageFields = [
         {
             'fieldName' : 'cad_image',
-            'type'      : 'text',
+            'type'      : 'image',
             'label'     : 'Cad Image'
         },
         {
             'fieldName' : 'front_image',
-            'type'      : 'text',
+            'type'      : 'image',
             'label'     : 'Front Image'
         },
         {
             'fieldName' : 'lateral_image',
-            'type'      : 'text',
+            'type'      : 'image',
             'label'     : 'Lateral Image'
         }
     ];
@@ -139,6 +186,7 @@ export default function Modal(props) {
     const handleInput = (e) => {
         const fieldName = e.target.name;
         const fieldValue = e.target.value;
+        
 
         setFormData((prevState) => ({
         ...prevState,
@@ -148,7 +196,7 @@ export default function Modal(props) {
 
     //Insert Fixture Library
     async function saveFixtureInformation(e) {
-        e.preventDefault()
+        e.preventDefault();
         try {
             const supabase = supabaseConnection();
             let { error } = await supabase.from('fixture_library').insert([formData])
@@ -183,7 +231,6 @@ export default function Modal(props) {
             //File Name = Type Of Image + Current Timestamp + _ + Upload Image Name From Browser
             const fileName  = type.field.fieldName+'/'+Date.now()+'_'+imageFile[0].name;
         
-
             //Supabase Connection
             const supabase  = supabaseConnection();
 
@@ -239,6 +286,10 @@ export default function Modal(props) {
         }
     }
 
+    const isUrlValid = (field) => {
+        debugger;
+    };
+
     return (
         <div>
             <Dialog
@@ -285,6 +336,10 @@ export default function Modal(props) {
                                 onChange={handleInput}
                                 size="small"
                                 margin="dense"
+                                variant="standard"
+                                required
+                                /* error={field.is_valid == false ? field.helper_text : ''}
+                                helperText={field.is_valid == false ? field.helper_text : ''} */
                                 />
                             </Grid>
                         ))}
@@ -305,7 +360,6 @@ export default function Modal(props) {
                                                 <input hidden 
                                                     accept="image/*" 
                                                     type="file" 
-                                                    fullWidth
                                                     label={field.label}
                                                     id="outlined-size-small"
                                                     name={field.fieldName}
@@ -337,7 +391,6 @@ export default function Modal(props) {
                                                             <input hidden 
                                                                 accept="image/*" 
                                                                 type="file" 
-                                                                fullWidth
                                                                 label={field.label}
                                                                 id="outlined-size-small"
                                                                 name={field.fieldName}
