@@ -14,19 +14,19 @@ export async function getServerSideProps(context) {
   // Fetch data from external API
   const supabase = supabaseConnection();
 
-  let { data: fldata, error: flerror } = await supabase
-  .from('fixture_library')
-  .select('*')
-  .eq("id", farr[1])
-
-  const fixture_library = _get(fldata, "0", {});
-
   let { data: fbdata, error: fberror } = await supabase
   .from('fixture_barcode')
   .select('*')
   .eq("fixture_barcode", barcode)
 
   const fixture_barcode = _get(fbdata, '0', {});
+
+  let { data: fldata, error: flerror } = await supabase
+  .from('fixture_library')
+  .select('*')
+  .eq("key", fixture_barcode.fixture_key)
+
+  const fixture_library = _get(fldata, "0", {});
 
   // Pass data to the page via props
   return { props: {
