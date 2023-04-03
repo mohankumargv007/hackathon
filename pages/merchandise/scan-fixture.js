@@ -9,7 +9,8 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import Scanner from '../../utils/scanner'
 import { verify } from 'crypto';
-import Quagga from 'quagga'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -39,18 +40,25 @@ export default function Fixture(props) {
   }
 
   const handleProceed = async () =>{
-   
-    if(results[0]) {
+    const url = `/api/fixture/barcode/${results[0].codeResult.code}`;
+    const response = await fetch(url);
+    const {data,error} = await response.json();
+    if(data.length) {
             const code = _get(results, "0.codeResult.code");
                       
               router.push(`/merchandise/barcode/${code}`);
+    } else {
+      toast.error('Barcode not found !', {
+        position: toast.POSITION.TOP_LEFT
+    });
+      setResults([])
     }
             
   }
 
 const _onDetected = result => {
   setResults([])
-  if(result.codeResult.code .length == 13){
+  if(result.codeResult.code.length == 13){
   setResults([result])
   }
 }
@@ -60,7 +68,7 @@ const _onDetected = result => {
       <Stack spacing={4}>
         <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
         <Button onClick = {handleScanner} variant="contained" >Scan Fixture</Button>
-
+        <ToastContainer />
         {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
         <Scanner onDetected={_onDetected} />
         </Paper>): null}

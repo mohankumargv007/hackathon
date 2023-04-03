@@ -23,7 +23,20 @@ export default async function handler(req, res) {
     } catch(error) {
       res.status(500).send();
     }
-  } else {
+  } else if (req.method == 'GET'){
+    const supabase = supabaseConnection();
+    const barcode = req.query.barcode;
+    try {
+      const { data, error } = await supabase
+      .from('fixture_barcode')
+      .select('*')
+      .eq('fixture_barcode',barcode)
+      res.status(200).json({data, error});
+      
+    } catch (error) {
+      res.status(500).send();
+    }
+  }else {
      // Handle any other HTTP method
      res.status(405).send({ message: 'Only PUT requests allowed' })
   }

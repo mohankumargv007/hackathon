@@ -8,6 +8,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import Scanner from '../../utils/scanner'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Fixture(props) {
@@ -27,6 +29,22 @@ export default function Fixture(props) {
   //     console.log(err);
   //   }
   // }, [results]);
+  const handleProceed = async () =>{
+    const productCode = _get(results, "0.codeResult.code");
+    const url = `/api/fixture/adjacencies/${productCode}`;
+    const response = await fetch(url);
+    const {data,error} = await response.json();
+    if(data.length) {
+                      
+              router.push(`/adjacencies/${productCode}`);
+    } else {
+      toast.error('Product not found !', {
+        position: toast.POSITION.TOP_LEFT
+    });
+      setResults([])
+    }
+            
+  }
 
   const handleScanner = ( ) =>{
     setScanner(true)
@@ -47,7 +65,7 @@ export default function Fixture(props) {
         {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
         <Scanner onDetected={_onDetected} />
         </Paper>): null}
-
+        <ToastContainer />
         {/* <TextareaAutosize
           style={{fontSize:32, width:320, height:100, marginTop:30}}
           rowsmax={4}
@@ -65,7 +83,9 @@ export default function Fixture(props) {
           /> 
 
         {_get(results, "0.codeResult.code") &&
-          <Link href={`/adjacencies/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior><Button variant="contained">Proceed</Button></Link>
+          // <Link href={`/adjacencies/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior>
+            <Button onClick={handleProceed} variant="contained">Proceed</Button>
+          //  {/* </Link> */}
         }
       </Stack>
     </Box>
