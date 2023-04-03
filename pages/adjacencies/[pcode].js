@@ -134,11 +134,11 @@ export default function Fixture(props) {
           </Table>
         </TableContainer>
         {saved &&
-          <Alert severity="success">Product merchandised successfully!</Alert>
-        }
-        {!saved && <Button onClick={(e) => handleScanner(e)} variant="contained">Scan More</Button>}
-        {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : <Button onClick={handleSubmit} variant="contained">Submit</Button>}
-      </Stack>
+        <Alert severity="success">Product merchandised successfully!</Alert>
+        }        
+        {!saved && <Button onClick={(e)=>handleScanner(e)} variant="contained">Scan More</Button>}
+        {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> :(products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null)}
+        </Stack>
     </Box>
   )
 }

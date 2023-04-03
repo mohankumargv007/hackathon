@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import {TextareaAutosize, Paper,TextField} from '@mui/material'
@@ -8,10 +9,13 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import Scanner from '../../../utils/scanner';
 import { useAppContext } from '../../../contexts/appContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
   setTitle("Remove Fixture");
+  const router = useRouter();
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
 
@@ -24,6 +28,22 @@ export default function Fixture(props) {
   //     console.log(err);
   //   }
   // }, [results]);
+  const handleProceed = async () =>{
+    const url = `/api/fixture/barcode/${results[0].codeResult.code}`;
+    const response = await fetch(url);
+    const {data,error} = await response.json();
+    if(data.length) {
+            const barcode = _get(results, "0.codeResult.code");
+                      
+              router.push(`/fixture/remove/${barcode}`);
+    } else {
+      toast.error('Barcode not found !', {
+        position: toast.POSITION.TOP_LEFT
+    });
+      setResults([])
+    }
+            
+  }
 
   const handleScanner = ( ) =>{
     setScanner(true)
@@ -42,7 +62,7 @@ export default function Fixture(props) {
       {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
       <Scanner onDetected={_onDetected} />
         </Paper>): null}
-
+        <ToastContainer />
         {/* <TextareaAutosize
             style={{fontSize:32, width:320, height:100, marginTop:30}}
             rowsmax={4}
@@ -60,11 +80,11 @@ export default function Fixture(props) {
           /> 
       </Stack>
       {_get(results, "0.codeResult.code") &&
-        <Link href={`/fixture/remove/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior>
+        // <Link href={`/fixture/remove/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior>
           <Box paddingY="20px">
-            <Button variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
+            <Button onClick = {handleProceed} variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
           </Box>
-        </Link>
+        // </Link>
       }
     </Box>
   )

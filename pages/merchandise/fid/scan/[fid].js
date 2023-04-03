@@ -92,13 +92,17 @@ export default function Fixture(props) {
   }
 
   const handleProduct  = async (productCode) =>{
-    const url = `/api/fixture/merchandise/${productCode}`;
-    const response = await fetch(url);
-    const {data,error} = await response.json();
-    const group = _get(data,"data.0.group",'');
-    const department =  _get(data,"data.0.department",'');
-    data.length && setProducts([{code : productCode, group, department,...data[0]},...products]);
-    setResults([]);
+    try {
+      const url = `/api/fixture/merchandise/${productCode}`;
+      const response = await fetch(url);
+      const {data,error} = await response.json();
+      const group = _get(data,"data.0.group",'');
+      const department =  _get(data,"data.0.department",'');
+      data.length && setProducts([{code : productCode, group, department,...data[0]},...products])
+      setResults([])
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handleSubmit = async () => {
@@ -173,7 +177,7 @@ setResults([])
         <Alert severity="success">Product merchandised successfully!</Alert>
         }        
         {!saved && <Button onClick={(e)=>handleScanner(e)} variant="contained">Scan More</Button>}
-        {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> :<Button onClick={handleSubmit} variant="contained">Submit</Button>}
+        {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null)}
       </Stack>
     </Box>
   )
