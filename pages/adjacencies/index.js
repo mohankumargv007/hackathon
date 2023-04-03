@@ -8,9 +8,11 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import Scanner from '../../utils/scanner'
-
+import { useAppContext } from '../../contexts/appContext';
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Scan Product");
   const router = useRouter();
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);

@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { supabaseConnection } from '../../../utils/supabase';
+import { useAppContext } from '../../../contexts/appContext';
 
 export async function getServerSideProps(context) {
   const { barcode } = context.query;
@@ -46,6 +47,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Remove Fixture");
   const [fixtureBarcode, setFixtureBarcode] = useState(_get(props, "fbdata", {}));
   const [fixture, setFixture] = useState(_get(fixtureBarcode, "fixture_library", {}));
   const removeFixture = (fixture) => async () => {

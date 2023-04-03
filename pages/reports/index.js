@@ -10,8 +10,11 @@ import {
   Tooltip, 
   Legend
 } from "recharts";
+import { useAppContext } from '../../contexts/appContext';
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Reports");
   return (
     <Box paddingX="20px" paddingY="40px">
       <BarChart
