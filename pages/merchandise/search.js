@@ -2,7 +2,7 @@ import _filter from 'lodash/filter';
 import _includes from 'lodash/includes';
 import { supabaseConnection } from '../../utils/supabase';
 import SearchFixture from '../../components/merchandise/search';
-import { FixtureProvider } from '../../contexts/fixtureContext';
+import { useAppContext } from '../../contexts/appContext';
 
 const merchadiseTypes = ["arm", "prong", "shelves"];
 
@@ -32,6 +32,8 @@ export async function getServerSideProps() {
 }
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Select Fixture");
   return (
     <SearchFixture {...props} />
   )

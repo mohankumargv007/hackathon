@@ -1,6 +1,6 @@
 import { supabaseConnection } from '../../utils/supabase';
 import SearchFixture from '../../components/fixture/search';
-import { FixtureProvider } from '../../contexts/fixtureContext';
+import { useAppContext } from '../../contexts/appContext';
 
 export async function getServerSideProps() {
   // Fetch data from external API
@@ -15,9 +15,10 @@ export async function getServerSideProps() {
 }
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Select Fixture");
+
   return (
-    <FixtureProvider>
-      <SearchFixture {...props} />
-    </FixtureProvider>
+    <SearchFixture {...props} />
   )
 }

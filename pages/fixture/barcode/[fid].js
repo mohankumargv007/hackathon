@@ -5,8 +5,9 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { supabaseConnection } from '../../../utils/supabase';
 import styles from '../../../styles/Layout.module.css';
+import { useAppContext } from '../../../contexts/appContext';
 import Barcode from 'react-barcode';
-import { useEffect,useState } from 'react';
+import { useState } from 'react';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
@@ -40,6 +41,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Barcode Fixture");
   const fixture = _get(props, "data", {});
   const fixture_barcode = _get(props, "fbdata", {});
   const store_code = 60318;
@@ -57,9 +60,7 @@ export default function Fixture(props) {
     counter = `001`
   }
 
-
-
-//generating the barcode
+  //generating the barcode
   const barCode =  `${store_code}${fixture.key}${counter}`
   const [code, setCode] = useState(barCode);
   

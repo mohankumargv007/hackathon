@@ -10,10 +10,11 @@ import { useState } from 'react';
 import Scanner from '../../utils/scanner'
 import { verify } from 'crypto';
 import Quagga from 'quagga'
-
-
+import { useAppContext } from '../../contexts/appContext';
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Scan Fixture");
   const router = useRouter();
   const [scanner,setScanner] = useState(false)
   const [results,setResults] = useState([])
@@ -39,21 +40,18 @@ export default function Fixture(props) {
   }
 
   const handleProceed = async () =>{
-   
     if(results[0]) {
-            const code = _get(results, "0.codeResult.code");
-                      
-              router.push(`/merchandise/barcode/${code}`);
+      const code = _get(results, "0.codeResult.code");
+      router.push(`/merchandise/barcode/${code}`);
     }
-            
   }
 
-const _onDetected = result => {
-  setResults([])
-  if(result.codeResult.code .length == 13){
-  setResults([result])
+  const _onDetected = result => {
+    setResults([])
+    if(result.codeResult.code .length == 13){
+    setResults([result])
+    }
   }
-}
 
   return (
     <Box paddingX="20px" paddingY="40px">

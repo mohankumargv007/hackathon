@@ -6,7 +6,7 @@ import Layout from '../components/layout';
 import '../styles/globals.css';
 import AdminLayout from '../components/admin/admin-layout';
 import { useRouter } from 'next/router';
-import { FixtureProvider } from '../contexts/fixtureContext';
+import { AppProvider } from '../contexts/appContext';
 
 function MyApp({ Component, pageProps }) {
 	const router = useRouter();
@@ -19,11 +19,11 @@ function MyApp({ Component, pageProps }) {
 				<AdminLayout>
 					<Component {...pageProps} />
 				</AdminLayout> :
-				<FixtureProvider value={{title, setTitle}}>
+				<AppProvider value={{title, setTitle}}>
 					<Layout>
 						<Component {...pageProps} />
 					</Layout>
-				</FixtureProvider>
+				</AppProvider>
 			}
 		</ThemeProvider>
 		);
