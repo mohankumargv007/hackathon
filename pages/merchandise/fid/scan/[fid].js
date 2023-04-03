@@ -16,7 +16,7 @@ import {TextareaAutosize , TextField} from '@mui/material'
 import { useState } from 'react';
 import Scanner from '../../../../utils/scanner';
 import { supabaseConnection } from '../../../../utils/supabase';
-
+import { useAppContext } from '../../../../contexts/appContext';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
@@ -68,6 +68,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Scan Products");
   const router = useRouter();
   const fid = _get(router, "query.fid", "");
   const count = _get(router, "query.count","")
@@ -80,7 +82,6 @@ export default function Fixture(props) {
   const [products,setProducts] = useState([])
   const [saved,setSaved] = useState(false)
 
-  
   const handleScanner =() =>{
     setScanner(true)
   }
@@ -96,9 +97,8 @@ export default function Fixture(props) {
     const {data,error} = await response.json();
     const group = _get(data,"data.0.group",'');
     const department =  _get(data,"data.0.department",'');
-    data.length && setProducts([{code : productCode, group, department,...data[0]},...products])
-    setResults([])
-
+    data.length && setProducts([{code : productCode, group, department,...data[0]},...products]);
+    setResults([]);
   }
 
   const handleSubmit = async () => {

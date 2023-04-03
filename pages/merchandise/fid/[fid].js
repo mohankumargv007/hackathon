@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { supabaseConnection } from '../../../utils/supabase';
+import { useAppContext } from '../../../contexts/appContext';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
@@ -24,6 +25,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Review Fixture Details");
   const router = useRouter();
   const [fcount, setFcount] = useState(1);
   const fid = _get(router, "query.fid", "");

@@ -16,6 +16,7 @@ import {TextareaAutosize,TextField} from '@mui/material'
 import { useState } from 'react';
 import Scanner from '../../../../utils/scanner';
 import { supabaseConnection } from '../../../../utils/supabase';
+import { useAppContext } from '../../../../contexts/appContext';
 
 export async function getServerSideProps(context) {
   const { barcode } = context.query;
@@ -42,6 +43,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { setTitle } = useAppContext();
+  setTitle("Scan Products");
   const router = useRouter();
   const barcode = _get(router, "query.barcode", "");
 
