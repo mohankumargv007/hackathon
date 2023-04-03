@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import _get from 'lodash/get';
 import { supabaseConnection } from '../../utils/supabase';
 import Box from '@mui/material/Box';
@@ -14,7 +15,9 @@ import { useAppContext } from '../../contexts/appContext';
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Reports");
+  useEffect(() => {
+    setTitle("Reports");
+  }, []);
   return (
     <Box paddingX="20px" paddingY="40px">
       <BarChart

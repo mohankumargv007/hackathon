@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from 'next/link';
 import _get from 'lodash/get';
 import Alert from '@mui/material/Alert';
@@ -48,7 +48,9 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Remove Fixture");
+  useEffect(() => {
+    setTitle("Remove Fixture");
+  }, []);
   const [fixtureBarcode, setFixtureBarcode] = useState(_get(props, "fbdata", {}));
   const [fixture, setFixture] = useState(_get(fixtureBarcode, "fixture_library", {}));
   const removeFixture = (fixture) => async () => {

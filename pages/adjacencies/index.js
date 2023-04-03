@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import {TextareaAutosize, Paper,TextField,Alert} from '@mui/material'
@@ -13,12 +12,14 @@ import { useAppContext } from '../../contexts/appContext';
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Scan Product");
   const router = useRouter();
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
   const [error,setError] = useState(false);
 
+  useEffect(() => {
+    setTitle("Scan Product");
+  }, []);
   // useEffect(() => {
   //   try {
   //     if(results[0]) {

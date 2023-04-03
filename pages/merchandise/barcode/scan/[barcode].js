@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
@@ -44,7 +45,6 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Scan Products");
   const router = useRouter();
   const barcode = _get(router, "query.barcode", "");
 
@@ -55,6 +55,9 @@ export default function Fixture(props) {
   const [saved,setSaved] = useState(false);
   const [error,setError] = useState(false);
 
+  useEffect(() => {
+    setTitle("Scan Products");
+  }, []);
 
   const handleScanner =() =>{
     setScanner(true)
@@ -72,8 +75,7 @@ export default function Fixture(props) {
     const group = _get(data,"data.0.group",'');
     const department =  _get(data,"data.0.department",'');
     data.length ? setProducts([{code : productCode, group, department,...data[0]},...products]) : setError(true);
-    setResults([])
-
+    setResults([]);
   }
 
   const handleSubmit = async () =>{

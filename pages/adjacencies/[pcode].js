@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import _get from 'lodash/get';
@@ -35,15 +35,16 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Scan Products");
   const router = useRouter();
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
   const [error,setError] = useState(false);
-  const parentProd = _get(props, "data.0")
-
+  const parentProd = _get(props, "data.0");
+  useEffect(() => {
+    setTitle("Scan Products");
+  }, []);
   const handleScanner = () => {
     setScanner(true)
   }

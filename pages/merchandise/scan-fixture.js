@@ -15,12 +15,14 @@ import { useAppContext } from '../../contexts/appContext';
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Scan Fixture");
   const router = useRouter();
   const [scanner,setScanner] = useState(false)
   const [results,setResults] = useState([])
   const [error,setError] = useState(false)
 
+  useEffect(() => {
+    setTitle("Scan Fixture");
+  }, []);
   // useEffect( async () => {
   //   try {
   //     if(results[0]) {

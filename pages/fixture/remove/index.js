@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
@@ -12,12 +11,14 @@ import { useAppContext } from '../../../contexts/appContext';
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Remove Fixture");
   const router = useRouter();
   const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
   const [error,setError] = useState(false);
 
+  useEffect(() => {
+    setTitle("Remove Fixture");
+  }, []);
   // useEffect(() => {
   //   try {
   //     if(results[0]) {

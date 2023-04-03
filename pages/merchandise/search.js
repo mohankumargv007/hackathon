@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import _filter from 'lodash/filter';
 import _includes from 'lodash/includes';
 import { supabaseConnection } from '../../utils/supabase';
@@ -33,7 +34,9 @@ export async function getServerSideProps() {
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Select Fixture");
+  useEffect(() => {
+    setTitle("Select Fixture");
+  }, []);
   return (
     <SearchFixture {...props} />
   )

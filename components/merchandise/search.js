@@ -17,7 +17,7 @@ const merchadiseTypes = [{
   }];
 
 export default function Home(props) {
-  const allfixtures = _get(props, "data");
+  const allfixtures = _get(props, "data", []);
   let fixtures = _cloneDeep(allfixtures);
 
   const [name, setName] = React.useState('');

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
@@ -69,7 +70,6 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Scan Products");
   const router = useRouter();
   const fid = _get(router, "query.fid", "");
   const count = _get(router, "query.count","")
@@ -82,6 +82,10 @@ export default function Fixture(props) {
   const [products,setProducts] = useState([])
   const [saved,setSaved] = useState(false)
   const [error,setError] = useState(false)
+
+  useEffect(() => {
+    setTitle("Scan Products");
+  }, []);
 
   const handleScanner =() =>{
     setScanner(true)

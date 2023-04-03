@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
@@ -31,7 +32,9 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Review Fixture Details");
+  useEffect(() => {
+    setTitle("Review Fixture Details");
+  }, []);
   const router = useRouter();
   const barcode = _get(router, "query.barcode", "");
   const fixture = _get(props, "data.0.fixture_library", {});

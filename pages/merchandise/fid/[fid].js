@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
@@ -26,7 +26,9 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Review Fixture Details");
+  useEffect(() => {
+    setTitle("Review Fixture Details");
+  }, []);
   const router = useRouter();
   const [fcount, setFcount] = useState(1);
   const fid = _get(router, "query.fid", "");

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { supabaseConnection } from '../../utils/supabase';
 import SearchFixture from '../../components/fixture/search';
 import { useAppContext } from '../../contexts/appContext';
@@ -16,7 +17,10 @@ export async function getServerSideProps() {
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Select Fixture");
+
+  useEffect(() => {
+    setTitle("Select Fixture");
+  }, []);
 
   return (
     <SearchFixture {...props} />

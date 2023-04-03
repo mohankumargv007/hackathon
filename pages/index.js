@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -5,6 +6,10 @@ import Link from 'next/link';
 import styles from '../styles/Home.module.css';
 
 export default function Home(props) {
+  const { setTitle } = useAppContext();
+  useEffect(() => {
+    setTitle("RMT");
+  }, []);
   return (
     <Box paddingX="20px" paddingY="30px">
       <Stack spacing={2} sx={{ width: "100%" }}>

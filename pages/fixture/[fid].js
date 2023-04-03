@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
@@ -23,7 +24,10 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { setTitle } = useAppContext();
-  setTitle("Review Fixture Details");
+  useEffect(() => {
+    setTitle("Review Fixture Details");
+  }, []);
+
   const fixture = _get(props, "data.0", {});
   return (
     <Box paddingX={"20px"}>
