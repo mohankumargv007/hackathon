@@ -341,7 +341,7 @@ export default function Modal(props) {
                         ))}
                     </Grid>
                     {/* Image Uploads */}
-                    <div mt={10}>
+                    <div className={commonStyles.marginTop}>
                     <Grid container spacing={2}
                     direction="row"
                     justifyContent="center"
