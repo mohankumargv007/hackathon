@@ -191,10 +191,10 @@ function FixtureLibrary(props) {
                     <Modal 
                         show="true" 
                         isUpdate={isUpdate} 
-                        key="1" 
                         formName={formName} 
                         rowData={rowData} 
                         handleClose={handleClose}
+                        page="fixtures"
                         storage="fixture-library-images"
                     ></Modal>
                 : ''

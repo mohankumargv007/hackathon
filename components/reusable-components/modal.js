@@ -156,6 +156,12 @@ export default function Modal(props) {
                 alert("All fields are required along with image uploads.");
                 return false;
             }
+
+            //Calculate Linear Meter Only For Fixture Library
+            if(props.page == 'fixtures') {
+                formData.linear_meter = formData.components * formData.component_length * 0.01
+            }
+
             const supabase = supabaseConnection();
 
             if(props.isUpdate) {
