@@ -16,15 +16,19 @@ import ImageListItem from '@mui/material/ImageListItem';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Loading from '../../components/reusable-components/loader';
+import commonStyles from '../../styles/Common.module.css';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="left" ref={ref} {...props} />;
+  return <Slide className={styles.stylesModal} direction="left" ref={ref} {...props} />;
 });
 
 export default function Modal(props) {
     const [open, setOpen] = React.useState(true);
 
     const [formData, setFormData] = React.useState(props.rowData);
+
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const formFields = [
         {
@@ -132,6 +136,7 @@ export default function Modal(props) {
 
     const handleClose = () => {
         setOpen(false);
+        setIsLoading(false);
         props.handleClose(false);
     };
   
@@ -149,11 +154,13 @@ export default function Modal(props) {
     //Insert Fixture Library
     async function saveFixtureInformation(e) {
         e.preventDefault();
+        setIsLoading(true);
         try {
             //From Validations
             const is_valid_data = validateFormFields();
             if(!is_valid_data) {
                 alert("All fields are required along with image uploads.");
+                setIsLoading(false);
                 return false;
             }
 
@@ -180,14 +187,15 @@ export default function Modal(props) {
             handleClose();
         } catch (error) {
             alert('Something went wrong.Please contact developer')
-            console.log(error)
+            setIsLoading(false);
         } finally {
-            console.log(121);
+            setIsLoading(false);
         }
     }
 
     //Upload File To Supabase Storage
     async function uploadFileToStorage(type, e, edit) {
+        setIsLoading(true);
         const imageFile = e.target.files;
 
         if(imageFile.length <= 0) {
@@ -227,16 +235,19 @@ export default function Modal(props) {
                 ...prevState,
                 [type_of_image]: PUBLIC_IMAGE_URL
             }));
+            setIsLoading(false);
         } catch (error) {
             alert('Error Uploading Image')
             console.log(error)
+            setIsLoading(false);
         } finally {
-            console.log(2121);
+            setIsLoading(false);
         }
-    } 
+    }
     
     //Delete Uploaded Image
     async function deleteUploadedImage(type) {
+        setIsLoading(true);
         try {
             //Type Of Image
             const type_of_image = type.field.fieldName;
@@ -256,8 +267,9 @@ export default function Modal(props) {
                 ...prevState,
                 [type_of_image]: ""
             }));
+            setIsLoading(false);
         } catch (error) {
-
+            setIsLoading(false);
         }
     }
 
@@ -273,15 +285,17 @@ export default function Modal(props) {
 
     return (
         <div>
+            {
+                isLoading == true ? <Loading/> : ''
+            }
             <Dialog
                 fullScreen
                 open={open}
                 onClose={handleClose}
                 TransitionComponent={Transition}
-                className={styles.stylesModal}
             >
                 <form onSubmit={saveFixtureInformation}>
-                <AppBar sx={{ position: 'relative' }}>
+                <AppBar sx={{ position: 'relative' }} className={commonStyles.modelHeader}>
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -294,7 +308,7 @@ export default function Modal(props) {
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                             {props.formName}
                         </Typography>
-                        <Button autoFocus color="inherit" onClick={saveFixtureInformation}>
+                        <Button autoFocus color="inherit" onClick={saveFixtureInformation} className={commonStyles.save}>
                             save
                         </Button>
                     </Toolbar>
@@ -307,7 +321,7 @@ export default function Modal(props) {
                     alignItems="left"
                     >
                         {formFields.map((field, index) => (
-                            <Grid item lg={3} md={3} sm={12} xs={12} textAlign="center">
+                            <Grid item lg={4} md={4} sm={12} xs={12} textAlign="center">
                                 <TextField
                                 fullWidth 
                                 label={field.label}
@@ -333,7 +347,7 @@ export default function Modal(props) {
                     justifyContent="center"
                     >
                         {imageFields.map((field, index) => (
-                            <Grid item lg={2} md={3} sm={12} xs={12} textAlign="center">
+                            <Grid item lg={4} md={4} sm={12} xs={12} textAlign="center">
                                 <div style={{marginTop:"10%"}}>
                                         {
                                         formData[field.fieldName] == '' ?
@@ -369,7 +383,7 @@ export default function Modal(props) {
                                                 </ImageListItem>
                                                 <div mt={10}>
                                                     <ButtonGroup size="medium">
-                                                        <Button variant="contained" component="label" endIcon={<EditIcon />} sx={{width : "100"}}>
+                                                        <Button variant="contained" component="label" endIcon={<EditIcon className={styles.iconPadd} sx={{ marginLeft: '0 !important' }}/>} sx={{width : "100"}}>
                                                             <input hidden 
                                                                 accept="image/*" 
                                                                 type="file" 
@@ -383,7 +397,7 @@ export default function Modal(props) {
                                                                 margin="dense"
                                                             />
                                                         </Button>
-                                                        <Button color='error' variant="contained" component="label" endIcon={<DeleteIcon />} sx={{width : "100"}}
+                                                        <Button color='error' variant="contained" component="label" endIcon={<DeleteIcon className={styles.iconPadd}/>} sx={{width : "100"}}
                                                             onClick={(e) => 
                                                                 deleteUploadedImage({field})
                                                             }

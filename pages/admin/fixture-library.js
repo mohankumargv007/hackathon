@@ -10,7 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { supabaseConnection } from '../../utils/supabase';
 import { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
-/* import Modal from "../admin/modal"; */
+import Loading from '../../components/reusable-components/loader';
 
 
 //InActive Fixture Library On Click Of Delete
@@ -34,9 +34,9 @@ export async function getServerSideProps() {
     let { data, error } = await supabase
     .from('fixture_library')
     .select('*')
-    .eq('status', true)
+    .eq('status', true);
 
-    return { props: { data: data } };
+    return { props: { data: data} };
 }
 
 function FixtureLibrary(props) {
@@ -44,6 +44,7 @@ function FixtureLibrary(props) {
     const [formName, setFormName] = React.useState('Create Fixture');
     const [isUpdate, setIsUpdate] = React.useState(false);
     const [typeOfUpdate, setTypeOfUpdate] = React.useState('Create');
+    const [isLoading, setIsLoading] = React.useState(false);
     const router = useRouter();
     const record = {
         concept_code            : "",
@@ -71,12 +72,15 @@ function FixtureLibrary(props) {
         setShowModal(false);
         setIsUpdate(false);
         setRowData(record);
+        setIsLoading(false);
         refreshData();
     }
 
     //Open Model
     const handleClickOpen = (e) => {
+        setIsLoading(true);
         setShowModal(true);
+        setIsLoading(false);
     };
 
     //Refresh Fixture Table
@@ -90,6 +94,10 @@ function FixtureLibrary(props) {
         setFormName("Update Fixture");
         setIsUpdate(true);
         setShowModal(true); 
+    }
+
+    const closeLoader = () => {
+        setIsLoading(false);
     }
 
     //Page Name
@@ -159,10 +167,13 @@ function FixtureLibrary(props) {
 
     //Refresh Data
     FixtureLibrary.refreshData          = refreshData;
+    FixtureLibrary.closeLoader          = closeLoader;
 
     return (
         <div>
-            {/* <CircularProgress /> */}
+            {
+                isLoading == true ? <Loading/> : ''
+            }
             <Paper className={styles.blockMainHight}>
                 <Grid container spacing={2}
                 direction="row"
