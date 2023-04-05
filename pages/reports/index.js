@@ -3,18 +3,18 @@ import _get from 'lodash/get';
 import { supabaseConnection } from '../../utils/supabase';
 import Box from '@mui/material/Box';
 import {
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   Legend
 } from "recharts";
 import { useAppContext } from '../../contexts/appContext';
 
 export default function Fixture(props) {
-  let reportData = props.data.reduce(get_report_data, {})
+  let reportData = props.data.reduce(mapReportData, {})
   const { setTitle } = useAppContext();
   useEffect(() => {
     setTitle("Reports");
@@ -37,7 +37,7 @@ export default function Fixture(props) {
         <YAxis />
         <Tooltip />
         <Legend />
-        
+
         <Bar dataKey="Prong" stackId="a" fill="#8884d8" />
         <Bar dataKey="Arm" stackId="a" fill="#82ca9d" />
         <Bar dataKey="Shelves&Bins" stackId="a" fill="#3366ff" />
@@ -50,13 +50,13 @@ export default function Fixture(props) {
 export async function getServerSideProps() {
   // Fetch data from external API
   const supabase = supabaseConnection();
-    let { data, error } = await supabase
-      .rpc('get_report_data', {'store_id' : 60318})
-    return { props: { data: data} };
+  let { data, error } = await supabase
+    .rpc('get_report_data', { 'store_id': 60318 })
+  return { props: { data: data } };
 }
 
-function get_report_data(report_data, item) {
-    report_data[item.gname] = report_data[item.gname] ?? {"Group" : item.gname}
-    report_data[item.gname][item.gtype] =  report_data[item.gname][item.gtype] ? (report_data[item.gname][item.gtype] + item.lm) : item.lm
-    return report_data
+function mapReportData(reportData, item) {
+  reportData[item.gname] = reportData[item.gname] ?? { "Group": item.gname }
+  reportData[item.gname][item.gtype] = reportData[item.gname][item.gtype] ? (reportData[item.gname][item.gtype] + item.lm) : item.lm
+  return reportData
 }
