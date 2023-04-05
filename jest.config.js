@@ -1,3 +1,6 @@
+// Reference
+// https://nextjs.org/docs/testing#quickstart-2
+
 module.exports = {
   collectCoverage: true,
   // on node 14.x coverage provider v8 offers good speed and more or less good report
