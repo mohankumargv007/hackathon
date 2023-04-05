@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import _get from 'lodash/get';
 import { supabaseConnection } from '../../utils/supabase';
 import Box from '@mui/material/Box';
@@ -11,39 +10,37 @@ import {
   Tooltip,
   Legend
 } from "recharts";
-import { useAppContext } from '../../contexts/appContext';
+import Layout from '../../components/layout';
 
 export default function Fixture(props) {
   let reportData = props.data.reduce(mapReportData, {})
-  const { setTitle } = useAppContext();
-  useEffect(() => {
-    setTitle("Reports");
-  }, []);
   return (
-    <Box paddingX="20px" paddingY="40px">
-      <BarChart
-        width={500}
-        height={500}
-        data={Object.values(reportData)}
-        margin={{
-          top: 20,
-          right: 30,
-          left: 20,
-          bottom: 5
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="Group" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-
-        <Bar dataKey="Prong" stackId="a" fill="#8884d8" />
-        <Bar dataKey="Arm" stackId="a" fill="#82ca9d" />
-        <Bar dataKey="Shelves&Bins" stackId="a" fill="#3366ff" />
-        <Bar dataKey="Tables" stackId="a" fill="#ff00ff" />
-      </BarChart>
-    </Box>
+    <Layout title="Reports">
+      <Box paddingX="20px" paddingY="40px">
+        <BarChart
+          width={500}
+          height={500}
+          data={Object.values(reportData)}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 20,
+            bottom: 5
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="Group" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          
+          <Bar dataKey="Prong" stackId="a" fill="#8884d8" />
+          <Bar dataKey="Arm" stackId="a" fill="#82ca9d" />
+          <Bar dataKey="Shelves&Bins" stackId="a" fill="#3366ff" />
+          <Bar dataKey="Tables" stackId="a" fill="#ff00ff" />
+        </BarChart>
+      </Box>
+    </Layout>
   )
 }
 

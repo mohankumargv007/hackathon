@@ -1,9 +1,9 @@
 import Header from './header';
 
-export default function Layout({ children }) {
+export default function Layout({children, title}) {
   return (
     <>
-      <Header />
+      <Header title={title} />
       <main>{children}</main>
     </>
   )

@@ -1,11 +1,8 @@
-import { useEffect } from 'react';
 import _filter from 'lodash/filter';
 import _includes from 'lodash/includes';
+import Layout from '../../components/layout';
 import { supabaseConnection } from '../../utils/supabase';
 import SearchFixture from '../../components/merchandise/search';
-import { useAppContext } from '../../contexts/appContext';
-
-const merchadiseTypes = ["arm", "prong", "shelves"];
 
 export async function getServerSideProps() {
   // Fetch data from external API
@@ -33,11 +30,9 @@ export async function getServerSideProps() {
 }
 
 export default function Fixture(props) {
-  const { setTitle } = useAppContext();
-  useEffect(() => {
-    setTitle("Select Fixture");
-  }, []);
   return (
-    <SearchFixture {...props} />
+    <Layout title="Select Fixture">
+      <SearchFixture {...props} />
+    </Layout>
   )
 }
