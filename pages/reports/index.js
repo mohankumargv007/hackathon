@@ -14,6 +14,7 @@ import {
 import { useAppContext } from '../../contexts/appContext';
 
 export default function Fixture(props) {
+  let reportData = props.data.reduce(get_report_data, {})
   const { setTitle } = useAppContext();
   useEffect(() => {
     setTitle("Reports");
@@ -23,7 +24,7 @@ export default function Fixture(props) {
       <BarChart
         width={500}
         height={500}
-        data={props.data}
+        data={Object.values(reportData)}
         margin={{
           top: 20,
           right: 30,
@@ -50,15 +51,12 @@ export async function getServerSideProps() {
   // Fetch data from external API
   const supabase = supabaseConnection();
     let { data, error } = await supabase
-      .from('fixture_product_list')
-      .select('group,department, linear_meter,fixture_library:fixture_key (type)')
-      .eq('store_id', 60318);
-    let finalResult = {}
-    let spaceTypes = {}
-    data.forEach(function (item, index) {
-      spaceTypes[item.fixture_library.type] = item.fixture_library.type
-      finalResult[item.group] = finalResult[item.group] ?? {"Group" : item.group}
-      finalResult[item.group][item.fixture_library.type] =  finalResult[item.group][item.fixture_library.type] ? (finalResult[item.group][item.fixture_library.type] + item.linear_meter) : item.linear_meter
-    });
-    return { props: { data: Object.values(finalResult), "key_values" : Object.keys(spaceTypes)} };
+      .rpc('get_report_data', {'store_id' : 60318})
+    return { props: { data: data} };
+}
+
+function get_report_data(report_data, item) {
+    report_data[item.gname] = report_data[item.gname] ?? {"Group" : item.gname}
+    report_data[item.gname][item.gtype] =  report_data[item.gname][item.gtype] ? (report_data[item.gname][item.gtype] + item.lm) : item.lm
+    return report_data
 }
