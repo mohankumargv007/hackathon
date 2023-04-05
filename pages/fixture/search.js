@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
+import Layout from '../../components/layout';
 import { supabaseConnection } from '../../utils/supabase';
 import SearchFixture from '../../components/fixture/search';
-import { useAppContext } from '../../contexts/appContext';
 
 export async function getServerSideProps() {
   // Fetch data from external API
@@ -16,13 +15,9 @@ export async function getServerSideProps() {
 }
 
 export default function Fixture(props) {
-  const { setTitle } = useAppContext();
-
-  useEffect(() => {
-    setTitle("Select Fixture");
-  }, []);
-
   return (
-    <SearchFixture {...props} />
+    <Layout title="Select Fixture">
+      <SearchFixture {...props} />
+    </Layout>
   )
 }

@@ -1,13 +1,13 @@
 import Link from 'next/link';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import _get from 'lodash/get';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Barcode from 'react-barcode';
+import Layout from '../../../components/layout';
 import { supabaseConnection } from '../../../utils/supabase';
 import styles from '../../../styles/Layout.module.css';
-import { useAppContext } from '../../../contexts/appContext';
-import Barcode from 'react-barcode';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
@@ -41,10 +41,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
-  const { setTitle } = useAppContext();
-  useEffect(() => {
-    setTitle("Barcode Fixture");
-  }, []);
   const fixture = _get(props, "data", {});
   const fixture_barcode = _get(props, "fbdata", {});
   const store_code = 60318;
@@ -87,17 +83,19 @@ export default function Fixture(props) {
   }
 
   return (
-    <div className={styles.container}>
-      <Stack spacing={2}>
-        {saved &&
-        <Alert severity="success">Barcode saved successfully!</Alert>
-        }
-        <p>4 way new format stand 125CM</p>
-        <Barcode value={code} />;
-        <Button onClick={handlePrint} variant="contained">Print</Button>
-        {!saved && <Button onClick={saveBarcode(code)} variant="contained">Save Barcode</Button>}
-        <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
-      </Stack>
-    </div>
+    <Layout title="Barcode Fixture">
+      <div className={styles.container}>
+        <Stack spacing={2}>
+          {saved &&
+          <Alert severity="success">Barcode saved successfully!</Alert>
+          }
+          <p>4 way new format stand 125CM</p>
+          <Barcode value={code} />;
+          <Button onClick={handlePrint} variant="contained">Print</Button>
+          {!saved && <Button onClick={saveBarcode(code)} variant="contained">Save Barcode</Button>}
+          <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
+        </Stack>
+      </div>
+    </Layout>
   )
 }
