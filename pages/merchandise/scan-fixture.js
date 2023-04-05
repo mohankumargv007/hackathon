@@ -55,8 +55,8 @@ export default function Fixture(props) {
             }}
           />
           {error && <Alert severity="error">Barcode not found !</Alert>}
+          {results[0] ? <Button onClick={handleProceed} variant="contained" >Proceed</Button> : null}
         </Stack>
-        {results[0] ? <Button onClick={handleProceed} variant="contained" >Proceed</Button> : null}
       </Box>
     </Layout>
   )
