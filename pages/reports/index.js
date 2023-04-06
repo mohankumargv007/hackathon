@@ -2,24 +2,25 @@ import _get from 'lodash/get';
 import { supabaseConnection } from '../../utils/supabase';
 import Box from '@mui/material/Box';
 import {
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   Legend
 } from "recharts";
 import Layout from '../../components/layout';
 
 export default function Fixture(props) {
+  let reportData = getReportData(props.data)
   return (
     <Layout title="Reports">
       <Box paddingX="20px" paddingY="40px">
         <BarChart
           width={500}
           height={500}
-          data={props.data}
+          data={Object.values(reportData)}
           margin={{
             top: 20,
             right: 30,
@@ -46,12 +47,17 @@ export default function Fixture(props) {
 export async function getServerSideProps() {
   // Fetch data from external API
   const supabase = supabaseConnection();
-    let { data, error } = await supabase
-      .rpc('get_report_data', {'store_id' : 60318})
-    let finalResult = {}
-    data.forEach(function (item, index) {
-      finalResult[item.gname] = finalResult[item.gname] ?? {"Group" : item.gname}
-      finalResult[item.gname][item.gtype] =  finalResult[item.gname][item.gtype] ? (finalResult[item.gname][item.gtype] + item.lm) : item.lm
-    });
-    return { props: { data: Object.values(finalResult)} };
+  let { data, error } = await supabase
+    .rpc('get_report_data', { 'store_id': 60318 })
+  return { props: { data: data } };
+}
+
+function  getReportData(data) {
+  return data.reduce(mapReportData, {})
+}
+
+function mapReportData(reportData, item) {
+  reportData[item.gname] = reportData[item.gname] ?? { "Group": item.gname }
+  reportData[item.gname][item.gtype] = reportData[item.gname][item.gtype] ? (reportData[item.gname][item.gtype] + item.lm) : item.lm
+  return reportData
 }
