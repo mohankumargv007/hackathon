@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect ,useCallback} from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
@@ -15,8 +16,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material';
 import Layout from '../../../../components/layout';
-import Scanner from '../../../../utils/scanner';
+// import Scanner from '../../../../utils/scanner';
 import { supabaseConnection } from '../../../../utils/supabase';
+const Scandit = dynamic(() => import('../../../../components/scandit'), {
+  ssr: false,
+})
 
 export async function getServerSideProps(context) {
   const { barcode } = context.query;
@@ -47,14 +51,12 @@ export default function Fixture(props) {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState(false);
 
-  const handleScanner = () => {
-    setScanner(true)
-  }
 
-  const _onDetected = result => {
-    setResults([])
-    setResults([result])
-  }
+  const _onDetected = useCallback((result) => {
+    setResults([]);
+      setResults([result]);
+      setError(false);
+  }, []);
 
   const handleProduct = async (productCode) => {
     const url = `/api/fixture/merchandise/${productCode}`;
@@ -95,18 +97,16 @@ export default function Fixture(props) {
               style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
               rowsmax={4}
               type='number'
-              value={results[0] ? results[0].codeResult.code : products.length == 0 ? 'No product scanned' : 'scan next product'}
+              value={results[0] || ""}
               onChange={event => {
-                setResults([{ codeResult: { code: event.target.value } }]);
+                setResults([event.target.value]);
                 error && setError(false);
               }}
             />
             {error && <Alert severity="error">Product not found !</Alert>}
-            {results[0] ? <Button onClick={() => handleProduct(results[0].codeResult.code)} variant="contained">add product</Button> : null}
+            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
-          {scanner ? (<Paper variant="outlined" style={{ marginTop: 30, minWidth: 320, height: 320 }}>
-            <Scanner onDetected={_onDetected} />
-          </Paper>) : null}
+          <Scandit btnText="Scan Product" onDetected={_onDetected} />
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption>Added {products.length}/5 products</caption>
@@ -133,7 +133,6 @@ export default function Fixture(props) {
           {saved &&
             <Alert severity="success">Product merchandised successfully!</Alert>
           }
-          {!saved && <Button onClick={(e) => handleScanner(e)} variant="contained">Scan More</Button>}
           {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : <Button onClick={handleSubmit} variant="contained">Submit</Button>}
         </Stack>
       </Box>

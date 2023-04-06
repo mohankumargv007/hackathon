@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
@@ -15,8 +16,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material'
 import Layout from '../../../../components/layout';
-import Scanner from '../../../../utils/scanner';
+// import Scanner from '../../../../utils/scanner';
 import { supabaseConnection } from '../../../../utils/supabase';
+const Scandit = dynamic(() => import('../../../../components/scandit'), {
+  ssr: false,
+})
+// const response = await fetch(url);
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
@@ -81,14 +86,11 @@ export default function Fixture(props) {
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState(false)
 
-  const handleScanner = () => {
-    setScanner(true)
-  }
-
-  const _onDetected = result => {
-    setResults([])
-    setResults([result])
-  }
+  const _onDetected = useCallback((result) => {
+    setResults([]);
+    setResults([result]);
+    setError(false);
+  }, []);
 
   const handleProduct = async (productCode) => {
     try {
@@ -100,7 +102,7 @@ export default function Fixture(props) {
       data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true)
       setResults([])
     } catch (error) {
-      console.log(error);
+      console.log("handle Product get api faile:",error);
     }
   }
 
@@ -117,7 +119,6 @@ export default function Fixture(props) {
     }
     const response = await fetch(url, options);
     const { data, error } = await response.json();
-    console.log("data", data, "error", error);
     data.length && setSaved(true);
     setResults([])
 
@@ -127,31 +128,23 @@ export default function Fixture(props) {
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
           <h3>{fixture.name}</h3>
-        Type: {fixture.type}
+          Type: {fixture.type}
           <h4>Add products</h4>
           <Box >
-            {/* {scanner ? <TextareaAutosize
-            style={{fontSize:20, width:320, height:70, marginTop:30}}
-            rowsmax={4}
-            onClick = {setScanner(false)}
-            value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}/>
-            : null } */}
             <TextField
               style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
               rowsmax={4}
               type='number'
-              value={results[0] ? results[0].codeResult.code : products.length == 0 ? 'No product scanned' : 'scan next product'}
-              onChange={event => {
-                setResults([{ codeResult: { code: event.target.value } }]);
+              value={ results[0] || ""}
+              onChange={(event) => {
+                setResults([event.target.value]);
                 error && setError(false);
               }}
             />
             {error && <Alert severity="error">Product not found !</Alert>}
-            {results[0] ? <Button onClick={() => handleProduct(results[0].codeResult.code)} variant="contained">add product</Button> : null}
+            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
-          {scanner ? (<Paper variant="outlined" style={{ marginTop: 30, minWidth: 320, height: 320 }}>
-            <Scanner onDetected={_onDetected} />
-          </Paper>) : null}
+          <Scandit btnText="Scan Product" onDetected={_onDetected} />
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption>Added {products.length}/5 products</caption>
@@ -178,7 +171,6 @@ export default function Fixture(props) {
           {saved &&
             <Alert severity="success">Product merchandised successfully!</Alert>
           }
-          {!saved && <Button onClick={(e) => handleScanner(e)} variant="contained">Scan More</Button>}
           {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null)}
         </Stack>
       </Box>
