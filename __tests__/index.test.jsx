@@ -1,15 +1,13 @@
-import { render, screen } from '@testing-library/react'
-import { useEffect, useContext } from 'react';
-import Home from '../pages/index'
-import '@testing-library/jest-dom'
-import { AppContext } from '../contexts/appContext';
+import { render, screen } from '@testing-library/react';
+import Home from '../pages/index';
+import '@testing-library/jest-dom';
 
 describe('Home', () => {
-  it('renders a heading', () => {
+  it('renders Home page', () => {
     render(<Home />)
 
-    const heading = screen.getByRole('button')
+    const buttons = screen.getByRole('button')
 
-    expect(heading).toBeInTheDocument()
+    expect(buttons).toBeInTheDocument()
   })
 })
