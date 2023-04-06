@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import * as SDCCore from "scandit-web-datacapture-core";
 import * as SDCBarcode from "scandit-web-datacapture-barcode";
@@ -6,13 +6,14 @@ import * as SDCBarcode from "scandit-web-datacapture-barcode";
 const libraryLocation = 'https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@6.x/build/engine/';
 const licenseKey = 'AfZydWVhRvlIKSgyqzoAZw0OHeoICxgiFXidHWkiBNKGR70WBHcavoB+A/Fhde//+lhijfd17iJAcD0+31VRTBpb2olPbbidp0me/Y0x93ZdKL0BpiC2WXoBWs2jGMNp242GhUh4UiC2DGSwtxJP8AbWXRM90PDWQM+Ylfi+sg+GFHTiSzRHj5sl/PbYJ/PS+G3eOWsBgY2IwjbMZF8nMkiHrTSN5as5Ro4MvkzFh4kQmcpTygh2Q9evtzdxQ2HVdrtDLyEghW2SjLTsrLU8hf524d+Mr3MgUNPDg3kJxQpXjLO2IdMUaxfmd5KmYM/ndBj7PulfiJMpKIqzqTQWy9FyQZmx0mipncKDUXe7eg8azirRRleZPa9w08DV4f2TWQd1Uk1SWeVO9akXbtKBN7OEu8BbPwvqhqXWRLW2xYcckHQ2mdX1LQ9qgHe/qR49k2GrezxLQ9F8wlwIRidr2RbV0NKd8BEIxh9Rk3UqjaAVXlXUGMyQRf21KxXaDcCC0XQL3QVRe1ZCCIcCWSegYw2tf2GGJvf/sk0tLjel86G0huIuNW0hT2irJY0sW2II+66M8NHkjI9p32w4oL9QgD8pkWlOZP+ySXYYrLnO2gEEhh73WY4s1ij/fSAxB2mEXJiX8iDpv7BR0eKneZ3pqdrP8DT2Yw7pEZ6/Qd/IdoNiOfWZnuyD2GW1fw3UtsqqNZx0om5Xl0d4b7LygwBujsuXbvcBLaz8ZuOv7jbAO5duzsl/hYsbRqQSh8FFgU6+CLOEXz38j1oJQbcEoqNvLxV6AoJ09syliWDRHrDwBA==';
 
-export default function Scandit(props) {
+
+const Scandit = React.memo(function Scandit(props) {
   const { btnText } = props;
   const [value, setValue] = useState("");
   // Keep a reference to the context object.
-  let context = useRef();
+  let context;
   // Keep a reference to the barcode capture mode object.
-  let barcodeCapture = useRef();
+  let barcodeCapture;
 
   async function loadAndPrepareLibrary() {
     // Configure and load the library using your license key. The passed parameter represents the location of the wasm
@@ -65,25 +66,34 @@ export default function Scandit(props) {
     // camera preview. The view must be connected to the data capture context.
     const view = await SDCCore.DataCaptureView.forContext(context)
 
-    // Connect the data capture view to the HTML element.
-    view.connectToElement(document.getElementById('data-capture-view'))
+    const dataCaptureView = document.getElementById('data-capture-view');
+    if(dataCaptureView && view) {
+      // Connect the data capture view to the HTML element.
+      view.connectToElement(dataCaptureView)
 
-    // Add a control to be able to switch cameras.
-    view.addControl(new SDCCore.CameraSwitchControl())
+      // Add a control to be able to switch cameras.
+      view.addControl(new SDCCore.CameraSwitchControl())
+    }
   }
 
   // Close the modal and switch off the camera.
   async function closeScanner() {
-    await wait(300)
-    await context.frameSource.switchToDesiredState(SDCCore.FrameSourceState.Off)
-    const dataCaptureView = document.getElementById("data-capture-view");
-    if(dataCaptureView) dataCaptureView.style.height = "0px";
+    try {
+      if(context && context.frameSource) {
+        await context.frameSource.switchToDesiredState(SDCCore.FrameSourceState.Off)
+      }
+      const dataCaptureView = document.getElementById("data-capture-view");
+      if(dataCaptureView) { dataCaptureView.style.height = "0px"; }
+    } catch(err) {
+      console.log("Error: Scandit unmount failed error - ", err);
+    }
   }
 
   // Open our modal and start the camera to scan a barcode.
   async function openScanner() {
+    await loadAndPrepareLibrary();
     document.getElementById("data-capture-view").style.height = "auto";
-    await wait(300)
+    await wait(50)
     // Start the camera. This can potentially fail, so we use try/catch.
     try {
       await context.frameSource.switchToDesiredState(
@@ -119,7 +129,7 @@ export default function Scandit(props) {
 
   useEffect(() => {
     // Load the library as soon as possible. This will make the user experience faster.
-    loadAndPrepareLibrary();
+    // loadAndPrepareLibrary();
     return () => {
       closeScanner();
     };
@@ -127,7 +137,7 @@ export default function Scandit(props) {
 
   useEffect(() => {
     // This will return the scanned value to parent component.
-    value.length > 1 && props.onDetected(value);
+    value.length > 2 && props.onDetected(value);
   }, [value]);
   
   const handleScanner = () => {
@@ -140,4 +150,6 @@ export default function Scandit(props) {
       <div id="data-capture-view"></div>
     </>
   )
-}
+})
+
+export default Scandit;

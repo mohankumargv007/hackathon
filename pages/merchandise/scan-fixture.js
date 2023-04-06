@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -31,12 +31,12 @@ export default function Fixture(props) {
     }
   }
 
-  const _onDetected = result => {
+  const _onDetected = useCallback((result) => {
     setResults([]);
     if (result.length == 13) {
       setResults([result])
     }
-  }
+  }, []);
 
   return (
     <Layout title="Scan Fixture">
@@ -48,14 +48,14 @@ export default function Fixture(props) {
             style={{ fontSize: 50, width: 320, height: 40 }}
             rowsmax={4}
             type='number'
-            value={results[0] ? results[0] : 'No data scanned'}
+            value={_get(results, "0", "No data scanned")}
             onChange={event => {
               setResults([event.target.value]);
               error && setError(false);
             }}
           />
           {error && <Alert severity="error">Barcode not found !</Alert>}
-          {results[0] ? <Button onClick={handleProceed} variant="contained" >Proceed</Button> : null}
+          {_get(results, "0") ? <Button onClick={handleProceed} variant="contained" >Proceed</Button> : null}
         </Stack>
       </Box>
     </Layout>
