@@ -38,33 +38,12 @@ export async function getServerSideProps(context) {
     .order("id", { ascending: false })
     .range(0, 0)
 
-  if (fbdata.length === 0) {
-    const { data: fbndata, fbnerror } = await supabase
-      .from('fixture_barcode')
-      .insert([{
-        store_id: 60318,
-        fixture_key: fixture.key,
-        counter: "001",
-        fixture_barcode: `60318${fixture.key}001`,
-      }])
-      .select()
-
-    // Pass data to the page via props
-    return {
-      props: {
-        data: data,
-        fbdata: fbndata
-      }
-    };
-  } else {
-    // Pass data to the page via props
-    return {
-      props: {
-        data: data,
-        fbdata: fbdata
-      }
-    };
-  }
+  return {
+    props: {
+      data: data,
+      fbdata: fbdata
+    }
+  };
 }
 
 export default function Fixture(props) {
@@ -119,22 +98,15 @@ export default function Fixture(props) {
     const { data, error } = await response.json();
     data.length && setSaved(true);
     setResults([])
-
   }
   return (
     <Layout title="Scan Products">
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
           <h3>{fixture.name}</h3>
-        Type: {fixture.type}
+          Type: {fixture.type}
           <h4>Add products</h4>
           <Box >
-            {/* {scanner ? <TextareaAutosize
-            style={{fontSize:20, width:320, height:70, marginTop:30}}
-            rowsmax={4}
-            onClick = {setScanner(false)}
-            value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}/>
-            : null } */}
             <TextField
               style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
               rowsmax={4}
@@ -175,10 +147,10 @@ export default function Fixture(props) {
             </Table>
           </TableContainer>
           {saved &&
-            <Alert severity="success">Product merchandised successfully!</Alert>
+            <Alert severity="success">Rexture removed successfully!</Alert>
           }
           {!saved && <Button onClick={(e) => handleScanner(e)} variant="contained">Scan More</Button>}
-          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null)}
+          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Remove Fixture</Button> : null)}
         </Stack>
       </Box>
     </Layout>

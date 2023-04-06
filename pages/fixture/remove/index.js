@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import { TextField, Alert } from '@mui/material'
@@ -39,6 +40,7 @@ export default function Fixture(props) {
     <Layout title="Remove Fixture">
       <Box paddingX="20px" paddingY="40px">
         <Stack spacing={4}>
+          <Link href={`/fixture/remove/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
           <Scandit btnText="Scan Fixture" onDetected={_onDetected} />
           <TextField
             style={{ fontSize: 50, width: 320, height: 50 }}
