@@ -1,64 +1,63 @@
-import { useEffect } from 'react';
 import _get from 'lodash/get';
 import { supabaseConnection } from '../../utils/supabase';
 import Box from '@mui/material/Box';
 import {
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   Legend
 } from "recharts";
-import { useAppContext } from '../../contexts/appContext';
+import Layout from '../../components/layout';
 
 export default function Fixture(props) {
-  const { setTitle } = useAppContext();
-  useEffect(() => {
-    setTitle("Reports");
-  }, []);
+  let reportData = getReportData(props.data)
   return (
-    <Box paddingX="20px" paddingY="40px">
-      <BarChart
-        width={500}
-        height={500}
-        data={props.data}
-        margin={{
-          top: 20,
-          right: 30,
-          left: 20,
-          bottom: 5
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="Group" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        
-        <Bar dataKey="Prong" stackId="a" fill="#8884d8" />
-        <Bar dataKey="Arm" stackId="a" fill="#82ca9d" />
-        <Bar dataKey="Shelves&Bins" stackId="a" fill="#3366ff" />
-        <Bar dataKey="Tables" stackId="a" fill="#ff00ff" />
-      </BarChart>
-    </Box>
+    <Layout title="Reports">
+      <Box paddingX="20px" paddingY="40px">
+        <BarChart
+          width={500}
+          height={500}
+          data={Object.values(reportData)}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 20,
+            bottom: 5
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="Group" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          
+          <Bar dataKey="Prong" stackId="a" fill="#8884d8" />
+          <Bar dataKey="Arm" stackId="a" fill="#82ca9d" />
+          <Bar dataKey="Shelves&Bins" stackId="a" fill="#3366ff" />
+          <Bar dataKey="Tables" stackId="a" fill="#ff00ff" />
+        </BarChart>
+      </Box>
+    </Layout>
   )
 }
 
 export async function getServerSideProps() {
   // Fetch data from external API
   const supabase = supabaseConnection();
-    let { data, error } = await supabase
-      .from('fixture_product_list')
-      .select('group,department, linear_meter,fixture_library:fixture_key (type)')
-      .eq('store_id', 60318);
-    let finalResult = {}
-    let spaceTypes = {}
-    data.forEach(function (item, index) {
-      spaceTypes[item.fixture_library.type] = item.fixture_library.type
-      finalResult[item.group] = finalResult[item.group] ?? {"Group" : item.group}
-      finalResult[item.group][item.fixture_library.type] =  finalResult[item.group][item.fixture_library.type] ? (finalResult[item.group][item.fixture_library.type] + item.linear_meter) : item.linear_meter
-    });
-    return { props: { data: Object.values(finalResult), "key_values" : Object.keys(spaceTypes)} };
+  let { data, error } = await supabase
+    .rpc('get_report_data', { 'store_id': 60318 })
+  return { props: { data: data } };
+}
+
+function  getReportData(data) {
+  return data.reduce(mapReportData, {})
+}
+
+function mapReportData(reportData, item) {
+  reportData[item.gname] = reportData[item.gname] ?? { "Group": item.gname }
+  reportData[item.gname][item.gtype] = reportData[item.gname][item.gtype] ? (reportData[item.gname][item.gtype] + item.lm) : item.lm
+  return reportData
 }

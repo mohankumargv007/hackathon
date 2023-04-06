@@ -27,9 +27,6 @@ function Sidebar() {
         <MenuList>
             {pages.map((page, index) => (
                 <MenuItem key={index}>
-                    <ListItemIcon>
-                        <ContentCopy fontSize="small"/>
-                    </ListItemIcon>
                     {
                         router.pathname.includes(page.path) ? 
                         <ListItemText className={styles.listItemActive} onClick={() => router.push('/'+page.path)}>

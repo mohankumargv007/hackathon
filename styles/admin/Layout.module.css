@@ -39,3 +39,34 @@
 .marginLeft0 {
     margin-left: 0px;
 }
+
+.loader {
+    width: 40px !important;
+    height: 40px !important;
+    position: fixed !important;
+    display: block !important;
+    top: 45% !important;
+    left: 50% !important;
+    text-align: center !important;
+    z-index: 9999 !important;
+}
+
+.iconPadd {
+    margin-left: 0px !important;
+}
+
+/* Media Query for Laptops and Desktops */
+@media (min-width: 1025px) and (max-width: 1280px){
+    .stylesModal {
+        width: 50%;
+        float: right;
+    }
+}
+  
+/* Media Query for Large screens */
+@media (min-width: 1281px) {
+    .stylesModal {
+        width: 50%;
+        float: right;
+    }
+}
