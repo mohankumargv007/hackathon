@@ -13,7 +13,7 @@ import {
 import Layout from '../../components/layout';
 
 export default function Fixture(props) {
-  let reportData = props.data.reduce(mapReportData, {})
+  let reportData = getReportData(props.data)
   return (
     <Layout title="Reports">
       <Box paddingX="20px" paddingY="40px">
@@ -50,6 +50,10 @@ export async function getServerSideProps() {
   let { data, error } = await supabase
     .rpc('get_report_data', { 'store_id': 60318 })
   return { props: { data: data } };
+}
+
+function  getReportData(data) {
+  return data.reduce(mapReportData, {})
 }
 
 function mapReportData(reportData, item) {
