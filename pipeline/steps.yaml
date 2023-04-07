@@ -10,7 +10,7 @@ steps:
       RunAsPreJob: true
 
   - script: |
-        echo '##vso[task.setvariable variable=VERCEL_TEAM_ID]$(VERCEL-TEAM-ID)'  
+        echo '##vso[task.setvariable variable=VERCEL_ORG_ID]$(VERCEL-ORG-ID)'  
         echo '##vso[task.setvariable variable=VERCEL_PROJECT_ID]$(VERCEL-PROJECT-ID)'
     displayName: 'Set environment variables'
 
@@ -23,7 +23,7 @@ steps:
         vercel $(env-parameter) --token=f1YsKlnkwO7HZxwyBanUQafu
     env:
         VERCEL_ORG_ID: eSg7BpD1cgHfbwUHUPO7d5KO
-        VERCEL_TEAM_ID: team_tQvEJvJXhbz2wo3OQm663oH5
+        #VERCEL_TEAM_ID: team_tQvEJvJXhbz2wo3OQm663oH5
         VERCEL_PROJECT_ID: prj_nribQrSbvJ7GA5bgJkuyuir5YmeP
     displayName: 'Vercel build and deployment' 
 
