@@ -20,10 +20,9 @@ steps:
       script: |
         # Write your commands here
         cd $(system.defaultworkingdirectory)
-        vercel $(env-parameter) --token=f1YsKlnkwO7HZxwyBanUQafu
+        vercel $(env-parameter) --token=$(VERCEL-LMG-TOKEN)
     env:
-        VERCEL_ORG_ID: eSg7BpD1cgHfbwUHUPO7d5KO
-         #VERCEL_TEAM_ID: team_tQvEJvJXhbz2wo3OQm663oH5
-        VERCEL_PROJECT_ID: prj_nribQrSbvJ7GA5bgJkuyuir5YmeP
+        VERCEL_ORG_ID: $(VERCEL_ORG_ID)
+        VERCEL_PROJECT_ID: $(VERCEL_PROJECT_ID)
     displayName: 'Vercel build and deployment' 
 
