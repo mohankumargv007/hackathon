@@ -4,5 +4,5 @@ parameters:
 variables:
   projectName: ${{ parameters.projectName }}
   VERCEL-ORG-ID: eSg7BpD1cgHfbwUHUPO7d5KO
-  VERCEL-PROJECT-ID: prj_dYIA4S7PTuFhyPXVqSEiWWwQgPy9
+  VERCEL-PROJECT-ID: prj_nribQrSbvJ7GA5bgJkuyuir5YmeP
   VERCEL-TEAM-ID: team_tQvEJvJXhbz2wo3OQm663oH5
