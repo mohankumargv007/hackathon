@@ -3,6 +3,5 @@ parameters:
 
 variables:
   projectName: ${{ parameters.projectName }}
-  VERCEL-ORG-ID: eSg7BpD1cgHfbwUHUPO7d5KO
+  VERCEL-ORG-ID: team_tQvEJvJXhbz2wo3OQm663oH5
   VERCEL-PROJECT-ID: prj_lt6OZf4wc7tYhIG19vwuA6wPHuuk
-  VERCEL-TEAM-ID: team_tQvEJvJXhbz2wo3OQm663oH5
