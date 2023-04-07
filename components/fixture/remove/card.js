@@ -20,7 +20,7 @@ export default function MuiCard(props) {
             {props.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {props.type}
+            Type: {props.type}
           </Typography>
         </CardContent>
         <CardActions>

@@ -134,6 +134,7 @@ export default function Fixture(props) {
             <Alert severity="success">Product merchandised successfully!</Alert>
           }
           {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : <Button onClick={handleSubmit} variant="contained">Submit</Button>}
+          <Link href={`/merchandise/barcode/${barcode}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>
