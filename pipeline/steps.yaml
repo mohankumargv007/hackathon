@@ -21,7 +21,7 @@ steps:
       script: |
         # Write your commands here
         cd $(system.defaultworkingdirectory)
-        vercel $(env-paramter) --token=$(VERCEL-LMG-TOKEN)
+        vercel $(env-parameter) --token=$(VERCEL-LMG-TOKEN)
     env:
         VERCEL_ORG_ID: $(VERCEL_ORG_ID)
         VERCEL_TEAM_ID: $(VERCEL_TEAM_ID)
