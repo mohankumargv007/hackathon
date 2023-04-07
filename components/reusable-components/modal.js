@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Dialog from '@mui/material/Dialog';
@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import styles from '../../styles/admin/Layout.module.css';
 import TextField from '@mui/material/TextField';
-import { Grid, Input } from "@mui/material";
+import { Alert, Grid, Input } from "@mui/material";
 import { supabaseConnection } from '../../utils/supabase';
 import ImageListItem from '@mui/material/ImageListItem';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -18,6 +18,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Loading from '../../components/reusable-components/loader';
 import commonStyles from '../../styles/Common.module.css';
+import Notification from '../../components/reusable-components/alert'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide className={styles.stylesModal} direction="left" ref={ref} {...props} />;
@@ -29,6 +30,19 @@ export default function Modal(props) {
     const [formData, setFormData] = React.useState(props.rowData);
 
     const [isLoading, setIsLoading] = React.useState(false);
+
+    const [toastStatus, setToastStatus] = React.useState(false);
+
+    const [toastMessage, setToastMessage] = React.useState("");
+
+    const [toastType, setToastType] = React.useState("warning");
+
+    const [state, setState] = React.useState({
+        vertical        : 'top',
+        horizontal      : 'center'
+    });
+
+    const { vertical, horizontal } = state;
 
     const formFields = [
         {
@@ -159,8 +173,7 @@ export default function Modal(props) {
             //From Validations
             const is_valid_data = validateFormFields();
             if(!is_valid_data) {
-                alert("All fields are required along with image uploads.");
-                setIsLoading(false);
+                notifyEvent(true, "warning", "All fields are required along with image uploads.");
                 return false;
             }
 
@@ -171,6 +184,8 @@ export default function Modal(props) {
 
             const supabase = supabaseConnection();
 
+            let message = "";
+
             if(props.isUpdate) {
                 let { error } = await supabase
                     .from('fixture_library')
@@ -178,16 +193,17 @@ export default function Modal(props) {
                     .eq('id', props.rowData.id)
 
                 if (error) throw error
-                alert('Fixture Updated Successfully!');
+                message = 'Fixture Updated Successfully!';
             } else {
                 let { error } = await supabase.from('fixture_library').insert([formData])
                 if (error) throw error
-                alert('Fixture Created Successfully!');
+                message = 'Fixture Created Successfully!';
             }
+            //Sent Notification
+            notifyEvent(true, "success", message);
             handleClose();
         } catch (error) {
-            alert('Something went wrong.Please contact developer')
-            setIsLoading(false);
+            notifyEvent(true, 'error', 'Something went wrong.Please contact developer');
         } finally {
             setIsLoading(false);
         }
@@ -273,6 +289,7 @@ export default function Modal(props) {
         }
     }
 
+    //Validating Input Feilds
     const validateFormFields = () => {
         let result = true;
         Object.keys(formData).forEach((key, val) => {
@@ -283,10 +300,35 @@ export default function Modal(props) {
         return result;
     };
 
+    //Closing Message Prompt
+    const handleCloseToast = () => {
+        setToastStatus(false);
+    }
+
+    //Notification Event
+    const notifyEvent = (propmtStatus, messageType, message) => {
+        setToastStatus(propmtStatus);
+        setToastType(messageType);
+        setToastMessage(message)
+        setIsLoading(false);
+    }
+
     return (
         <div>
+            {/* Loading Component */}
             {
                 isLoading == true ? <Loading/> : ''
+            }
+
+            {/* Notification Component */}
+            {
+                toastStatus == true ?
+                <Notification
+                    state={state}
+                    toastType={toastType}
+                    toastMessage={toastMessage}
+                    onClose={handleCloseToast}
+                ></Notification> : ''
             }
             <Dialog
                 fullScreen
