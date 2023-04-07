@@ -6,8 +6,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import Layout from '../../../components/layout';
-import { supabaseConnection } from '../../../utils/supabase';
+import Layout from '../../../../components/layout';
+import { supabaseConnection } from '../../../../utils/supabase';
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
@@ -41,8 +41,8 @@ export default function Fixture(props) {
           <img src={fixture.front_image} width="100%" style={{ "maxWidth": "400px" }} />
           <p>Enter count of Fixtures</p>
           <OutlinedInput placeholder="Please enter fixtures count" type="number" value={fcount} onChange={handleChange} />
-          <Link href={`/merchandise/fid/scan/${fid}?count=${fcount}`} passHref legacyBehavior><Button variant="contained">Confirm</Button></Link>
-          <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
+          <Link href={`/fixture/remove/scan/${fid}?count=${fcount}`} passHref legacyBehavior><Button variant="contained">Confirm</Button></Link>
+          <Link href={`/fixture/remove/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>

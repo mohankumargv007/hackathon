@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
@@ -16,12 +15,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material'
 import Layout from '../../../../components/layout';
-// import Scanner from '../../../../utils/scanner';
+import Scanner from '../../../../utils/scanner';
 import { supabaseConnection } from '../../../../utils/supabase';
-const Scandit = dynamic(() => import('../../../../components/scandit'), {
-  ssr: false,
-})
-// const response = await fetch(url);
 
 export async function getServerSideProps(context) {
   const { fid } = context.query;
@@ -43,33 +38,12 @@ export async function getServerSideProps(context) {
     .order("id", { ascending: false })
     .range(0, 0)
 
-  if (fbdata.length === 0) {
-    const { data: fbndata, fbnerror } = await supabase
-      .from('fixture_barcode')
-      .insert([{
-        store_id: 60318,
-        fixture_key: fixture.key,
-        counter: "001",
-        fixture_barcode: `60318${fixture.key}001`,
-      }])
-      .select()
-
-    // Pass data to the page via props
-    return {
-      props: {
-        data: data,
-        fbdata: fbndata
-      }
-    };
-  } else {
-    // Pass data to the page via props
-    return {
-      props: {
-        data: data,
-        fbdata: fbdata
-      }
-    };
-  }
+  return {
+    props: {
+      data: data,
+      fbdata: fbdata
+    }
+  };
 }
 
 export default function Fixture(props) {
@@ -86,11 +60,14 @@ export default function Fixture(props) {
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState(false)
 
-  const _onDetected = useCallback((result) => {
-    setResults([]);
-    setResults([result]);
-    setError(false);
-  }, []);
+  const handleScanner = () => {
+    setScanner(true)
+  }
+
+  const _onDetected = result => {
+    setResults([])
+    setResults([result])
+  }
 
   const handleProduct = async (productCode) => {
     try {
@@ -102,7 +79,7 @@ export default function Fixture(props) {
       data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true)
       setResults([])
     } catch (error) {
-      console.log("handle Product get api faile:",error);
+      console.log(error);
     }
   }
 
@@ -121,7 +98,6 @@ export default function Fixture(props) {
     const { data, error } = await response.json();
     data.length && setSaved(true);
     setResults([])
-
   }
   return (
     <Layout title="Scan Products">
@@ -135,16 +111,18 @@ export default function Fixture(props) {
               style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
               rowsmax={4}
               type='number'
-              value={ results[0] || ""}
-              onChange={(event) => {
-                setResults([event.target.value]);
+              value={results[0] ? results[0].codeResult.code : products.length == 0 ? 'No product scanned' : 'scan next product'}
+              onChange={event => {
+                setResults([{ codeResult: { code: event.target.value } }]);
                 error && setError(false);
               }}
             />
             {error && <Alert severity="error">Product not found !</Alert>}
-            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
+            {results[0] ? <Button onClick={() => handleProduct(results[0].codeResult.code)} variant="contained">add product</Button> : null}
           </Box>
-          <Scandit btnText="Scan Product" onDetected={_onDetected} />
+          {scanner ? (<Paper variant="outlined" style={{ marginTop: 30, minWidth: 320, height: 320 }}>
+            <Scanner onDetected={_onDetected} />
+          </Paper>) : null}
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption>Added {products.length}/5 products</caption>
@@ -169,9 +147,10 @@ export default function Fixture(props) {
             </Table>
           </TableContainer>
           {saved &&
-            <Alert severity="success">Product merchandised successfully!</Alert>
+            <Alert severity="success">Rexture removed successfully!</Alert>
           }
-          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null)}
+          {!saved && <Button onClick={(e) => handleScanner(e)} variant="contained">Scan More</Button>}
+          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Remove Fixture</Button> : null)}
         </Stack>
       </Box>
     </Layout>

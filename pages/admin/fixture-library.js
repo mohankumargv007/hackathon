@@ -10,7 +10,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { supabaseConnection } from '../../utils/supabase';
 import { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
-/* import Modal from "../admin/modal"; */
+import Loading from '../../components/reusable-components/loader';
+import Notification from '../../components/reusable-components/alert'
 
 
 //InActive Fixture Library On Click Of Delete
@@ -22,9 +23,8 @@ async function inactiveSelectedFixture(row) {
     .update({ status: false })
     .eq('id', row.id)
 
-    alert('Fixture Deleted Successfully!');
-
-    FixtureLibrary.refreshData()
+    FixtureLibrary.notifyEvent(true, "success", 'Fixture Deleted Successfully!');
+    FixtureLibrary.refreshData();
 }
 
 //Fetch Fixture Library
@@ -34,9 +34,9 @@ export async function getServerSideProps() {
     let { data, error } = await supabase
     .from('fixture_library')
     .select('*')
-    .eq('status', true)
+    .eq('status', true);
 
-    return { props: { data: data } };
+    return { props: { data: data} };
 }
 
 function FixtureLibrary(props) {
@@ -44,7 +44,17 @@ function FixtureLibrary(props) {
     const [formName, setFormName] = React.useState('Create Fixture');
     const [isUpdate, setIsUpdate] = React.useState(false);
     const [typeOfUpdate, setTypeOfUpdate] = React.useState('Create');
+    const [isLoading, setIsLoading] = React.useState(false);
     const router = useRouter();
+    const [toastStatus, setToastStatus] = React.useState(false);
+    const [toastMessage, setToastMessage] = React.useState("");
+    const [toastType, setToastType] = React.useState("warning");
+    const [state, setState] = React.useState({
+        vertical        : 'top',
+        horizontal      : 'center'
+    });
+
+    const { vertical, horizontal } = state;
     const record = {
         concept_code            : "",
         type                    : "",
@@ -71,12 +81,15 @@ function FixtureLibrary(props) {
         setShowModal(false);
         setIsUpdate(false);
         setRowData(record);
+        setIsLoading(false);
         refreshData();
     }
 
     //Open Model
     const handleClickOpen = (e) => {
+        setIsLoading(true);
         setShowModal(true);
+        setIsLoading(false);
     };
 
     //Refresh Fixture Table
@@ -90,6 +103,10 @@ function FixtureLibrary(props) {
         setFormName("Update Fixture");
         setIsUpdate(true);
         setShowModal(true); 
+    }
+
+    const closeLoader = () => {
+        setIsLoading(false);
     }
 
     //Page Name
@@ -157,12 +174,41 @@ function FixtureLibrary(props) {
         },
     ];
 
+    //Closing Message Prompt
+    const handleCloseToast = () => {
+        setToastStatus(false);
+    }
+
+    //Notification Event
+    const notifyEvent = (propmtStatus, messageType, message) => {
+        setToastStatus(propmtStatus);
+        setToastType(messageType);
+        setToastMessage(message)
+        setIsLoading(false);
+    }
+
     //Refresh Data
     FixtureLibrary.refreshData          = refreshData;
+    FixtureLibrary.closeLoader          = closeLoader;
+    FixtureLibrary.notifyEvent          = notifyEvent;
 
     return (
         <div>
-            {/* <CircularProgress /> */}
+            {/* Loading Component */}
+            {
+                isLoading == true ? <Loading/> : ''
+            }
+
+            {/* Notification Component */}
+            {
+                toastStatus == true ?
+                <Notification
+                    state={state}
+                    toastType={toastType}
+                    toastMessage={toastMessage}
+                    onClose={handleCloseToast}
+                ></Notification> : ''
+            }
             <Paper className={styles.blockMainHight}>
                 <Grid container spacing={2}
                 direction="row"
@@ -191,10 +237,10 @@ function FixtureLibrary(props) {
                     <Modal 
                         show="true" 
                         isUpdate={isUpdate} 
-                        key="1" 
                         formName={formName} 
                         rowData={rowData} 
                         handleClose={handleClose}
+                        page="fixtures"
                         storage="fixture-library-images"
                     ></Modal>
                 : ''

@@ -1,90 +1,65 @@
-import { useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
-import {TextareaAutosize, Paper,TextField,Alert} from '@mui/material'
+import { TextField, Alert } from '@mui/material'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { useState } from 'react';
-import Scanner from '../../../utils/scanner';
-import { useAppContext } from '../../../contexts/appContext';
+import Layout from '../../../components/layout';
+
+const Scandit = dynamic(() => import('../../../components/scandit'), {
+  ssr: false,
+})
 
 export default function Fixture(props) {
-  const { setTitle } = useAppContext();
   const router = useRouter();
-  const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
-  const [error,setError] = useState(false);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    setTitle("Remove Fixture");
-  }, []);
-  // useEffect(() => {
-  //   try {
-  //     if(results[0]) {
-  //       const code = _get(results, "0.codeResult.code");
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, [results]);
-  const handleProceed = async () =>{
-    const url = `/api/fixture/barcode/${results[0].codeResult.code}`;
+  const handleProceed = async () => {
+    const barcode = _get(results, "0");
+    const url = `/api/fixture/barcode/${barcode}`;
     const response = await fetch(url);
-    const {data,error} = await response.json();
-    if(data.length) {
-            const barcode = _get(results, "0.codeResult.code");
-                      
-              router.push(`/fixture/remove/${barcode}`);
+    const { data, error } = await response.json();
+    if (data.length) {
+      router.push(`/fixture/remove/${barcode}`);
     } else {
-     setError(true);
+      setError(true);
       setResults([]);
     }
-            
   }
 
-  const handleScanner = ( ) =>{
-    setScanner(true)
-  }
-
-  const _onDetected = result => {
-    setResults([])
+  const _onDetected = useCallback((result) => {
+    setResults([]);
     setResults([result])
-  }
+  }, []);
 
   return (
-    <Box paddingX="20px" paddingY="40px">
-      <Stack spacing={4}>
-        <Button onClick = {handleScanner} variant="contained" >Scan Fixture</Button>
-
-      {scanner ? (<Paper variant="outlined" style={{marginTop:30, minWidth:320, height:320}}>
-      <Scanner onDetected={_onDetected} />
-        </Paper>): null}
-        {/* <TextareaAutosize
-            style={{fontSize:32, width:320, height:100, marginTop:30}}
-            rowsmax={4}
-            // defaultValue={'No data scanned'}
-            value={results[0] ? results[0].codeResult.code : 'No data scanned'}
-        /> */}
-         <TextField
-            style={{fontSize:50, width:320, height:70, marginTop:30}}
+    <Layout title="Remove Fixture">
+      <Box paddingX="20px" paddingY="40px">
+        <Stack spacing={4}>
+          <Link href={`/fixture/remove/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
+          <Scandit btnText="Scan Fixture" onDetected={_onDetected} />
+          <TextField
+            style={{ fontSize: 50, width: 320, height: 50 }}
             rowsmax={4}
             type='number'
-            value={results[0] ? results[0].codeResult.code : 'No data scanned'}
+            value={_get(results, "0", "No data scanned")}
             onChange={event => {
-              setResults([{codeResult:{code:event.target.value}}]);
+              setResults([{ codeResult: { code: event.target.value } }]);
               error && setError(false);
             }}
-          /> 
+          />
           {error && <Alert severity="error">Barcode not found !</Alert>}
-      </Stack>
-      {_get(results, "0.codeResult.code") &&
-        // <Link href={`/fixture/remove/${_get(results, "0.codeResult.code")}`} passHref legacyBehavior>
+          {_get(results, "0") &&
           <Box paddingY="20px">
-            <Button onClick = {handleProceed} variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
+            <Button onClick={handleProceed} variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
           </Box>
-        // </Link>
-      }
-    </Box>
+          }
+        </Stack>
+      </Box>
+    </Layout>
   )
 }
