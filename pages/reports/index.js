@@ -13,7 +13,7 @@ import {
 import Layout from '../../components/layout';
 
 export default function Fixture(props) {
-  let reportData = getReportData(props.data)
+  let reportData = getReportData(_get(props, 'data', []));
   return (
     <Layout title="Reports">
       <Box paddingX="20px" paddingY="40px">
