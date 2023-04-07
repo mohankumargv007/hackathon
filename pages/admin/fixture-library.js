@@ -11,6 +11,7 @@ import { supabaseConnection } from '../../utils/supabase';
 import { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
 import Loading from '../../components/reusable-components/loader';
+import Notification from '../../components/reusable-components/alert'
 
 
 //InActive Fixture Library On Click Of Delete
@@ -22,9 +23,8 @@ async function inactiveSelectedFixture(row) {
     .update({ status: false })
     .eq('id', row.id)
 
-    alert('Fixture Deleted Successfully!');
-
-    FixtureLibrary.refreshData()
+    FixtureLibrary.notifyEvent(true, "success", 'Fixture Deleted Successfully!');
+    FixtureLibrary.refreshData();
 }
 
 //Fetch Fixture Library
@@ -46,6 +46,15 @@ function FixtureLibrary(props) {
     const [typeOfUpdate, setTypeOfUpdate] = React.useState('Create');
     const [isLoading, setIsLoading] = React.useState(false);
     const router = useRouter();
+    const [toastStatus, setToastStatus] = React.useState(false);
+    const [toastMessage, setToastMessage] = React.useState("");
+    const [toastType, setToastType] = React.useState("warning");
+    const [state, setState] = React.useState({
+        vertical        : 'top',
+        horizontal      : 'center'
+    });
+
+    const { vertical, horizontal } = state;
     const record = {
         concept_code            : "",
         type                    : "",
@@ -165,14 +174,40 @@ function FixtureLibrary(props) {
         },
     ];
 
+    //Closing Message Prompt
+    const handleCloseToast = () => {
+        setToastStatus(false);
+    }
+
+    //Notification Event
+    const notifyEvent = (propmtStatus, messageType, message) => {
+        setToastStatus(propmtStatus);
+        setToastType(messageType);
+        setToastMessage(message)
+        setIsLoading(false);
+    }
+
     //Refresh Data
     FixtureLibrary.refreshData          = refreshData;
     FixtureLibrary.closeLoader          = closeLoader;
+    FixtureLibrary.notifyEvent          = notifyEvent;
 
     return (
         <div>
+            {/* Loading Component */}
             {
                 isLoading == true ? <Loading/> : ''
+            }
+
+            {/* Notification Component */}
+            {
+                toastStatus == true ?
+                <Notification
+                    state={state}
+                    toastType={toastType}
+                    toastMessage={toastMessage}
+                    onClose={handleCloseToast}
+                ></Notification> : ''
             }
             <Paper className={styles.blockMainHight}>
                 <Grid container spacing={2}
