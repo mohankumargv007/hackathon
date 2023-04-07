@@ -86,10 +86,9 @@ export default function Fixture(props) {
         <h4>Item : {parentProd.item}</h4>
         <h4>Concept : {parentProd.concept}</h4>
         <h4>Department : {parentProd.department}</h4>
-        <h4>Class :{parentProd.class}</h4>
+        <h4>Class : {parentProd.class}</h4>
 
         <Stack spacing={2}>
-
           <h3>Add Products</h3>
           <Box >
             {/* <TextareaAutosize
