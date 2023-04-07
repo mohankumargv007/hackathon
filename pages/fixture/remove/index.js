@@ -46,9 +46,9 @@ export default function Fixture(props) {
             style={{ fontSize: 50, width: 320, height: 50 }}
             rowsmax={4}
             type='number'
-            value={_get(results, "0", "No data scanned")}
+            value={_get(results, "0", "")}
             onChange={event => {
-              setResults([{ codeResult: { code: event.target.value } }]);
+              setResults([event.target.value]);
               error && setError(false);
             }}
           />
