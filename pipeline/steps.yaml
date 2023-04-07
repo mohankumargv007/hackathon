@@ -4,7 +4,7 @@ steps:
   - task: AzureKeyVault@1
     displayName: PullSecrets
     inputs:
-      azureSubscription: $(azureSubscription)
+      azureSubscription: $(azureSubscription)-$(projectName)
       KeyVaultName: $(KeyVaultName)
       SecretsFilter: 'VERCEL-LMG-TOKEN'
       RunAsPreJob: true
