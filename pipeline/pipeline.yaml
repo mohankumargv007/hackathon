@@ -4,10 +4,10 @@ pr: none
 variables:
   - template: vars.yaml
     parameters:
-      projectName: "space-management-tool" 
+      projectName: "Space Management Tool" 
   - template: env-vars-dev.yaml
     parameters:
-      projectName: "space-management-tool"       
+      projectName: "Space Management Tool"       
    
 stages:
   - stage: dev
