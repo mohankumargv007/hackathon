@@ -1,0 +1,6 @@
+variables:
+  env: dev
+  azureSubscription: SP-SHL-DEV01
+  KeyVaultName: LMAPAZ1KYVDEVSHL01
+  env-parameter: 
+  

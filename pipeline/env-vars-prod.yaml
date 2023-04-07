@@ -1,0 +1,5 @@
+variables:
+  env: prod
+  azureSubscription: SP-SHL-PRD01
+  KeyVaultName: LMAPAZ1KYVAKSPRDSHL01
+  env-parameter: --prod
