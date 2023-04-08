@@ -17,6 +17,7 @@ import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material'
 import Layout from '../../../../components/layout';
 import Scanner from '../../../../utils/scanner';
+import Notification from "../../../../components/reusable-components/alert"
 import { supabaseConnection } from '../../../../utils/supabase';
 const Scandit = dynamic(() => import('../../../../components/scandit'), {
   ssr: false,
@@ -64,12 +65,14 @@ export default function Fixture(props) {
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState(false)
 
- 
+
+
   const _onDetected = useCallback((result) => {
     setResults([]);
       setResults([result]);
       setError(false);
   }, []);
+
   const handleProduct = async (productCode) => {
     try {
       const url = `/api/fixture/merchandise/${productCode}`;
@@ -109,11 +112,23 @@ export default function Fixture(props) {
     data.length && setSaved(true);
     setResults([])
   }
+
+  const notification = (type,msg) =>{
+    return(
+                 <Notification
+                    state={ {
+                      vertical        : 'top',
+                      horizontal      : 'center'
+                  }}
+                    toastType={type}
+                    toastMessage={msg}
+                    onClose={()=>error && setError(false)}
+                ></Notification>
+    )
+  }
   return (
     <Layout title="Scan Products">
-      {fbdata.length && !fbdata[0]?.status ? 
-        <Alert severity="info">Fixture removed successfully!</Alert> : null
-      }
+      {fbdata.length && !fbdata[0]?.status ? notification("info","Fixture removed successfully!")  : null  }
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
           <h3>{fixture.name}</h3>
@@ -130,8 +145,9 @@ export default function Fixture(props) {
                 error && setError(false);
               }}
             />
-            {error && <Alert severity="error">Product not found !</Alert>}
-            {!fbdata.length && <Alert severity="error">Fixture Barcode not found !</Alert>}
+            {error &&  notification("error","Product Not Found !")    }
+            {!fbdata.length &&  notification("error","Fixture Barcode not found !")  }
+            
             {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} />
