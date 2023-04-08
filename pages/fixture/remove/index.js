@@ -8,6 +8,7 @@ import { TextField, Alert } from '@mui/material'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Layout from '../../../components/layout';
+import Notification from "../../../components/reusable-components/alert"
 
 const Scandit = dynamic(() => import('../../../components/scandit'), {
   ssr: false,
@@ -31,6 +32,20 @@ export default function Fixture(props) {
     }
   }
 
+  const notification = (type, msg) => {
+    return (
+      <Notification
+        state={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        toastType={type}
+        toastMessage={msg}
+        onClose={() => error && setError(false)}
+      ></Notification>
+    )
+  }
+
   const _onDetected = useCallback((result) => {
     setResults([]);
     setResults([result])
@@ -46,17 +61,17 @@ export default function Fixture(props) {
             style={{ fontSize: 50, width: 320, height: 50 }}
             rowsmax={4}
             type='number'
-            value={_get(results, "0", "No data scanned")}
+            value={_get(results, "0", "")}
             onChange={event => {
-              setResults([{ codeResult: { code: event.target.value } }]);
+              setResults([event.target.value]);
               error && setError(false);
             }}
           />
-          {error && <Alert severity="error">Barcode not found !</Alert>}
+          {error && notification("error", "Barcode not found !")}
           {_get(results, "0") &&
-          <Box paddingY="20px">
-            <Button onClick={handleProceed} variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
-          </Box>
+            <Box paddingY="20px">
+              <Button onClick={handleProceed} variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
+            </Box>
           }
         </Stack>
       </Box>

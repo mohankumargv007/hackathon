@@ -32,11 +32,27 @@ export default function Fixture(props) {
     <Layout title="Review Fixture Details">
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
-          <h2>{fixture.name}</h2>
-          <h3>{fixture.type}</h3>
-          <img src={fixture.front_image} width="100%" style={{ "maxWidth": "400px" }} />
+          <Stack spacing={1}>
+            <h2>{fixture.name}</h2>
+            {fixture.type &&<p><b>Type: </b>{fixture.type}</p>}
+            {fixture.component_length && <p><b>Length: </b>{fixture.component_length}</p>}
+            {fixture.component_width && <p><b>Width: </b>{fixture.component_width}</p>}
+            {fixture.component_height && <p><b>Height: </b>{fixture.component_height}</p>}
+            {fixture.front_image && <>
+              <label><b>Front Image</b></label>
+              <img src={fixture.front_image} width="100%" style={{"maxWidth":"400px"}} />
+            </>}
+            {fixture.cad_image && <>
+              <label><b>CAD Image</b></label>
+              <img src={fixture.cad_image} width="100%" style={{"maxWidth":"400px"}} />
+            </>}
+            {fixture.lateral_image && <>
+              <label><b>Lateral Image</b></label>
+              <img src={fixture.lateral_image} width="100%" style={{"maxWidth":"400px"}} />
+            </>}
+          </Stack>
           <Link href={`/merchandise/barcode/scan/${barcode}`} passHref legacyBehavior><Button variant="contained">Confirm</Button></Link>
-          <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
+          <Link href={`/merchandise/scan-fixture`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>

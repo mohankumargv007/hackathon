@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
@@ -16,10 +17,14 @@ import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material'
 import Layout from '../../../../components/layout';
 import Scanner from '../../../../utils/scanner';
+import Notification from "../../../../components/reusable-components/alert"
 import { supabaseConnection } from '../../../../utils/supabase';
+const Scandit = dynamic(() => import('../../../../components/scandit'), {
+  ssr: false,
+})
 
 export async function getServerSideProps(context) {
-  const { fid } = context.query;
+  const { fid, count } = context.query;
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -35,9 +40,10 @@ export async function getServerSideProps(context) {
     .from('fixture_barcode')
     .select('*')
     .eq('fixture_key', fixture.key)
+    .eq('store_id', 60318)
+    .eq('counter', count)
     .order("id", { ascending: false })
     .range(0, 0)
-
   return {
     props: {
       data: data,
@@ -50,24 +56,22 @@ export default function Fixture(props) {
   const router = useRouter();
   const fid = _get(router, "query.fid", "");
   const count = _get(router, "query.count", "")
-  const fbdata = _get(props, "fbdata.0", {});
-  const fixture = _get(props, "data.0", {});
-  const barcode = fbdata.fixture_barcode
 
-  const [scanner, setScanner] = useState(false);
+  const [fbdata, setFbdata] = useState(_get(props, "fbdata"));
+  const fixture = _get(props, "data.0", {});
+  const barcode = fbdata.length && fbdata[0].fixture_barcode
   const [results, setResults] = useState([]);
   const [products, setProducts] = useState([])
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState(false)
 
-  const handleScanner = () => {
-    setScanner(true)
-  }
 
-  const _onDetected = result => {
-    setResults([])
-    setResults([result])
-  }
+
+  const _onDetected = useCallback((result) => {
+    setResults([]);
+    setResults([result]);
+    setError(false);
+  }, []);
 
   const handleProduct = async (productCode) => {
     try {
@@ -79,8 +83,17 @@ export default function Fixture(props) {
       data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true)
       setResults([])
     } catch (error) {
-      console.log(error);
+      console.log("get product details error: ", error);
     }
+  }
+  const removeFixture = (fixture) => async () => {
+    const url = `/api/fixture/remove/${fbdata[0].fixture_barcode}`;
+    const options = {
+      method: "put"
+    };
+    const response = await fetch(url, options);
+    const { data, error } = await response.json();
+    data.length && setFbdata(data)
   }
 
   const handleSubmit = async () => {
@@ -99,30 +112,45 @@ export default function Fixture(props) {
     data.length && setSaved(true);
     setResults([])
   }
+
+  const notification = (type, msg) => {
+    return (
+      <Notification
+        state={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        toastType={type}
+        toastMessage={msg}
+        onClose={() => error && setError(false)}
+      ></Notification>
+    )
+  }
   return (
     <Layout title="Scan Products">
+      {fbdata.length && !fbdata[0]?.status ? notification("info", "Fixture removed successfully!") : null}
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
           <h3>{fixture.name}</h3>
-          Type: {fixture.type}
+          <h4>Type: {fixture.type}</h4>
           <h4>Add products</h4>
           <Box >
             <TextField
               style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
               rowsmax={4}
               type='number'
-              value={results[0] ? results[0].codeResult.code : products.length == 0 ? 'No product scanned' : 'scan next product'}
+              value={results[0] || ""}
               onChange={event => {
-                setResults([{ codeResult: { code: event.target.value } }]);
+                setResults([event.target.value]);
                 error && setError(false);
               }}
             />
-            {error && <Alert severity="error">Product not found !</Alert>}
-            {results[0] ? <Button onClick={() => handleProduct(results[0].codeResult.code)} variant="contained">add product</Button> : null}
+            {error && notification("error", "Product Not Found !")}
+            {!fbdata.length && notification("error", "Fixture Barcode not found !")}
+
+            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
-          {scanner ? (<Paper variant="outlined" style={{ marginTop: 30, minWidth: 320, height: 320 }}>
-            <Scanner onDetected={_onDetected} />
-          </Paper>) : null}
+          <Scandit btnText="Scan Product" onDetected={_onDetected} />
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption>Added {products.length}/5 products</caption>
@@ -146,11 +174,19 @@ export default function Fixture(props) {
               </TableBody>
             </Table>
           </TableContainer>
-          {saved &&
-            <Alert severity="success">Rexture removed successfully!</Alert>
+          {fbdata.length && fbdata[0].status ?
+            <>
+              <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>
+              <Button variant="contained" onClick={removeFixture(fixture)}>Yes</Button>
+            </>
+            : fbdata.length && !fbdata[0].status ?
+              <>
+                <Alert severity="success">Fixture removed successfully!</Alert>
+                <Link href={`/`} passHref legacyBehavior><Button variant="contained">Go to Home page</Button></Link>
+              </>
+              : null
           }
-          {!saved && <Button onClick={(e) => handleScanner(e)} variant="contained">Scan More</Button>}
-          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Remove Fixture</Button> : null)}
+          <Link href={`/fixture/remove/fid/${fid}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>

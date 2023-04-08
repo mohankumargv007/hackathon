@@ -40,13 +40,34 @@ export async function getServerSideProps(context) {
   } };
 }
 
+const printPageArea = areaID => {
+  let disp_setting="toolbar=yes,location=no,";
+  disp_setting+="directories=yes,menubar=yes,";
+  disp_setting+="width=650, height=600, left=100, top=25";
+  const content_vlue = document.getElementById(areaID).innerHTML;
+  const docprint=window.open("","",disp_setting);
+  docprint.document.open();
+  docprint.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"');
+  docprint.document.write('"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+  docprint.document.write('<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">');
+  docprint.document.write('<head><title>&nbsp;</title>');
+  docprint.document.write('<style type="text/css">body{ margin:0px;');
+  docprint.document.write('font-family:verdana,Arial;color:#000;');
+  docprint.document.write('font-family:Verdana, Geneva, sans-serif; font-size:12px;}');
+  docprint.document.write('a{color:#000;text-decoration:none;} </style>');
+  docprint.document.write('</head><body onLoad="self.print()"><center>');
+  docprint.document.write(content_vlue);
+  docprint.document.write('</center></body></html>');
+  docprint.document.close();
+  docprint.focus();
+}
+
 export default function Fixture(props) {
   const fixture = _get(props, "data", {});
   const fixture_barcode = _get(props, "fbdata", {});
   const store_code = 60318;
   let counter = ''
-  if(fixture_barcode.counter){
-    console.log(typeof fixture_barcode.counter,fixture_barcode.counter,"gggggggg");
+  if(fixture_barcode.counter) {
     if(fixture_barcode.counter < 10){
       counter = `00${fixture_barcode.counter + 1}`
     } else if (fixture_barcode.counter < 100){
@@ -79,7 +100,8 @@ export default function Fixture(props) {
 
   const handlePrint = () => {
     !saved && saveBarcode(code)();
-    window.print();
+    // window.print();
+    printPageArea("printableArea");
   }
 
   return (
@@ -89,8 +111,10 @@ export default function Fixture(props) {
           {saved &&
           <Alert severity="success">Barcode saved successfully!</Alert>
           }
-          <p>4 way new format stand 125CM</p>
-          <Barcode value={code} />;
+          <div id="printableArea">
+            <p>4 way new format stand 125CM</p>
+            <Barcode value={code} />
+          </div>
           <Button onClick={handlePrint} variant="contained">Print</Button>
           {!saved && <Button onClick={saveBarcode(code)} variant="contained">Save Barcode</Button>}
           <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
