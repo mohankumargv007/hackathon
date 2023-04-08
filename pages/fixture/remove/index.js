@@ -32,17 +32,17 @@ export default function Fixture(props) {
     }
   }
 
-  const notification = (type,msg) =>{
-    return(
-                 <Notification
-                    state={ {
-                      vertical        : 'top',
-                      horizontal      : 'center'
-                  }}
-                    toastType={type}
-                    toastMessage={msg}
-                    onClose={()=>error && setError(false)}
-                ></Notification>
+  const notification = (type, msg) => {
+    return (
+      <Notification
+        state={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        toastType={type}
+        toastMessage={msg}
+        onClose={() => error && setError(false)}
+      ></Notification>
     )
   }
 
@@ -67,11 +67,11 @@ export default function Fixture(props) {
               error && setError(false);
             }}
           />
-          {error && notification("error","Barcode not found !")}
+          {error && notification("error", "Barcode not found !")}
           {_get(results, "0") &&
-          <Box paddingY="20px">
-            <Button onClick={handleProceed} variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
-          </Box>
+            <Box paddingY="20px">
+              <Button onClick={handleProceed} variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
+            </Box>
           }
         </Stack>
       </Box>

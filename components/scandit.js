@@ -20,7 +20,7 @@ const Scandit = React.memo(function Scandit(props) {
     // file, which will be fetched asynchronously. You must `await` the returned promise to be able to continue.
     await SDCCore.configure({
       licenseKey: process.env.NEXT_PUBLIC_SCANDIT_LICENCE_KEY || licenseKey,
-      libraryLocation: process.env.NEXT_PUBLIC_SCANDIT_LIB_LOCATION || libraryLocation,
+      libraryLocation: libraryLocation,
       moduleLoaders: [
         SDCBarcode.barcodeCaptureLoader({ highEndBlurryRecognition: false })
       ]

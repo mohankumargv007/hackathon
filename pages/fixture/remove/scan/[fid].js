@@ -24,7 +24,7 @@ const Scandit = dynamic(() => import('../../../../components/scandit'), {
 })
 
 export async function getServerSideProps(context) {
-  const { fid , count } = context.query;
+  const { fid, count } = context.query;
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -41,7 +41,7 @@ export async function getServerSideProps(context) {
     .select('*')
     .eq('fixture_key', fixture.key)
     .eq('store_id', 60318)
-    .eq('counter',count)
+    .eq('counter', count)
     .order("id", { ascending: false })
     .range(0, 0)
   return {
@@ -69,8 +69,8 @@ export default function Fixture(props) {
 
   const _onDetected = useCallback((result) => {
     setResults([]);
-      setResults([result]);
-      setError(false);
+    setResults([result]);
+    setError(false);
   }, []);
 
   const handleProduct = async (productCode) => {
@@ -83,16 +83,16 @@ export default function Fixture(props) {
       data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true)
       setResults([])
     } catch (error) {
-      console.log("get product details error: ",error);
+      console.log("get product details error: ", error);
     }
   }
   const removeFixture = (fixture) => async () => {
-    const url = `/api/fixture/remove/${ fbdata[0].fixture_barcode}`;
+    const url = `/api/fixture/remove/${fbdata[0].fixture_barcode}`;
     const options = {
       method: "put"
     };
     const response = await fetch(url, options);
-    const {data,error} = await response.json();
+    const { data, error } = await response.json();
     data.length && setFbdata(data)
   }
 
@@ -113,22 +113,22 @@ export default function Fixture(props) {
     setResults([])
   }
 
-  const notification = (type,msg) =>{
-    return(
-                 <Notification
-                    state={ {
-                      vertical        : 'top',
-                      horizontal      : 'center'
-                  }}
-                    toastType={type}
-                    toastMessage={msg}
-                    onClose={()=>error && setError(false)}
-                ></Notification>
+  const notification = (type, msg) => {
+    return (
+      <Notification
+        state={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        toastType={type}
+        toastMessage={msg}
+        onClose={() => error && setError(false)}
+      ></Notification>
     )
   }
   return (
     <Layout title="Scan Products">
-      {fbdata.length && !fbdata[0]?.status ? notification("info","Fixture removed successfully!")  : null  }
+      {fbdata.length && !fbdata[0]?.status ? notification("info", "Fixture removed successfully!") : null}
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
           <h3>{fixture.name}</h3>
@@ -145,9 +145,9 @@ export default function Fixture(props) {
                 error && setError(false);
               }}
             />
-            {error &&  notification("error","Product Not Found !")    }
-            {!fbdata.length &&  notification("error","Fixture Barcode not found !")  }
-            
+            {error && notification("error", "Product Not Found !")}
+            {!fbdata.length && notification("error", "Fixture Barcode not found !")}
+
             {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} />
@@ -180,11 +180,11 @@ export default function Fixture(props) {
               <Button variant="contained" onClick={removeFixture(fixture)}>Yes</Button>
             </>
             : fbdata.length && !fbdata[0].status ?
-            <>
-              <Alert severity="success">Fixture removed successfully!</Alert>
-              <Link href={`/`} passHref legacyBehavior><Button variant="contained">Go to Home page</Button></Link>
-            </> 
-            : null
+              <>
+                <Alert severity="success">Fixture removed successfully!</Alert>
+                <Link href={`/`} passHref legacyBehavior><Button variant="contained">Go to Home page</Button></Link>
+              </>
+              : null
           }
           <Link href={`/fixture/remove/fid/${fid}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
         </Stack>

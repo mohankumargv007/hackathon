@@ -103,7 +103,7 @@ export default function Fixture(props) {
       data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true)
       setResults([])
     } catch (error) {
-      console.log("handle Product get api faile:",error);
+      console.log("handle Product get api faile:", error);
     }
   }
 
@@ -126,17 +126,17 @@ export default function Fixture(props) {
   }
 
 
-  const notification = (type,msg) =>{
-    return(
-                 <Notification
-                    state={ {
-                      vertical        : 'top',
-                      horizontal      : 'center'
-                  }}
-                    toastType={type}
-                    toastMessage={msg}
-                    onClose={()=>error && setError(false)}
-                ></Notification>
+  const notification = (type, msg) => {
+    return (
+      <Notification
+        state={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        toastType={type}
+        toastMessage={msg}
+        onClose={() => error && setError(false)}
+      ></Notification>
     )
   }
 
@@ -152,13 +152,13 @@ export default function Fixture(props) {
               style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
               rowsmax={4}
               type='number'
-              value={ results[0] || ""}
+              value={results[0] || ""}
               onChange={(event) => {
                 setResults([event.target.value]);
                 error && setError(false);
               }}
             />
-            {error && notification("error","Product not found !")}
+            {error && notification("error", "Product not found !")}
             {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} />

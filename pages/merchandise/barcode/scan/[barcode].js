@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState, useEffect ,useCallback} from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import _get from 'lodash/get';
@@ -55,8 +55,8 @@ export default function Fixture(props) {
 
   const _onDetected = useCallback((result) => {
     setResults([]);
-      setResults([result]);
-      setError(false);
+    setResults([result]);
+    setError(false);
   }, []);
 
   const handleProduct = async (productCode) => {
@@ -86,17 +86,17 @@ export default function Fixture(props) {
     setResults([])
   }
 
-  const notification = (type,msg) =>{
-    return(
-                 <Notification
-                    state={ {
-                      vertical        : 'top',
-                      horizontal      : 'center'
-                  }}
-                    toastType={type}
-                    toastMessage={msg}
-                    onClose={()=>error && setError(false)}
-                ></Notification>
+  const notification = (type, msg) => {
+    return (
+      <Notification
+        state={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        toastType={type}
+        toastMessage={msg}
+        onClose={() => error && setError(false)}
+      ></Notification>
     )
   }
 
@@ -118,7 +118,7 @@ export default function Fixture(props) {
                 error && setError(false);
               }}
             />
-            {error && notification("error","Product not found !")}
+            {error && notification("error", "Product not found !")}
             {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} />
@@ -148,10 +148,10 @@ export default function Fixture(props) {
           {saved &&
             <Alert severity="success">Product merchandised successfully!</Alert>
           }
-          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> 
-          : products.length ? 
-          <Button onClick={handleSubmit} variant="contained">Submit</Button> 
-          : null}
+          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link>
+            : products.length ?
+              <Button onClick={handleSubmit} variant="contained">Submit</Button>
+              : null}
           <Link href={`/merchandise/barcode/${barcode}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
         </Stack>
       </Box>
