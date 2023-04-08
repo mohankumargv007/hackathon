@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import * as SDCCore from "scandit-web-datacapture-core";
 import * as SDCBarcode from "scandit-web-datacapture-barcode";
@@ -19,8 +19,8 @@ const Scandit = React.memo(function Scandit(props) {
     // Configure and load the library using your license key. The passed parameter represents the location of the wasm
     // file, which will be fetched asynchronously. You must `await` the returned promise to be able to continue.
     await SDCCore.configure({
-      licenseKey: licenseKey,
-      libraryLocation: libraryLocation,
+      licenseKey: process.env.NEXT_PUBLIC_SCANDIT_LICENCE_KEY || licenseKey,
+      libraryLocation: process.env.NEXT_PUBLIC_SCANDIT_LIB_LOCATION || libraryLocation,
       moduleLoaders: [
         SDCBarcode.barcodeCaptureLoader({ highEndBlurryRecognition: false })
       ]
