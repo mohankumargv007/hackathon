@@ -52,7 +52,7 @@ export default function Fixture(props) {
             </>}
           </Stack>
           <Link href={`/merchandise/barcode/scan/${barcode}`} passHref legacyBehavior><Button variant="contained">Confirm</Button></Link>
-          <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
+          <Link href={`/merchandise/scan-fixture`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>

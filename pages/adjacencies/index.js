@@ -7,6 +7,7 @@ import { TextField, Alert } from '@mui/material'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Layout from '../../components/layout';
+import Notification from "../../components/reusable-components/alert"
 const Scandit = dynamic(() => import('../../components/scandit'), {
   ssr: false,
 })
@@ -34,6 +35,20 @@ export default function Fixture(props) {
     setResults([result])
   }, []);
 
+  const notification = (type,msg) =>{
+    return(
+                 <Notification
+                    state={ {
+                      vertical        : 'top',
+                      horizontal      : 'center'
+                  }}
+                    toastType={type}
+                    toastMessage={msg}
+                    onClose={()=>error && setError(false)}
+                ></Notification>
+    )
+  }
+
   return (
     <Layout title="Scan Product">
       <Box paddingX="20px" paddingY="40px">
@@ -45,11 +60,11 @@ export default function Fixture(props) {
             type='number'
             value={_get(results, "0", "No product scanned")}
             onChange={event => {
-              setResults([{ codeResult: { code: event.target.value } }]);
+              setResults([event.target.value]);
               error && setError(false);
             }}
           />
-          {error && <Alert severity="error">Barcode not found !</Alert>}
+          {error && notification("error","Product not found !")}
           {_get(results, "0") &&
             <Button onClick={handleProceed} variant="contained">Proceed</Button>
           }

@@ -16,6 +16,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material'
 import Layout from '../../../../components/layout';
+import Notification from "../../../../components/reusable-components/alert"
 // import Scanner from '../../../../utils/scanner';
 import { supabaseConnection } from '../../../../utils/supabase';
 const Scandit = dynamic(() => import('../../../../components/scandit'), {
@@ -123,6 +124,22 @@ export default function Fixture(props) {
     setResults([])
 
   }
+
+
+  const notification = (type,msg) =>{
+    return(
+                 <Notification
+                    state={ {
+                      vertical        : 'top',
+                      horizontal      : 'center'
+                  }}
+                    toastType={type}
+                    toastMessage={msg}
+                    onClose={()=>error && setError(false)}
+                ></Notification>
+    )
+  }
+
   return (
     <Layout title="Scan Products">
       <Box paddingX={"20px"}>
@@ -141,7 +158,7 @@ export default function Fixture(props) {
                 error && setError(false);
               }}
             />
-            {error && <Alert severity="error">Product not found !</Alert>}
+            {error && notification("error","Product not found !")}
             {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} />

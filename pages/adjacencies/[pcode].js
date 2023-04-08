@@ -16,6 +16,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material';
 import Layout from '../../components/layout';
+import Notification from "../../components/reusable-components/alert"
 // import Scanner from '../../utils/scanner';
 import { supabaseConnection } from '../../utils/supabase';
 const Scandit = dynamic(() => import('../../components/scandit'), {
@@ -78,6 +79,20 @@ export default function Fixture(props) {
     setResults([])
   }
 
+  const notification = (type,msg) =>{
+    return(
+                 <Notification
+                    state={ {
+                      vertical        : 'top',
+                      horizontal      : 'center'
+                  }}
+                    toastType={type}
+                    toastMessage={msg}
+                    onClose={()=>error && setError(false)}
+                ></Notification>
+    )
+  }
+
   // const [fixture, setFixture] = useState(_get(props, "data.0", {}));
   return (
     <Layout title="Scan Products">
@@ -91,11 +106,6 @@ export default function Fixture(props) {
         <Stack spacing={2}>
           <h3>Add Products</h3>
           <Box >
-            {/* <TextareaAutosize
-              style={{fontSize:20, width:320, height:70, marginTop:30}}
-              rowsmax={4}
-              value={results[0] ? results[0].codeResult.code : products.length ==0 ? 'No product scanned' : 'scan next product'}/>*/}
-
             <TextField
               style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
               rowsmax={4}
@@ -106,7 +116,7 @@ export default function Fixture(props) {
                 error && setError(false)
               }}
             />
-            {error && <Alert severity="error">Product not found !</Alert>}
+            {error && notification("error","Product not found !")}
             {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} />
