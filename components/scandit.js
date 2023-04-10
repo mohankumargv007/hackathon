@@ -93,7 +93,12 @@ const Scandit = React.memo(function Scandit(props) {
   // Open our modal and start the camera to scan a barcode.
   async function openScanner() {
     await loadAndPrepareLibrary();
-    document.getElementById("data-capture-view").style.height = "auto";
+    const width = screen.width;
+    if(width < 678) {
+      document.getElementById("data-capture-view").style.height = "210px";
+    } else {
+      document.getElementById("data-capture-view").style.height = "400px";
+    }
     await wait(50)
     // Start the camera. This can potentially fail, so we use try/catch.
     try {
