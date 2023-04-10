@@ -7,6 +7,7 @@ import * as SDCBarcode from "scandit-web-datacapture-barcode";
 const libraryLocation = 'https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@6.x/build/engine/';
 const licenseKey = 'ARliCSphCaRqPjr2RSVODedD1xQ8Emxf4T0pNQExbFNYfYMPkVMPRP53rer2ON77cUWItbl99qxWTubojXANK9NeEi0qaFLVBGkqzhhfyGqiQfLJtC6Ew2hCKrNKW9fe4kMv2ZYzW/vUVgpOOUTpt8JkQgoyZVhZ52kBUWVRh1YTfk/ePnhlzwteKUW5EDGF7Wsk6tVbxiF0U7a06jo8FBZEd1JQba20knsAqVkH4Y/7VjJu6CR7fkEt24K2YbHa/RGAKUcbh86vGN+MuThpOLAmgX1+D8h0QsFy3Imkte96e77+OKfMOZKFIpjxwBa9Dj14rR4g2/iu/LdyiKWU6lX78CRXSmcgyU5LbmikUS6mOUnK+g73U2HdwZngelhkpQ8YAGtxRVALI6nA1T8eKRjgwIVu9h4vqxys4NBKOTqk2bCF0frkvn2Pjmcm7YESwPUACCt7CvfkhZquTdfEstm3idiO2cjkQhmEzY9hf4M4kYOyKRPahRwXycPJ2T1DiTZeVfNuf/g+Zo43uuRkLE83Rl47r9l+KccP35Fkn7Hj1uyHy2UdNWqu2N+A50WmueuntPJY96+DitmekzYRrs0YuBovlHLVGHn6XhUiCq4ft8Qgs4umw1OdNXFmlSLQre8LyVt6x2cOgc+AkcW9ZQyxAOygbWtCPzbmpkH3h9t/F88fPIs2z6nvJXHkFTz6DWAkd/Ox/dK/HzctMvkWXFUsGrxbP91aZSFtBMGVV2QH+qNlCrwq348FspzcPHe/LlIJgTiSjO0UMgVS7WxJEoQIabLSQe/QpolP6CgvhdfZH7MXF6/ktXYQUAV3jGI675DsZhR48Qh2uRNJ2F1DhZ50ekNxrZ5HSn9RiOSl0tY/RxG8CWM8cKrZnqQMwaPHIUh16JPeqTF4MPnZljYTI/1xW3YTtFd7/B75DaurBTECxd2+Mq/5nUJTabyar3sPSH1BYjNI';
 
+
 const Scandit = React.memo(function Scandit(props) {
   const { btnText } = props;
   const [value, setValue] = useState("");
