@@ -1,6 +1,7 @@
 import * as React from 'react';
 import _get from 'lodash/get';
 import _cloneDeep from 'lodash/cloneDeep';
+import _uniqBy from 'lodash/uniqBy';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -61,7 +62,7 @@ export default function Home(props) {
               }}
               id="search-fixture-name"
               autoComplete
-              options={fixtures.map((option) => option.name)}
+              options={_uniqBy(fixtures, 'name').map((option) => option.name)}
               renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
             />
           </div>

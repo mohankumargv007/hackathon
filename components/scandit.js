@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import * as SDCCore from "scandit-web-datacapture-core";
 import * as SDCBarcode from "scandit-web-datacapture-barcode";
 
 const libraryLocation = 'https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@6.x/build/engine/';
-const licenseKey = 'AfZydWVhRvlIKSgyqzoAZw0OHeoICxgiFXidHWkiBNKGR70WBHcavoB+A/Fhde//+lhijfd17iJAcD0+31VRTBpb2olPbbidp0me/Y0x93ZdKL0BpiC2WXoBWs2jGMNp242GhUh4UiC2DGSwtxJP8AbWXRM90PDWQM+Ylfi+sg+GFHTiSzRHj5sl/PbYJ/PS+G3eOWsBgY2IwjbMZF8nMkiHrTSN5as5Ro4MvkzFh4kQmcpTygh2Q9evtzdxQ2HVdrtDLyEghW2SjLTsrLU8hf524d+Mr3MgUNPDg3kJxQpXjLO2IdMUaxfmd5KmYM/ndBj7PulfiJMpKIqzqTQWy9FyQZmx0mipncKDUXe7eg8azirRRleZPa9w08DV4f2TWQd1Uk1SWeVO9akXbtKBN7OEu8BbPwvqhqXWRLW2xYcckHQ2mdX1LQ9qgHe/qR49k2GrezxLQ9F8wlwIRidr2RbV0NKd8BEIxh9Rk3UqjaAVXlXUGMyQRf21KxXaDcCC0XQL3QVRe1ZCCIcCWSegYw2tf2GGJvf/sk0tLjel86G0huIuNW0hT2irJY0sW2II+66M8NHkjI9p32w4oL9QgD8pkWlOZP+ySXYYrLnO2gEEhh73WY4s1ij/fSAxB2mEXJiX8iDpv7BR0eKneZ3pqdrP8DT2Yw7pEZ6/Qd/IdoNiOfWZnuyD2GW1fw3UtsqqNZx0om5Xl0d4b7LygwBujsuXbvcBLaz8ZuOv7jbAO5duzsl/hYsbRqQSh8FFgU6+CLOEXz38j1oJQbcEoqNvLxV6AoJ09syliWDRHrDwBA==';
+const licenseKey = 'ARliCSphCaRqPjr2RSVODedD1xQ8Emxf4T0pNQExbFNYfYMPkVMPRP53rer2ON77cUWItbl99qxWTubojXANK9NeEi0qaFLVBGkqzhhfyGqiQfLJtC6Ew2hCKrNKW9fe4kMv2ZYzW/vUVgpOOUTpt8JkQgoyZVhZ52kBUWVRh1YTfk/ePnhlzwteKUW5EDGF7Wsk6tVbxiF0U7a06jo8FBZEd1JQba20knsAqVkH4Y/7VjJu6CR7fkEt24K2YbHa/RGAKUcbh86vGN+MuThpOLAmgX1+D8h0QsFy3Imkte96e77+OKfMOZKFIpjxwBa9Dj14rR4g2/iu/LdyiKWU6lX78CRXSmcgyU5LbmikUS6mOUnK+g73U2HdwZngelhkpQ8YAGtxRVALI6nA1T8eKRjgwIVu9h4vqxys4NBKOTqk2bCF0frkvn2Pjmcm7YESwPUACCt7CvfkhZquTdfEstm3idiO2cjkQhmEzY9hf4M4kYOyKRPahRwXycPJ2T1DiTZeVfNuf/g+Zo43uuRkLE83Rl47r9l+KccP35Fkn7Hj1uyHy2UdNWqu2N+A50WmueuntPJY96+DitmekzYRrs0YuBovlHLVGHn6XhUiCq4ft8Qgs4umw1OdNXFmlSLQre8LyVt6x2cOgc+AkcW9ZQyxAOygbWtCPzbmpkH3h9t/F88fPIs2z6nvJXHkFTz6DWAkd/Ox/dK/HzctMvkWXFUsGrxbP91aZSFtBMGVV2QH+qNlCrwq348FspzcPHe/LlIJgTiSjO0UMgVS7WxJEoQIabLSQe/QpolP6CgvhdfZH7MXF6/ktXYQUAV3jGI675DsZhR48Qh2uRNJ2F1DhZ50ekNxrZ5HSn9RiOSl0tY/RxG8CWM8cKrZnqQMwaPHIUh16JPeqTF4MPnZljYTI/1xW3YTtFd7/B75DaurBTECxd2+Mq/5nUJTabyar3sPSH1BYjNI';
 
 
 const Scandit = React.memo(function Scandit(props) {
@@ -19,7 +19,7 @@ const Scandit = React.memo(function Scandit(props) {
     // Configure and load the library using your license key. The passed parameter represents the location of the wasm
     // file, which will be fetched asynchronously. You must `await` the returned promise to be able to continue.
     await SDCCore.configure({
-      licenseKey: licenseKey,
+      licenseKey: process.env.NEXT_PUBLIC_SCANDIT_LICENCE_KEY || licenseKey,
       libraryLocation: libraryLocation,
       moduleLoaders: [
         SDCBarcode.barcodeCaptureLoader({ highEndBlurryRecognition: false })
