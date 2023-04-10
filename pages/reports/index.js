@@ -1,6 +1,7 @@
 import _get from 'lodash/get';
 import { supabaseConnection } from '../../utils/supabase';
 import Box from '@mui/material/Box';
+import NoSsr from '@mui/base/NoSsr';
 import {
   BarChart,
   Bar,
@@ -16,6 +17,7 @@ export default function Fixture(props) {
   let reportData = getReportData(_get(props, 'data', []));
   return (
     <Layout title="Reports">
+      <NoSsr>
       <Box paddingX="20px" paddingY="40px">
         <BarChart
           width={500}
@@ -40,6 +42,7 @@ export default function Fixture(props) {
           <Bar dataKey="Tables" stackId="a" fill="#ff00ff" />
         </BarChart>
       </Box>
+      </NoSsr>
     </Layout>
   )
 }
