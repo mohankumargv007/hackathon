@@ -119,7 +119,7 @@ export default function Fixture(props) {
             {error && notification("error","Product not found !")}
             {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
-          <Scandit btnText="Scan Product" onDetected={_onDetected} />
+          <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption>Added {products.length}/5 products</caption>

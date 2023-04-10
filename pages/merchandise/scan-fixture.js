@@ -58,7 +58,7 @@ export default function Fixture(props) {
       <Box paddingX="20px" paddingY="40px">
         <Stack spacing={4}>
           <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
-          <Scandit btnText="Scan Fixture" onDetected={_onDetected} />
+          <Scandit btnText="Scan Fixture" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
           <TextField
             style={{ fontSize: 50, width: 320, height: 40 }}
             rowsmax={4}

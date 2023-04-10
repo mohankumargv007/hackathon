@@ -53,7 +53,7 @@ export default function Fixture(props) {
     <Layout title="Scan Product">
       <Box paddingX="20px" paddingY="40px">
         <Stack spacing={4}>
-          <Scandit btnText="Scan Product" onDetected={_onDetected} />
+          <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
           <TextField
             style={{ fontSize: 50, width: 320, height: 50 }}
             rowsmax={4}
