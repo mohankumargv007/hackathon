@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
+import _get from 'lodash/get';
 import * as SDCCore from "scandit-web-datacapture-core";
 import * as SDCBarcode from "scandit-web-datacapture-barcode";
 
 const libraryLocation = 'https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@6.x/build/engine/';
 const licenseKey = 'AfZydWVhRvlIKSgyqzoAZw0OHeoICxgiFXidHWkiBNKGR70WBHcavoB+A/Fhde//+lhijfd17iJAcD0+31VRTBpb2olPbbidp0me/Y0x93ZdKL0BpiC2WXoBWs2jGMNp242GhUh4UiC2DGSwtxJP8AbWXRM90PDWQM+Ylfi+sg+GFHTiSzRHj5sl/PbYJ/PS+G3eOWsBgY2IwjbMZF8nMkiHrTSN5as5Ro4MvkzFh4kQmcpTygh2Q9evtzdxQ2HVdrtDLyEghW2SjLTsrLU8hf524d+Mr3MgUNPDg3kJxQpXjLO2IdMUaxfmd5KmYM/ndBj7PulfiJMpKIqzqTQWy9FyQZmx0mipncKDUXe7eg8azirRRleZPa9w08DV4f2TWQd1Uk1SWeVO9akXbtKBN7OEu8BbPwvqhqXWRLW2xYcckHQ2mdX1LQ9qgHe/qR49k2GrezxLQ9F8wlwIRidr2RbV0NKd8BEIxh9Rk3UqjaAVXlXUGMyQRf21KxXaDcCC0XQL3QVRe1ZCCIcCWSegYw2tf2GGJvf/sk0tLjel86G0huIuNW0hT2irJY0sW2II+66M8NHkjI9p32w4oL9QgD8pkWlOZP+ySXYYrLnO2gEEhh73WY4s1ij/fSAxB2mEXJiX8iDpv7BR0eKneZ3pqdrP8DT2Yw7pEZ6/Qd/IdoNiOfWZnuyD2GW1fw3UtsqqNZx0om5Xl0d4b7LygwBujsuXbvcBLaz8ZuOv7jbAO5duzsl/hYsbRqQSh8FFgU6+CLOEXz38j1oJQbcEoqNvLxV6AoJ09syliWDRHrDwBA==';
-
 
 const Scandit = React.memo(function Scandit(props) {
   const { btnText } = props;
@@ -19,7 +19,7 @@ const Scandit = React.memo(function Scandit(props) {
     // Configure and load the library using your license key. The passed parameter represents the location of the wasm
     // file, which will be fetched asynchronously. You must `await` the returned promise to be able to continue.
     await SDCCore.configure({
-      licenseKey: process.env.NEXT_PUBLIC_SCANDIT_LICENCE_KEY || licenseKey,
+      licenseKey: _get(props, "scandit_licence_key") || licenseKey,
       libraryLocation: libraryLocation,
       moduleLoaders: [
         SDCBarcode.barcodeCaptureLoader({ highEndBlurryRecognition: false })
