@@ -416,6 +416,7 @@ export default function Modal(props) {
                                         formData[field.fieldName] != '' ?
                                         (
                                             <div>
+                                                <span>{field.label}</span>
                                                 <ImageListItem>
                                                     <img
                                                         src={`${formData[field.fieldName]}?w=248&fit=crop&auto=format`}
