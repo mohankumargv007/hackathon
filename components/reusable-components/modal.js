@@ -18,7 +18,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Loading from '../../components/reusable-components/loader';
 import commonStyles from '../../styles/Common.module.css';
-import Notification from '../../components/reusable-components/alert'
+import Notification from '../../components/reusable-components/alert';
+import _get from 'lodash/get';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide className={styles.stylesModal} direction="left" ref={ref} {...props} />;
@@ -172,33 +173,36 @@ export default function Modal(props) {
         try {
             //From Validations
             const is_valid_data = validateFormFields();
-            if(!is_valid_data) {
+            let message = "";
+            /* if(!is_valid_data) {
                 notifyEvent(true, "warning", "All fields are required along with image uploads.");
                 return false;
             }
-
+ */
             //Calculate Linear Meter Only For Fixture Library
             if(props.page == 'fixtures') {
                 formData.linear_meter = formData.components * formData.component_length * 0.01
             }
 
-            const supabase = supabaseConnection();
+            const url = `/api/admin/fixture-library/fixture-library`;
 
-            let message = "";
+            const options = {
+                method: "POST",
+                body: formData
+            };
 
-            if(props.isUpdate) {
-                let { error } = await supabase
-                    .from('fixture_library')
-                    .update(formData)
-                    .eq('id', props.rowData.id)
+            const response = await fetch(url, options);
 
-                if (error) throw error
-                message = 'Fixture Updated Successfully!';
-            } else {
-                let { error } = await supabase.from('fixture_library').insert([formData])
-                if (error) throw error
-                message = 'Fixture Created Successfully!';
+            const data = await response.json();
+
+            if(_get(data, "data.0.id")) {
+                if(props.isUpdate) {
+                    message = 'Fixture Updated Successfully!';
+                } else {
+                    message = 'Fixture Created Successfully!';
+                }
             }
+
             //Sent Notification
             notifyEvent(true, "success", message);
             handleClose();
@@ -416,6 +420,7 @@ export default function Modal(props) {
                                         formData[field.fieldName] != '' ?
                                         (
                                             <div>
+                                                <span>{field.label}</span>
                                                 <ImageListItem>
                                                     <img
                                                         src={`${formData[field.fieldName]}?w=248&fit=crop&auto=format`}
