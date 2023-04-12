@@ -1,0 +1,45 @@
+trigger: none
+pr: none
+# define variables: registryName, registryLogin and registryPassword in the Azure pipeline UI definition
+variables:
+  - template: vars.yaml
+    parameters:
+      projectName: "Space Management Tool" 
+  - template: env-vars-dev.yaml
+    parameters:
+      projectName: "Space Management Tool"       
+   
+stages:
+  - stage: dev
+    condition: or(eq(variables['Build.Reason'], 'Manual'), eq(variables['build.sourceBranch'], 'refs/heads/dev')) 
+    displayName: dev
+    jobs:
+      - deployment: dev
+        variables:
+          - template: env-vars-dev.yaml
+        displayName: Deployment to Vercel DEV
+        pool:
+           vmImage: ubuntu-latest
+        environment: dev-$(projectName)
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: steps.yaml
+
+  - stage: prod
+    condition: eq(variables['build.sourceBranch'], 'refs/heads/release')
+    displayName: prod
+    jobs:
+      - deployment: prod
+        variables:
+          - template: env-vars-prod.yaml
+        displayName: Deployment to Vercel PROD
+        pool:
+           vmImage: ubuntu-latest
+        environment: prod-$(projectName)
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: steps.yaml

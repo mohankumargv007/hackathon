@@ -7,9 +7,9 @@ import { useRouter } from 'next/router';
 import '../styles/globals.css';
 
 MyApp.getInitialProps = async (ctx) => {
-  const res = await fetch('https://cdn.c1.amplience.net/c/centrepoint/smt_config');
+	const res = await fetch('https://cdn.c1.amplience.net/c/centrepoint/smt_config_v1');
 	const json = await res.json();
-  return { ...json }
+	return { ...json }
 }
 
 function MyApp({ Component, pageProps, scandit_licence_key }) {
