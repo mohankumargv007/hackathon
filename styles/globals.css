@@ -15,12 +15,9 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+.to-lowercase {
+  text-transform: none !important;
+}
+.manual-btn {
+  width: 140px;
 }

@@ -85,7 +85,9 @@ export default function Fixture(props) {
               color="secondary"
             />
             &nbsp;&nbsp;
-            <Button variant="contained" onClick={manualEntry} size="small">{manual ? "Disable Entry" : "Enable Entry"}</Button>
+            <Button variant="contained" onClick={manualEntry} size="small" className="to-lowercase manual-btn">
+              {manual ? "Disable Manual Entry" : "Add Fixture Manually"}
+            </Button>
           </Box>
           {error && notification("error", "Barcode not found !")}
           {_get(results, "0") ? <Button onClick={handleProceed} variant="contained" size="large">Proceed</Button> : null}

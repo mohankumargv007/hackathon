@@ -159,7 +159,9 @@ export default function Fixture(props) {
                 color="secondary"
               />
               &nbsp;&nbsp;
-              <Button variant="contained" onClick={manualEntry} size="small">{manual ? "Disable Entry" : "Enable Entry"}</Button>
+              <Button variant="contained" className="to-lowercase manual-btn" onClick={manualEntry} size="small">
+                {manual ? "Disable Manual Entry" : "Add Product manually"}
+              </Button>
             </Box>
             {error && notification("error", "Product not found!")}
             {results[0] ?

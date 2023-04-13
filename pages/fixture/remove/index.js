@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
-import { TextField, Alert } from '@mui/material'
+import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Layout from '../../../components/layout';
@@ -83,7 +83,9 @@ export default function Fixture(props) {
               color="secondary"
             />
             &nbsp;&nbsp;
-            <Button variant="contained" onClick={manualEntry} size="small">{manual ? "Disable Entry" : "Enable Entry"}</Button>
+            <Button variant="contained" onClick={manualEntry} size="small" className="to-lowercase manual-btn">
+              {manual ? "Disable Manual Entry" : "Add Fixture Manually"}
+            </Button>
           </Box>
           {error && notification("error", "Barcode not found !")}
           {_get(results, "0") &&

@@ -9,7 +9,7 @@ export default function Header(props) {
     {_get(props, "footer.link") &&
     <Box sx={{ flexGrow: 1 }} padding="20px">
       <Link href={_get(props, "footer.link")} passHref legacyBehavior>
-        <Button size="large" fullWidth variant="contained" aria-label="add">
+        <Button size="large" fullWidth variant="contained" aria-label="add" className="to-lowercase">
           {_get(props, "footer.title")}
         </Button>
       </Link>
