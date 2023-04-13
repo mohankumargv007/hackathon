@@ -11,20 +11,7 @@ export async function getServerSideProps() {
   let { data, error } = await supabase
   .from('fixture_library')
   .select('*')
-  .eq('status', true)
-
-  // Filter data
-  data = _filter(data, (o) => {
-    if(_includes(o.type.toLowerCase(), "arm")) {
-      return true;
-    } else if (_includes(o.type.toLowerCase(), "prong")) {
-      return true;
-    } else if(_includes(o.type.toLowerCase(), "shelves")) {
-      return true;
-    } else {
-      return false;
-    }
-  });
+  .or('type.ilike.%arm%,type.ilike.%prong%,type.ilike.%shelves%')
 
   return { props: { data: data } };
 }
