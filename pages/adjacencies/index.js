@@ -16,6 +16,11 @@ export default function Fixture(props) {
   const router = useRouter();
   const [results, setResults] = useState([]);
   const [error, setError] = useState(false);
+  const [manual, setManual] = useState(false);
+
+  const manualEntry = () => {
+    setManual(!manual);
+  }
 
   const handleProceed = async () => {
     const productCode = _get(results, "0");
@@ -35,17 +40,17 @@ export default function Fixture(props) {
     setResults([result])
   }, []);
 
-  const notification = (type,msg) =>{
-    return(
-                 <Notification
-                    state={ {
-                      vertical        : 'top',
-                      horizontal      : 'center'
-                  }}
-                    toastType={type}
-                    toastMessage={msg}
-                    onClose={()=>error && setError(false)}
-                ></Notification>
+  const notification = (type, msg) => {
+    return (
+      <Notification
+        state={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        toastType={type}
+        toastMessage={msg}
+        onClose={() => error && setError(false)}
+      ></Notification>
     )
   }
 
@@ -54,17 +59,30 @@ export default function Fixture(props) {
       <Box paddingX="20px" paddingY="40px">
         <Stack spacing={4}>
           <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
-          <TextField
-            style={{ fontSize: 50, width: 320, height: 50 }}
-            rowsmax={4}
-            type='number'
-            value={_get(results, "0", "No product scanned")}
-            onChange={event => {
-              setResults([event.target.value]);
-              error && setError(false);
-            }}
-          />
-          {error && notification("error","Product not found !")}
+          <Box display="flex">
+            <TextField
+              label="Scanned data"
+              style={{ maxWidth: 300 }}
+              fullWidth
+              rowsmax={4}
+              type='text'
+              value={_get(results, "0")}
+              onChange={event => {
+                setResults([event.target.value]);
+                error && setError(false);
+              }}
+              InputProps={{
+                readOnly: !manual
+              }}
+              InputLabelProps={{
+                shrink: true
+              }}
+              color="secondary"
+            />
+            &nbsp;&nbsp;
+            <Button variant="contained" onClick={manualEntry} size="small">{manual ? "Disable Entry" : "Enable Entry"}</Button>
+          </Box>
+          {error && notification("error", "Product not found !")}
           {_get(results, "0") &&
             <Button onClick={handleProceed} variant="contained">Proceed</Button>
           }

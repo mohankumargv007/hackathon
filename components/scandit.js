@@ -84,7 +84,7 @@ const Scandit = React.memo(function Scandit(props) {
         await context.frameSource.switchToDesiredState(SDCCore.FrameSourceState.Off)
       }
       const dataCaptureView = document.getElementById("data-capture-view");
-      if(dataCaptureView) { dataCaptureView.style.height = "0px"; }
+      if(dataCaptureView) { dataCaptureView.style.height = "0px"; dataCaptureView.style.marginTop = "0px"; }
     } catch(err) {
       console.log("Error: Scandit unmount failed error - ", err);
     }
@@ -99,6 +99,7 @@ const Scandit = React.memo(function Scandit(props) {
     } else {
       document.getElementById("data-capture-view").style.height = "400px";
     }
+    document.getElementById("data-capture-view").style.marginTop = "20px";
     await wait(50)
     // Start the camera. This can potentially fail, so we use try/catch.
     try {
@@ -151,10 +152,10 @@ const Scandit = React.memo(function Scandit(props) {
   }
 
   return (
-    <>
-      <Button onClick={handleScanner} variant="contained" >{btnText}</Button>
+    <div>
+      <Button onClick={handleScanner} variant="contained" fullWidth size="large">{btnText}</Button>
       <div id="data-capture-view"></div>
-    </>
+    </div>
   )
 })
 
