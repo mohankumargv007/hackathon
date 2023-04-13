@@ -14,21 +14,35 @@ import {
 import Layout from '../../components/layout';
 
 export default function Fixture(props) {
+  const isServer = typeof window === "undefined";
   let reportData = getReportData(_get(props, 'data', []));
+  let width = 350;
+  let height = 350;
+  let margin = {
+    top: 20,
+    right: 10,
+    left: 10,
+    bottom: 5
+  };
+  if(!isServer && screen && screen.width > 500) {
+    width = 500;
+    height = 500;
+    margin = {
+      top: 20,
+      right: 30,
+      left: 10,
+      bottom: 5
+    };
+  }
   return (
     <Layout title="Reports">
       <NoSsr>
       <Box paddingX="20px" paddingY="40px">
         <BarChart
-          width={500}
-          height={500}
+          width={width}
+          height={height}
           data={Object.values(reportData)}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5
-          }}
+          margin={margin}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="Group" />

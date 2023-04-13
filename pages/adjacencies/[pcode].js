@@ -97,7 +97,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Products">
+    <Layout title="Scan Products" footer={{title:"Go to Map Adjacencies", link:"/adjacencies"}}>
       <Box paddingX={"20px"}>
         <h3>Parent Product Details:</h3>
         <Stack spacing={2}>
@@ -166,7 +166,7 @@ export default function Fixture(props) {
           {saved &&
             <Alert severity="success">Product merchandised successfully!</Alert>
           }
-          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null)}
+          {products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null}
         </Stack>
       </Box>
     </Layout>

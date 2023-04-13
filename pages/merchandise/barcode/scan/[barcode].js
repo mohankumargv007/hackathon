@@ -105,7 +105,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Products">
+    <Layout title="Scan Products" footer={{title:"Go to Map Merchandise", link:"/merchandise/scan-fixture"}}>
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
           <h3>{fixture.name}</h3>
@@ -173,7 +173,6 @@ export default function Fixture(props) {
             : products.length ?
               <Button onClick={handleSubmit} variant="contained">Submit</Button>
               : null}
-          <Link href={`/merchandise/barcode/${barcode}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>

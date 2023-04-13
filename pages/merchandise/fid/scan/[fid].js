@@ -143,7 +143,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Products">
+    <Layout title="Scan Products" footer={{title:"Go to Map Merchandise", link:"/merchandise/scan-fixture"}}>
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
           <h3>{fixture.name}</h3>

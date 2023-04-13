@@ -105,7 +105,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Barcode Fixture">
+    <Layout title="Barcode Fixture" footer={{title:"Go to Barcode a fixture", link:"/fixture/search"}}>
       <div className={styles.container}>
         <Stack spacing={2}>
           {saved &&
@@ -115,8 +115,7 @@ export default function Fixture(props) {
             <p>4 way new format stand 125CM</p>
             <Barcode value={code} />
           </div>
-          <Button onClick={handlePrint} variant="contained">Print</Button>
-          <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
+          <Button onClick={handlePrint} variant="contained" size="large">Print</Button>
         </Stack>
       </div>
     </Layout>

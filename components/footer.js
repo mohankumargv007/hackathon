@@ -4,7 +4,6 @@ import Link from 'next/link';
 import _get from 'lodash/get';
 
 export default function Header(props) {
-  console.log(props)
   return (
     <>
     {_get(props, "footer.link") &&
