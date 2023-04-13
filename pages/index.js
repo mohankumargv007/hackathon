@@ -10,14 +10,14 @@ export default function Home(props) {
     <Layout title="SMT">
       <Box paddingX="20px" paddingY="30px">
         <Stack spacing={2} sx={{ width: "100%" }}>
-          <Link className={styles.btn} href="/fixture/search" passHref legacyBehavior>
-            <Button role="button" variant="contained" className={styles.btn}>Barcode a Fixture</Button>
-          </Link>
           <Link className={styles.btn} href="/merchandise/scan-fixture" passHref legacyBehavior>
             <Button variant="contained" className={styles.btn}>Map Merchandise</Button>
           </Link>
           <Link className={styles.btn} href="/fixture/remove" passHref legacyBehavior>
             <Button variant="contained" className={styles.btn}>Remove Fixture</Button>
+          </Link>
+          <Link className={styles.btn} href="/fixture/search" passHref legacyBehavior>
+            <Button role="button" variant="contained" className={styles.btn}>Barcode a Fixture</Button>
           </Link>
           <Link className={styles.btn} href="/adjacencies" passHref legacyBehavior>
             <Button variant="contained" className={styles.btn}>Map Adjacencies</Button>

@@ -116,7 +116,6 @@ export default function Fixture(props) {
             <Barcode value={code} />
           </div>
           <Button onClick={handlePrint} variant="contained">Print</Button>
-          {!saved && <Button onClick={saveBarcode(code)} variant="contained">Save Barcode</Button>}
           <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
         </Stack>
       </div>
