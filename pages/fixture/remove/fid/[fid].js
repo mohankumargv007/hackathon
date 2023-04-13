@@ -33,7 +33,7 @@ export default function Fixture(props) {
     setFcount(event.target.value);
   }
   return (
-    <Layout title="Review Fixture Details">
+    <Layout title="Review Fixture Details" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}}>
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
           <Stack spacing={1}>
@@ -58,7 +58,6 @@ export default function Fixture(props) {
           <b>Enter count of Fixtures:</b>
           <OutlinedInput placeholder="Please enter fixtures count" type="number" value={fcount} onChange={handleChange} />
           <Link href={`/fixture/remove/scan/${fid}?count=${fcount}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
-          <Link href={`/fixture/remove/search`} passHref legacyBehavior><Button variant="contained" size="large">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>

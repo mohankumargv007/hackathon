@@ -130,7 +130,7 @@ export default function Fixture(props) {
     )
   }
   return (
-    <Layout title="Scan Products">
+    <Layout title="Scan Products" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}}>
       {fbdata.length && !fbdata[0]?.status ? notification("info", "Fixture removed successfully!") : null}
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
@@ -195,16 +195,14 @@ export default function Fixture(props) {
           {fbdata.length && fbdata[0].status ?
             <>
               <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>
-              <Button variant="contained" onClick={removeFixture(fixture)}>Yes</Button>
+              <Button variant="contained" onClick={removeFixture(fixture)} size="large">Yes</Button>
             </>
             : fbdata.length && !fbdata[0].status ?
               <>
                 <Alert severity="success">Fixture removed successfully!</Alert>
-                <Link href={`/`} passHref legacyBehavior><Button variant="contained" size="large">Go to Home page</Button></Link>
               </>
               : null
           }
-          <Link href={`/fixture/remove/fid/${fid}`} passHref legacyBehavior><Button variant="contained" size="large">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>
