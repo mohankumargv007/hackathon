@@ -76,16 +76,20 @@ export async function getServerSideProps(context) {
 export default function Fixture(props) {
   const router = useRouter();
   const fid = _get(router, "query.fid", "");
-  const count = _get(router, "query.count", "")
+  const count = _get(router, "query.count", "");
   const fbdata = _get(props, "fbdata.0", {});
   const fixture = _get(props, "data.0", {});
-  const barcode = fbdata.fixture_barcode
+  const barcode = fbdata.fixture_barcode;
 
-  const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
-  const [products, setProducts] = useState([])
-  const [saved, setSaved] = useState(false)
-  const [error, setError] = useState(false)
+  const [products, setProducts] = useState([]);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState(false);
+  const [manual, setManual] = useState(false);
+
+  const manualEntry = () => {
+    setManual(!manual);
+  }
 
   const _onDetected = useCallback((result) => {
     setResults([]);
@@ -100,10 +104,10 @@ export default function Fixture(props) {
       const { data, error } = await response.json();
       const group = _get(data, "data.0.group", '');
       const department = _get(data, "data.0.department", '');
-      data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true)
-      setResults([])
+      data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true);
+      setResults([]);
     } catch (error) {
-      console.log("handle Product get api faile:", error);
+      console.log("handle Product get api fail:", error);
     }
   }
 
@@ -122,9 +126,7 @@ export default function Fixture(props) {
     const { data, error } = await response.json();
     data.length && setSaved(true);
     setResults([])
-
   }
-
 
   const notification = (type, msg) => {
     return (
@@ -147,21 +149,38 @@ export default function Fixture(props) {
           <h3>{fixture.name}</h3>
           Type: {fixture.type}
           <h4>Add products</h4>
-          <Box >
-            <TextField
-              style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
-              rowsmax={4}
-              type='number'
-              value={results[0] || ""}
-              onChange={(event) => {
-                setResults([event.target.value]);
-                error && setError(false);
-              }}
-            />
-            {error && notification("error", "Product not found !")}
-            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
-          </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+          <Box paddingTop="10px">
+            <Box display="flex">
+              <TextField
+                label="Scanned product code"
+                style={{ maxWidth: 300 }}
+                fullWidth
+                type='text'
+                value={_get(results, "0", "")}
+                onChange={event => {
+                  setResults([event.target.value]);
+                  error && setError(false);
+                }}
+                InputProps={{
+                  readOnly: !manual
+                }}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                color="secondary"
+              />
+              &nbsp;&nbsp;
+              <Button variant="contained" onClick={manualEntry} size="small">{manual ? "Disable Entry" : "Enable Entry"}</Button>
+            </Box>
+            {error && notification("error", "Product not found !")}
+            {results[0] ?
+              <Box paddingTop="16px">
+                <Button onClick={() => handleProduct(results[0])} variant="contained" size="large">Add Scanned Product</Button>
+              </Box>
+              : null
+            }
+          </Box>
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption>Added {products.length}/5 products</caption>

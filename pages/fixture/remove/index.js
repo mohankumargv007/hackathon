@@ -87,7 +87,7 @@ export default function Fixture(props) {
           </Box>
           {error && notification("error", "Barcode not found !")}
           {_get(results, "0") &&
-            <Button onClick={handleProceed} variant="contained" disableElevation size="large" fullWidth={true}>Get Details of Fixture</Button>
+            <Button onClick={handleProceed} variant="contained" disableElevation size="large" fullWidth={true} size="large">Get Details of Fixture</Button>
           }
         </Stack>
       </Box>

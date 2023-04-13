@@ -46,8 +46,8 @@ export default function Fixture(props) {
               <img src={fixture.lateral_image} width="100%" style={{"maxWidth":"400px"}} />
             </>}
           </Stack>
-          <Link href={`/fixture/barcode/${fixture.id}?key=${fixture.key}`} passHref legacyBehavior><Button variant="contained">Generate Bar Code</Button></Link>
-          <Link href={`/fixture/search`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
+          <Link href={`/fixture/barcode/${fixture.id}?key=${fixture.key}`} passHref legacyBehavior><Button variant="contained" size="large">Generate Bar Code</Button></Link>
+          <Link href={`/fixture/search`} passHref legacyBehavior><Button variant="contained" size="large">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>

@@ -1,4 +1,4 @@
-import { useState ,useCallback} from "react";
+import { useState, useCallback } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
@@ -40,17 +40,21 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const router = useRouter();
-  const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState(false);
   const parentProd = _get(props, "data.0");
+  const [manual, setManual] = useState(false);
+
+  const manualEntry = () => {
+    setManual(!manual);
+  }
 
   const _onDetected = useCallback((result) => {
     setResults([]);
-      setResults([result]);
-      setError(false);
+    setResults([result]);
+    setError(false);
   }, []);
 
   const handleProduct = async (productCode) => {
@@ -61,7 +65,6 @@ export default function Fixture(props) {
     const department = _get(data, "data.0.department", '');
     data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true);
     setResults([])
-
   }
 
   const handleSubmit = async () => {
@@ -79,47 +82,64 @@ export default function Fixture(props) {
     setResults([])
   }
 
-  const notification = (type,msg) =>{
-    return(
-                 <Notification
-                    state={ {
-                      vertical        : 'top',
-                      horizontal      : 'center'
-                  }}
-                    toastType={type}
-                    toastMessage={msg}
-                    onClose={()=>error && setError(false)}
-                ></Notification>
+  const notification = (type, msg) => {
+    return (
+      <Notification
+        state={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        toastType={type}
+        toastMessage={msg}
+        onClose={() => error && setError(false)}
+      ></Notification>
     )
   }
 
-  // const [fixture, setFixture] = useState(_get(props, "data.0", {}));
   return (
     <Layout title="Scan Products">
       <Box paddingX={"20px"}>
         <h3>Parent Product Details:</h3>
-        <h4>Item : {parentProd.item}</h4>
-        <h4>Concept : {parentProd.concept}</h4>
-        <h4>Department : {parentProd.department}</h4>
-        <h4>Class : {parentProd.class}</h4>
-
         <Stack spacing={2}>
-          <h3>Add Products</h3>
-          <Box >
-            <TextField
-              style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
-              rowsmax={4}
-              type='number'
-              value={results[0] || ""}
-              onChange={event => {
-                setResults([event.target.value]);
-                error && setError(false)
-              }}
-            />
-            {error && notification("error","Product not found !")}
-            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
-          </Box>
+          <Stack spacing={1}>
+            <b>Item : {parentProd.item}</b>
+            <b>Concept : {parentProd.concept}</b>
+            <b>Department : {parentProd.department}</b>
+            <b>Class : {parentProd.class}</b>
+            <h3>Add Products</h3>
+          </Stack>
           <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+          <Box paddingTop="10px">
+            <Box display="flex">
+              <TextField
+                label="Scanned product code"
+                style={{ maxWidth: 300 }}
+                fullWidth
+                type='text'
+                value={_get(results, "0", "")}
+                onChange={event => {
+                  setResults([event.target.value]);
+                  error && setError(false);
+                }}
+                InputProps={{
+                  readOnly: !manual
+                }}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                color="secondary"
+              />
+              &nbsp;&nbsp;
+              <Button variant="contained" onClick={manualEntry} size="small">{manual ? "Disable Entry" : "Enable Entry"}</Button>
+            </Box>
+            {error && notification("error", "Product not found!")}
+            {results[0] ?
+              <Box paddingTop="16px">
+                <Button onClick={() => handleProduct(results[0])} variant="contained" size="large">Add Scanned Product</Button>
+              </Box>
+              : null
+            }
+          </Box>
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption>Added {products.length}/5 products</caption>

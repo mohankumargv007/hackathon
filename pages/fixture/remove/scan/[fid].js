@@ -61,11 +61,14 @@ export default function Fixture(props) {
   const fixture = _get(props, "data.0", {});
   const barcode = fbdata.length && fbdata[0].fixture_barcode
   const [results, setResults] = useState([]);
-  const [products, setProducts] = useState([])
-  const [saved, setSaved] = useState(false)
-  const [error, setError] = useState(false)
+  const [products, setProducts] = useState([]);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState(false);
+  const [manual, setManual] = useState(false);
 
-
+  const manualEntry = () => {
+    setManual(!manual);
+  }
 
   const _onDetected = useCallback((result) => {
     setResults([]);
@@ -134,23 +137,38 @@ export default function Fixture(props) {
           <h3>{fixture.name}</h3>
           <h4>Type: {fixture.type}</h4>
           <h4>Add products</h4>
-          <Box >
-            <TextField
-              style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
-              rowsmax={4}
-              type='number'
-              value={results[0] || ""}
-              onChange={event => {
-                setResults([event.target.value]);
-                error && setError(false);
-              }}
-            />
-            {error && notification("error", "Product Not Found !")}
-            {!fbdata.length && notification("error", "Fixture Barcode not found !")}
-
-            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
-          </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} />
+          <Box paddingTop="10px">
+            <Box display="flex">
+              <TextField
+                label="Scanned product code"
+                style={{ maxWidth: 300 }}
+                fullWidth
+                type='text'
+                value={_get(results, "0", "")}
+                onChange={event => {
+                  setResults([event.target.value]);
+                  error && setError(false);
+                }}
+                InputProps={{
+                  readOnly: !manual
+                }}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                color="secondary"
+              />
+              &nbsp;&nbsp;
+              <Button variant="contained" onClick={manualEntry} size="small">{manual ? "Disable Entry" : "Enable Entry"}</Button>
+            </Box>
+            {error && notification("error", "Product not found!")}
+            {results[0] ?
+              <Box paddingTop="16px">
+                <Button onClick={() => handleProduct(results[0])} variant="contained" size="large">Add Scanned Product</Button>
+              </Box>
+              : null
+            }
+          </Box>
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption>Added {products.length}/5 products</caption>
@@ -182,11 +200,11 @@ export default function Fixture(props) {
             : fbdata.length && !fbdata[0].status ?
               <>
                 <Alert severity="success">Fixture removed successfully!</Alert>
-                <Link href={`/`} passHref legacyBehavior><Button variant="contained">Go to Home page</Button></Link>
+                <Link href={`/`} passHref legacyBehavior><Button variant="contained" size="large">Go to Home page</Button></Link>
               </>
               : null
           }
-          <Link href={`/fixture/remove/fid/${fid}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
+          <Link href={`/fixture/remove/fid/${fid}`} passHref legacyBehavior><Button variant="contained" size="large">Back</Button></Link>
         </Stack>
       </Box>
     </Layout>

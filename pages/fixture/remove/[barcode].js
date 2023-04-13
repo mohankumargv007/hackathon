@@ -75,14 +75,14 @@ export default function Fixture(props) {
           {fixtureBarcode.status ?
             <>
               <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>
-              <Button variant="contained" onClick={removeFixture(fixture)}>Yes</Button>
-              <Link href={`/fixture/remove`} passHref legacyBehavior><Button variant="contained">No</Button></Link>
+              <Button variant="contained" onClick={removeFixture(fixture)} size="large">Yes</Button>
+              <Link href={`/fixture/remove`} passHref legacyBehavior><Button variant="contained" size="large">No</Button></Link>
             </>
             :
             <>
               <Alert severity="success">Fixture removed successfully!</Alert>
-              <Link href={`/`} passHref legacyBehavior><Button variant="contained">Go to Home page</Button></Link>
-              <Link href={`/fixture/remove`} passHref legacyBehavior><Button variant="contained">Go Back</Button></Link>
+              <Link href={`/`} passHref legacyBehavior><Button variant="contained" size="large">Go to Home page</Button></Link>
+              <Link href={`/fixture/remove`} passHref legacyBehavior><Button variant="contained" size="large">Go Back</Button></Link>
             </>
           }
         </Stack>

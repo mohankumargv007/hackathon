@@ -51,7 +51,11 @@ export default function Fixture(props) {
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState(false);
+  const [manual, setManual] = useState(false);
 
+  const manualEntry = () => {
+    setManual(!manual);
+  }
 
   const _onDetected = useCallback((result) => {
     setResults([]);
@@ -107,21 +111,38 @@ export default function Fixture(props) {
           <h3>{fixture.name}</h3>
         Type: {fixture.type}
           <h4>Add products</h4>
-          <Box >
-            <TextField
-              style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
-              rowsmax={4}
-              type='number'
-              value={results[0] || ""}
-              onChange={event => {
-                setResults([event.target.value]);
-                error && setError(false);
-              }}
-            />
-            {error && notification("error", "Product not found !")}
-            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
-          </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+          <Box paddingTop="10px">
+            <Box display="flex">
+              <TextField
+                label="Scanned product code"
+                style={{ maxWidth: 300 }}
+                fullWidth
+                type='text'
+                value={_get(results, "0", "")}
+                onChange={event => {
+                  setResults([event.target.value]);
+                  error && setError(false);
+                }}
+                InputProps={{
+                  readOnly: !manual
+                }}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                color="secondary"
+              />
+              &nbsp;&nbsp;
+              <Button variant="contained" onClick={manualEntry} size="small">{manual ? "Disable Entry" : "Enable Entry"}</Button>
+            </Box>
+            {error && notification("error", "Product not found!")}
+            {results[0] ?
+              <Box paddingTop="16px">
+                <Button onClick={() => handleProduct(results[0])} variant="contained" size="large">Add Scanned Product</Button>
+              </Box>
+              : null
+            }
+          </Box>
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
               <caption>Added {products.length}/5 products</caption>

@@ -84,7 +84,7 @@ export default function Fixture(props) {
           </Box>
           {error && notification("error", "Product not found !")}
           {_get(results, "0") &&
-            <Button onClick={handleProceed} variant="contained">Proceed</Button>
+            <Button onClick={handleProceed} variant="contained" size="large">Proceed</Button>
           }
         </Stack>
       </Box>
