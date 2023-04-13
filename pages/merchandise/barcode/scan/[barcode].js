@@ -14,6 +14,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { DateTime } from "luxon";
 import { TextField } from '@mui/material';
 import Layout from '../../../../components/layout';
 import Notification from "../../../../components/reusable-components/alert"
@@ -46,7 +47,6 @@ export default function Fixture(props) {
   const barcode = _get(router, "query.barcode", "");
 
   const fixture = _get(props, "data.0.fixture_library", {});
-  const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
@@ -104,13 +104,17 @@ export default function Fixture(props) {
     )
   }
 
+  const dt = new Date(_get(props, "data.0.created_at"));
   return (
     <Layout title="Scan Products" footer={{title:"Go to Map Merchandise", link:"/merchandise/scan-fixture"}}>
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
-          <h3>{fixture.name}</h3>
-        Type: {fixture.type}
-          <h4>Add products</h4>
+          <div>
+            <h3>{fixture.name}</h3>
+            <p>Last updated on: {dt.toLocaleString(DateTime.DATETIME_FULL)}</p>
+            <p>Type: {fixture.type}</p>
+            <b>Add products</b>
+          </div>
           <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
           <Box paddingTop="10px">
             <Box display="flex">
