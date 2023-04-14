@@ -76,16 +76,20 @@ export async function getServerSideProps(context) {
 export default function Fixture(props) {
   const router = useRouter();
   const fid = _get(router, "query.fid", "");
-  const count = _get(router, "query.count", "")
+  const count = _get(router, "query.count", "");
   const fbdata = _get(props, "fbdata.0", {});
   const fixture = _get(props, "data.0", {});
-  const barcode = fbdata.fixture_barcode
+  const barcode = fbdata.fixture_barcode;
 
-  const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
-  const [products, setProducts] = useState([])
-  const [saved, setSaved] = useState(false)
-  const [error, setError] = useState(false)
+  const [products, setProducts] = useState([]);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState(false);
+  const [manual, setManual] = useState(false);
+
+  const manualEntry = () => {
+    setManual(!manual);
+  }
 
   const _onDetected = useCallback((result) => {
     setResults([]);
@@ -100,10 +104,10 @@ export default function Fixture(props) {
       const { data, error } = await response.json();
       const group = _get(data, "data.0.group", '');
       const department = _get(data, "data.0.department", '');
-      data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true)
-      setResults([])
+      data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true);
+      setResults([]);
     } catch (error) {
-      console.log("handle Product get api faile:", error);
+      console.log("handle Product get api fail:", error);
     }
   }
 
@@ -122,9 +126,7 @@ export default function Fixture(props) {
     const { data, error } = await response.json();
     data.length && setSaved(true);
     setResults([])
-
   }
-
 
   const notification = (type, msg) => {
     return (
@@ -141,56 +143,73 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Products">
-      <Box paddingX={"20px"}>
-        <Stack spacing={2}>
-          <h3>{fixture.name}</h3>
-          Type: {fixture.type}
-          <h4>Add products</h4>
-          <Box >
+    <Layout title="Scan Products" footer={{title:"Go to Map Merchandise", link:"/merchandise/scan-fixture"}}>
+      <Stack spacing={2}>
+        <h2 className="no-margig">{fixture.name}</h2>
+        Type: {fixture.type}
+        <h4>Add products</h4>
+        <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+        <Box paddingTop="10px">
+          <Box display="flex">
             <TextField
-              style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
-              rowsmax={4}
-              type='number'
-              value={results[0] || ""}
-              onChange={(event) => {
+              label="Scanned product code"
+              style={{ maxWidth: 300 }}
+              fullWidth
+              type='text'
+              value={_get(results, "0", "")}
+              onChange={event => {
                 setResults([event.target.value]);
                 error && setError(false);
               }}
+              InputProps={{
+                readOnly: !manual
+              }}
+              InputLabelProps={{
+                shrink: true
+              }}
+              color="secondary"
             />
-            {error && notification("error", "Product not found !")}
-            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
+            &nbsp;&nbsp;
+            <Button variant="contained" className="to-lowercase manual-btn" onClick={manualEntry} size="small">
+              {manual ? "Disable Manual Entry" : "Add Product Manually"}
+            </Button>
           </Box>
-          <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
-          <TableContainer component={Paper}>
-            <Table aria-label="caption table">
-              <caption>Added {products.length}/5 products</caption>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Item Code</TableCell>
-                  <TableCell>Group</TableCell>
-                  <TableCell>Department</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {products.map((row, index) => (
-                  <TableRow key={`${row.code}-${index}`}>
-                    <TableCell component="th" scope="row">
-                      {row.code}
-                    </TableCell>
-                    <TableCell>{row.group}</TableCell>
-                    <TableCell>{row.department}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {saved &&
-            <Alert severity="success">Product merchandised successfully!</Alert>
+          {error && notification("error", "Product not found !")}
+          {results[0] ?
+            <Box paddingTop="16px">
+              <Button onClick={() => handleProduct(results[0])} variant="contained" size="large">Add Scanned Product</Button>
+            </Box>
+            : null
           }
-          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null)}
-        </Stack>
-      </Box>
+        </Box>
+        <TableContainer component={Paper}>
+          <Table aria-label="caption table">
+            <caption>Added {products.length}/5 products</caption>
+            <TableHead>
+              <TableRow>
+                <TableCell>Item Code</TableCell>
+                <TableCell>Group</TableCell>
+                <TableCell>Department</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {products.map((row, index) => (
+                <TableRow key={`${row.code}-${index}`}>
+                  <TableCell component="th" scope="row">
+                    {row.code}
+                  </TableCell>
+                  <TableCell>{row.group}</TableCell>
+                  <TableCell>{row.department}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {saved &&
+          <Alert severity="success">Product merchandised successfully!</Alert>
+        }
+        {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null)}
+      </Stack>
     </Layout>
   )
 }

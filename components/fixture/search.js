@@ -38,51 +38,47 @@ export default function Home(props) {
   );
 
   return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <Stack sx={{ width: "100%" }}>
-          <div>
-            <h4>Name: {name}</h4>
-            <Autocomplete
-              value={name}
-              onChange={(event, newValue) => {
-                setName(newValue);
-              }}
-              inputValue={inputName}
-              onInputChange={(event, newInputName) => {
-                setInputName(newInputName);
-              }}
-              id="search-fixture-name"
-              autoComplete
-              options={_uniqBy(fixtures, 'name').map((option) => option.name)}
-              renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
-            />
-          </div>
-          <div>
-            <h4>Type: {type}</h4>
-            <Autocomplete
-              value={type}
-              onChange={(event, newValue) => {
-                setType(newValue);
-              }}
-              inputValue={inputType}
-              onInputChange={(event, newInputType) => {
-                setInputType(newInputType);
-              }}
-              id="search-fixture-type"
-              autoComplete
-              options={_uniqBy(fixtures, 'type').map((option) => option.type)}
-              renderInput={(params) => <TextField {...params} label="Filter via type" />}
-            />
-          </div>
-          <h3>Fixtures</h3>
-          <div>
-            <Grid container spacing={1}>
-              {listItems}
-            </Grid>
-          </div>
-        </Stack>
-      </main>
-    </div>
+    <main className={styles.main}>
+      <Stack sx={{ width: "100%" }} spacing={2}>
+        <div>
+          <Autocomplete
+            value={name}
+            onChange={(event, newValue) => {
+              setName(newValue);
+            }}
+            inputValue={inputName}
+            onInputChange={(event, newInputName) => {
+              setInputName(newInputName);
+            }}
+            id="search-fixture-name"
+            autoComplete
+            options={_uniqBy(fixtures, 'name').map((option) => option.name)}
+            renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
+          />
+        </div>
+        <div>
+          <Autocomplete
+            value={type}
+            onChange={(event, newValue) => {
+              setType(newValue);
+            }}
+            inputValue={inputType}
+            onInputChange={(event, newInputType) => {
+              setInputType(newInputType);
+            }}
+            id="search-fixture-type"
+            autoComplete
+            options={_uniqBy(fixtures, 'type').map((option) => option.type)}
+            renderInput={(params) => <TextField {...params} label="Filter via type" />}
+          />
+        </div>
+        <h3>Fixtures</h3>
+        <div>
+          <Grid container spacing={1}>
+            {listItems}
+          </Grid>
+        </div>
+      </Stack>
+    </main>
   )
 }

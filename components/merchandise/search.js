@@ -1,5 +1,6 @@
 import * as React from 'react';
 import _get from 'lodash/get';
+import _map from 'lodash/map';
 import _cloneDeep from 'lodash/cloneDeep';
 import _uniqBy from 'lodash/uniqBy';
 import Stack from '@mui/material/Stack';
@@ -39,58 +40,54 @@ export default function Home(props) {
     })
   }
 
-  const listItems = fixtures.map((fixture, index) =>
+  const listItems = _map(fixtures, (fixture, index) =>
     <Grid item xs={6} key={`grid-${index}`}>
       <Card {...fixture} />
     </Grid>
   );
 
   return (
-    <div className={styles.container}>
-      <main className={styles.main}>
-        <Stack sx={{ width: "100%" }}>
-          <div>
-            <h4>Name: {name}</h4>
-            <Autocomplete
-              value={name}
-              onChange={(event, newValue) => {
-                setName(newValue);
-              }}
-              inputValue={inputName}
-              onInputChange={(event, newInputName) => {
-                setInputName(newInputName);
-              }}
-              id="search-fixture-name"
-              autoComplete
-              options={_uniqBy(fixtures, 'name').map((option) => option.name)}
-              renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
-            />
-          </div>
-          <div>
-            <h4>Type: {type}</h4>
-            <Autocomplete
-              value={type}
-              onChange={(event, newValue) => {
-                setType(newValue);
-              }}
-              inputValue={inputType}
-              onInputChange={(event, newInputType) => {
-                setInputType(newInputType);
-              }}
-              id="search-fixture-type"
-              autoComplete
-              options={merchadiseTypes.map((option) => option.type)}
-              renderInput={(params) => <TextField {...params} label="Filter via Type" />}
-            />
-          </div>
-          <h3>Fixtures</h3>
-          <div>
-            <Grid container spacing={1}>
-              {listItems}
-            </Grid>
-          </div>
-        </Stack>
-      </main>
-    </div>
+    <main className={styles.main}>
+      <Stack sx={{ width: "100%" }} spacing={2}>
+        <div>
+          <Autocomplete
+            value={name}
+            onChange={(event, newValue) => {
+              setName(newValue);
+            }}
+            inputValue={inputName}
+            onInputChange={(event, newInputName) => {
+              setInputName(newInputName);
+            }}
+            id="search-fixture-name"
+            autoComplete
+            options={_uniqBy(fixtures, 'name').map((option) => option.name)}
+            renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
+          />
+        </div>
+        <div>
+          <Autocomplete
+            value={type}
+            onChange={(event, newValue) => {
+              setType(newValue);
+            }}
+            inputValue={inputType}
+            onInputChange={(event, newInputType) => {
+              setInputType(newInputType);
+            }}
+            id="search-fixture-type"
+            autoComplete
+            options={merchadiseTypes.map((option) => option.type)}
+            renderInput={(params) => <TextField {...params} label="Filter via Type" />}
+          />
+        </div>
+        <h3>Fixtures</h3>
+        <div>
+          <Grid container spacing={1}>
+            {listItems}
+          </Grid>
+        </div>
+      </Stack>
+    </main>
   )
 }

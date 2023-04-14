@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import _get from 'lodash/get';
 import Box from '@mui/material/Box';
-import { TextField, Alert } from '@mui/material'
+import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Layout from '../../../components/layout';
@@ -18,6 +18,11 @@ export default function Fixture(props) {
   const router = useRouter();
   const [results, setResults] = useState([]);
   const [error, setError] = useState(false);
+  const [manual, setManual] = useState(false)
+
+  const manualEntry = () => {
+    setManual(!manual);
+  }
 
   const handleProceed = async () => {
     const barcode = _get(results, "0");
@@ -53,28 +58,39 @@ export default function Fixture(props) {
 
   return (
     <Layout title="Remove Fixture">
-      <Box paddingX="20px" paddingY="40px">
-        <Stack spacing={4}>
-          <Link href={`/fixture/remove/search`} passHref legacyBehavior><Button variant="contained">Arms, Prongs, Shelves</Button></Link>
-          <Scandit btnText="Scan Fixture" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+      <Stack spacing={4}>
+        <Link href={`/fixture/remove/search`} passHref legacyBehavior><Button variant="contained" size="large">Arms, Prongs, Shelves</Button></Link>
+        <Scandit btnText="Scan Fixture" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+        <Box display="flex">
           <TextField
-            style={{ fontSize: 50, width: 320, height: 50 }}
+            label="Scanned data"
+            style={{ maxWidth: 300 }}
+            fullWidth
             rowsmax={4}
-            type='number'
-            value={_get(results, "0", "")}
+            type='text'
+            value={_get(results, "0")}
             onChange={event => {
               setResults([event.target.value]);
               error && setError(false);
             }}
+            InputProps={{
+              readOnly: !manual
+            }}
+            InputLabelProps={{
+              shrink: true
+            }}
+            color="secondary"
           />
-          {error && notification("error", "Barcode not found !")}
-          {_get(results, "0") &&
-            <Box paddingY="20px">
-              <Button onClick={handleProceed} variant="contained" disableElevation size="medium" fullWidth={true}>Get Details</Button>
-            </Box>
-          }
-        </Stack>
-      </Box>
+          &nbsp;&nbsp;
+          <Button variant="contained" onClick={manualEntry} size="small" className="to-lowercase manual-btn">
+            {manual ? "Disable Manual Entry" : "Add Fixture Manually"}
+          </Button>
+        </Box>
+        {error && notification("error", "Barcode not found !")}
+        {_get(results, "0") &&
+          <Button onClick={handleProceed} variant="contained" disableElevation size="large" fullWidth={true} size="large">Get Fixture Details</Button>
+        }
+      </Stack>
     </Layout>
   )
 }

@@ -105,21 +105,17 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Barcode Fixture">
-      <div className={styles.container}>
-        <Stack spacing={2}>
-          {saved &&
-          <Alert severity="success">Barcode saved successfully!</Alert>
-          }
-          <div id="printableArea">
-            <p>4 way new format stand 125CM</p>
-            <Barcode value={code} />
-          </div>
-          <Button onClick={handlePrint} variant="contained">Print</Button>
-          {!saved && <Button onClick={saveBarcode(code)} variant="contained">Save Barcode</Button>}
-          <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
-        </Stack>
-      </div>
+    <Layout title="Barcode Fixture" footer={{title:"Go to Barcode a fixture", link:"/fixture/search"}}>
+      <Stack spacing={2}>
+        {saved &&
+        <Alert severity="success">Barcode saved successfully!</Alert>
+        }
+        <div id="printableArea">
+          <p>4 way new format stand 125CM</p>
+          <Barcode value={code} />
+        </div>
+        <Button onClick={handlePrint} variant="contained" size="large">Print</Button>
+      </Stack>
     </Layout>
   )
 }
