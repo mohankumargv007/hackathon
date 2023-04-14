@@ -20,9 +20,20 @@ export async function getServerSideProps(context) {
     .from('fixture_library')
     .select('*')
     .eq("id", fid)
-
+    .single()
+  
+  
+  let { fixtureBarcode, barerror } = await supabase
+    .from('fixture_barcode')
+    .upsert({ store_id: 60318, fixture_key : data.key, counter: 1, fixture_barcode : "60318" + data.key + '001'},{ onConflict: 'fixture_barcode' })
+  let {data: fbdata, error: fberror} = await supabase
+    .from('fixture_barcode')
+    .select("*")
+    .eq('fixture_barcode', "60318" + data.key + '001')
+    .single()
+  
   // Pass data to the page via props
-  return { props: { data: data } };
+  return { props: { data: data, fixtureBarcode : fbdata } };
 }
 
 export default function Fixture(props) {
@@ -30,17 +41,18 @@ export default function Fixture(props) {
   const router = useRouter();
   const [fcount, setFcount] = useState(1);
   const fid = _get(router, "query.fid", "");
-  const fixture = _get(props, "data.0", {});
+  const fixture = _get(props, "data", {});
+  const fixtureBarcode = _get(props, "fixtureBarcode", {});
   const handleChange = (event) => {
     setFcount(event.target.value);
   }
   return (
     <Layout title="Review Fixture Details" loginDetails={loginDetails}>
       <Stack spacing={2}>
-        <FixtureDetails fixture={fixture} />
+        <FixtureDetails fixture={fixture} fixtureBarcode={fixtureBarcode} />
         <b>Enter count of Fixtures:</b>
         <OutlinedInput placeholder="Please enter fixtures count" type="number" value={fcount} onChange={handleChange} />
-        <Link href={`/merchandise/fid/scan/${fid}?count=${fcount}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
+        <Link href={`/merchandise/barcode/scan/${fixtureBarcode.fixture_barcode}?count=${fcount}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
       </Stack>
     </Layout>
   )

@@ -45,6 +45,7 @@ export default function Fixture(props) {
   const { loginDetails } = props;
   const router = useRouter();
   const barcode = _get(router, "query.barcode", "");
+  const count = _get(router, "query.count", 1);
 
   const fixture = _get(props, "data.0.fixture_library", {});
   const [results, setResults] = useState([]);
@@ -92,7 +93,8 @@ export default function Fixture(props) {
       body: JSON.stringify({
         barcode,
         fixture,
-        products
+        products,
+        count
       })
     }
 
