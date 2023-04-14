@@ -16,7 +16,7 @@ export default function Home(props) {
           <Button variant="contained" className={styles.btn} size="large">Remove Fixture</Button>
         </Link>
         <Link className={styles.btn} href="/fixture/search" passHref legacyBehavior>
-          <Button role="button" variant="contained" className={styles.btn} size="large">Barcode a Fixture</Button>
+          <Button role="button" variant="contained" className={styles.btn} size="large">QRCode a Fixture</Button>
         </Link>
         <Link className={styles.btn} href="/adjacencies" passHref legacyBehavior>
           <Button variant="contained" className={styles.btn} size="large">Map Adjacencies</Button>

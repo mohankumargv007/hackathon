@@ -106,10 +106,10 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Barcode Fixture" footer={{title:"Go to Barcode a fixture", link:"/fixture/search"}}>
+    <Layout title="QRCode Fixture" footer={{title:"Go to QRCode a fixture", link:"/fixture/search"}}>
       <Stack spacing={2}>
         {saved &&
-        <Alert severity="success">Barcode saved successfully!</Alert>
+        <Alert severity="success">QRCode saved successfully!</Alert>
         }
         <div id="printableArea">
           <p>4 way new format stand 125CM</p>
