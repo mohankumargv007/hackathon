@@ -21,3 +21,6 @@ a {
 .manual-btn {
   width: 140px;
 }
+.no-margig {
+  margin: 0 !important;
+}

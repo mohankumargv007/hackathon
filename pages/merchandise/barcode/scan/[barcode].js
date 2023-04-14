@@ -108,7 +108,7 @@ export default function Fixture(props) {
     <Layout title="Scan Products" footer={{title:"Go to Map Merchandise", link:"/merchandise/scan-fixture"}}>
       <Stack spacing={2}>
         <div>
-          <h3>{fixture.name}</h3>
+          <h3 className="no-margig">{fixture.name}</h3>
           <p>Last updated on: {dt.toLocaleString(DateTime.DATETIME_FULL)}</p>
           <p>Type: {fixture.type}</p>
           <b>Add products</b>

@@ -133,7 +133,7 @@ export default function Fixture(props) {
     <Layout title="Scan Products" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}}>
       {fbdata.length && !fbdata[0]?.status ? notification("info", "Fixture removed successfully!") : null}
       <Stack spacing={2}>
-        <h3>{fixture.name}</h3>
+        <h3 className="no-margig">{fixture.name}</h3>
         <h4>Type: {fixture.type}</h4>
         <h4>Add products</h4>
         <Scandit btnText="Scan Product" onDetected={_onDetected} />

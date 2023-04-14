@@ -32,7 +32,7 @@ export default function Fixture(props) {
     <Layout title="Review Fixture Details">
       <Stack spacing={2}>
         <Stack spacing={1}>
-          <h2>{fixture.name}</h2>
+          <h2 className="no-margig">{fixture.name}</h2>
           {fixture.type &&<p><b>Type: </b>{fixture.type}</p>}
           {fixture.component_length && <p><b>Length: </b>{fixture.component_length}</p>}
           {fixture.component_width && <p><b>Width: </b>{fixture.component_width}</p>}

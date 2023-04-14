@@ -39,9 +39,8 @@ export default function Home(props) {
 
   return (
     <main className={styles.main}>
-      <Stack sx={{ width: "100%" }}>
+      <Stack sx={{ width: "100%" }} spacing={2}>
         <div>
-          <h4>Name: {name}</h4>
           <Autocomplete
             value={name}
             onChange={(event, newValue) => {
@@ -58,7 +57,6 @@ export default function Home(props) {
           />
         </div>
         <div>
-          <h4>Type: {type}</h4>
           <Autocomplete
             value={type}
             onChange={(event, newValue) => {
