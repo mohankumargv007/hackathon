@@ -13,7 +13,7 @@ export async function getServerSideProps() {
   .select('*')
   .or('type.ilike.%arm%,type.ilike.%prong%,type.ilike.%shelves%')
 
-  return { props: { data: data } };
+  return { props: { data: data, error: error } };
 }
 
 export default function Fixture(props) {

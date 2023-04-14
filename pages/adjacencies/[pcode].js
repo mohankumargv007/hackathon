@@ -1,4 +1,4 @@
-import { useState ,useCallback} from "react";
+import { useState, useCallback } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
@@ -40,17 +40,21 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const router = useRouter();
-  const [scanner, setScanner] = useState(false);
   const [results, setResults] = useState([]);
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
   const parentProd = _get(props, "data.0");
+  const [manual, setManual] = useState(false);
+
+  const manualEntry = () => {
+    setManual(!manual);
+  }
 
   const _onDetected = useCallback((result) => {
     setResults([]);
-      setResults([result]);
-      setError(false);
+    setResults([result]);
+    setError(false);
   }, []);
 
   const handleProduct = async (productCode) => {
@@ -59,22 +63,28 @@ export default function Fixture(props) {
     const { data, error } = await response.json();
     const group = _get(data, "data.0.group", '');
     const department = _get(data, "data.0.department", '');
-    
-    const found = data.length && products.some((e) => {
-      return e.item == data[0].item
-    })
 
-    data.length && !found ?
-      setProducts([{ code: productCode, group, department, ...data[0] }, ...products])
-      :
-      found ?
-        setError("Scan different product !")
+    if (data.length && data[0].item == parentProd.item) {
+      setError("Scan different product !")
+    } else {
+
+      const found = data.length && products.some((e) => {
+        return e.item == data[0].item;
+      })
+
+
+      data.length && !found ?
+        setProducts([{ code: productCode, group, department, ...data[0] }, ...products])
         :
-        setError("Product not found !");
+        found ?
+          setError("Scan different product !")
+          :
+          setError("Product not found !");
+    }
 
     setResults([])
-
   }
+
 
   const handleSubmit = async () => {
     const url = `/api/fixture/adjacencies/${parentProd.item}`;
@@ -91,76 +101,93 @@ export default function Fixture(props) {
     setResults([])
   }
 
-  const notification = (type,msg) =>{
-    return(
-                 <Notification
-                    state={ {
-                      vertical        : 'top',
-                      horizontal      : 'center'
-                  }}
-                    toastType={type}
-                    toastMessage={msg}
-                    onClose={()=>error && setError(false)}
-                ></Notification>
+  const notification = (type, msg) => {
+    return (
+      <Notification
+        state={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        toastType={type}
+        toastMessage={msg}
+        onClose={() => error && setError(false)}
+      ></Notification>
     )
   }
 
-  // const [fixture, setFixture] = useState(_get(props, "data.0", {}));
   return (
-    <Layout title="Scan Products">
-      <Box paddingX={"20px"}>
-        <h3>Parent Product Details:</h3>
-        <h4>Item : {parentProd.item}</h4>
-        <h4>Concept : {parentProd.concept}</h4>
-        <h4>Department : {parentProd.department}</h4>
-        <h4>Class : {parentProd.class}</h4>
-
-        <Stack spacing={2}>
+    <Layout title="Scan Products" footer={{ title: "Go to Map Adjacencies", link: "/adjacencies" }}>
+      <h3>Parent Product Details:</h3>
+      <Stack spacing={2}>
+        <Stack spacing={1}>
+          <b>Item : {parentProd.item}</b>
+          <b>Concept : {parentProd.concept}</b>
+          <b>Department : {parentProd.department}</b>
+          <b>Class : {parentProd.class}</b>
           <h3>Add Products</h3>
-          <Box >
+        </Stack>
+        <Scandit btnText="Scan Child Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+        <Box paddingTop="10px">
+          <Box display="flex">
             <TextField
-              style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
-              rowsmax={4}
-              type='number'
-              value={results[0] || ""}
+              label="Scanned product code"
+              style={{ maxWidth: 300 }}
+              fullWidth
+              type='text'
+              value={_get(results, "0", "")}
               onChange={event => {
                 setResults([event.target.value]);
-                error && setError(false)
+                error && setError(false);
               }}
+              InputProps={{
+                readOnly: !manual
+              }}
+              InputLabelProps={{
+                shrink: true
+              }}
+              color="secondary"
             />
-            {error && notification("error", error)}
-            {results[0] && products.length < 20 ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
+            &nbsp;&nbsp;
+            <Button variant="contained" className="to-lowercase manual-btn" onClick={manualEntry} size="small">
+              {manual ? "Disable Manual Entry" : "Add Product Manually"}
+            </Button>
           </Box>
-          <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
-          <TableContainer component={Paper}>
-            <Table aria-label="caption table">
-              <caption>Added {products.length}/20 products</caption>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Item Code</TableCell>
-                  <TableCell>Group</TableCell>
-                  <TableCell>Department</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {products.map((row, index) => (
-                  <TableRow key={`${row.code}-${index}`}>
-                    <TableCell component="th" scope="row">
-                      {row.code}
-                    </TableCell>
-                    <TableCell>{row.group}</TableCell>
-                    <TableCell>{row.department}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {saved &&
-            <Alert severity="success">Product merchandised successfully!</Alert>
+          {error && notification("error", error)}
+          {results[0] && products.length < 20 ?
+            <Box paddingTop="16px">
+              <Button onClick={() => handleProduct(results[0])} variant="contained" size="large">Add Scanned Product</Button>
+            </Box>
+            : null
           }
-          {saved ? <Link href={`/`} passHref legacyBehavior><Button variant="contained">back to home</Button></Link> : (products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null)}
-        </Stack>
-      </Box>
+        </Box>
+        <TableContainer component={Paper}>
+          <Table aria-label="caption table">
+            <caption>Added {products.length}/20 products</caption>
+            <TableHead>
+              <TableRow>
+                <TableCell>Item Code</TableCell>
+                <TableCell>Group</TableCell>
+                <TableCell>Department</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {products.map((row, index) => (
+                <TableRow key={`${row.code}-${index}`}>
+                  <TableCell component="th" scope="row">
+                    {row.code}
+                  </TableCell>
+                  <TableCell>{row.group}</TableCell>
+                  <TableCell>{row.department}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {saved &&
+          <Alert severity="success">Product merchandised successfully!</Alert>
+        }
+        {products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null}
+      </Stack>
     </Layout>
   )
 }

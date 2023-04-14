@@ -64,8 +64,11 @@ export default function Fixture(props) {
   const [products, setProducts] = useState([])
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState("")
+  const [manual, setManual] = useState(false);
 
-
+  const manualEntry = () => {
+    setManual(!manual);
+  }
 
   const _onDetected = useCallback((result) => {
     setResults([]);
@@ -139,68 +142,83 @@ export default function Fixture(props) {
     )
   }
   return (
-    <Layout title="Scan Products">
+    <Layout title="Scan Products" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}}>
       {fbdata.length && !fbdata[0]?.status ? notification("info", "Fixture removed successfully!") : null}
-      <Box paddingX={"20px"}>
-        <Stack spacing={2}>
-          <h3>{fixture.name}</h3>
-          <h4>Type: {fixture.type}</h4>
-          <h4>Add products</h4>
-          <Box >
+      <Stack spacing={2}>
+        <h3 className="no-margig">{fixture.name}</h3>
+        <h4>Type: {fixture.type}</h4>
+        <h4>Add products</h4>
+        <Scandit btnText="Scan Product" onDetected={_onDetected} />
+        <Box paddingTop="10px">
+          <Box display="flex">
             <TextField
-              style={{ fontSize: 50, width: 320, height: 70, marginTop: 30 }}
-              rowsmax={4}
-              type='number'
-              value={results[0] || ""}
+              label="Scanned product code"
+              style={{ maxWidth: 300 }}
+              fullWidth
+              type='text'
+              value={_get(results, "0", "")}
               onChange={event => {
                 setResults([event.target.value]);
                 error && setError(false);
               }}
+              InputProps={{
+                readOnly: !manual
+              }}
+              InputLabelProps={{
+                shrink: true
+              }}
+              color="secondary"
             />
-            {error && notification("error", error)}
+            &nbsp;&nbsp;
+            <Button variant="contained" className="to-lowercase manual-btn" onClick={manualEntry} size="small">
+              {manual ? "Disable Manual Entry" : "Add Product Manually"}
+            </Button>
+          </Box>
+          {error && notification("error", error)}
             {!fbdata.length && notification("error", "Fixture Barcode not found !")}
 
-            {results[0] && products.length < 20 ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
-          </Box>
-          <Scandit btnText="Scan Product" onDetected={_onDetected} />
-          <TableContainer component={Paper}>
-            <Table aria-label="caption table">
-              <caption>Added {products.length}/20 products</caption>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Item Code</TableCell>
-                  <TableCell>Group</TableCell>
-                  <TableCell>Department</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {products.map((row, index) => (
-                  <TableRow key={`${row.code}-${index}`}>
-                    <TableCell component="th" scope="row">
-                      {row.code}
-                    </TableCell>
-                    <TableCell>{row.group}</TableCell>
-                    <TableCell>{row.department}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {fbdata.length && fbdata[0].status ?
-            <>
-              <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>
-              <Button variant="contained" onClick={removeFixture(fixture)}>Yes</Button>
-            </>
-            : fbdata.length && !fbdata[0].status ?
-              <>
-                <Alert severity="success">Fixture removed successfully!</Alert>
-                <Link href={`/`} passHref legacyBehavior><Button variant="contained">Go to Home page</Button></Link>
-              </>
-              : null
+            {results[0] && products.length < 20 ?
+            <Box paddingTop="16px">
+              <Button onClick={() => handleProduct(results[0])} variant="contained" size="large">Add Scanned Product</Button>
+            </Box>
+            : null
           }
-          <Link href={`/fixture/remove/fid/${fid}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>
-        </Stack>
-      </Box>
+        </Box>
+        <TableContainer component={Paper}>
+          <Table aria-label="caption table">
+            <caption>Added {products.length}/20 products</caption>
+            <TableHead>
+              <TableRow>
+                <TableCell>Item Code</TableCell>
+                <TableCell>Group</TableCell>
+                <TableCell>Department</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {products.map((row, index) => (
+                <TableRow key={`${row.code}-${index}`}>
+                  <TableCell component="th" scope="row">
+                    {row.code}
+                  </TableCell>
+                  <TableCell>{row.group}</TableCell>
+                  <TableCell>{row.department}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {fbdata.length && fbdata[0].status ?
+          <>
+            <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>
+            <Button variant="contained" onClick={removeFixture(fixture)} size="large">Yes</Button>
+          </>
+          : fbdata.length && !fbdata[0].status ?
+            <>
+              <Alert severity="success">Fixture removed successfully!</Alert>
+            </>
+            : null
+        }
+      </Stack>
     </Layout>
   )
 }
