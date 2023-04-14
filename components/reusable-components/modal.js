@@ -20,6 +20,10 @@ import Loading from '../../components/reusable-components/loader';
 import commonStyles from '../../styles/Common.module.css';
 import Notification from '../../components/reusable-components/alert';
 import _get from 'lodash/get';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide className={styles.stylesModal} direction="left" ref={ref} {...props} />;
@@ -55,7 +59,7 @@ export default function Modal(props) {
         },
         {
             'fieldName'     : 'type',
-            'type'          : 'text',
+            'type'          : 'select',
             'label'         : 'Fixture Type',
             'helper_text'   : 'Please enter fixture type',
             'is_valid'      : false,
@@ -143,6 +147,16 @@ export default function Modal(props) {
         }
     ];
 
+    //Fixture Types
+    const fixutre_types = [
+        'Arm',
+        'Prong',
+        'Shelves',
+        'Rails & Stands',
+        'Tables',
+        'Bins'
+    ];
+
     //Storage Bucket
     const bucket = props.storage;
 
@@ -173,34 +187,39 @@ export default function Modal(props) {
         try {
             //From Validations
             const is_valid_data = validateFormFields();
-            let message = "";
-            /* if(!is_valid_data) {
+            
+            if(!is_valid_data) {
                 notifyEvent(true, "warning", "All fields are required along with image uploads.");
                 return false;
             }
- */
+
             //Calculate Linear Meter Only For Fixture Library
             if(props.page == 'fixtures') {
                 formData.linear_meter = formData.components * formData.component_length * 0.01
             }
 
+            //Create / Update Fixture Library
             const url = `/api/admin/fixture-library/fixture-library`;
 
             const options = {
                 method: "POST",
-                body: formData
+                body: JSON.stringify(formData),
             };
 
             const response = await fetch(url, options);
 
             const data = await response.json();
-
-            if(_get(data, "data.0.id")) {
+           
+            let message = "";
+            if(_get(data, "data.id")) {
                 if(props.isUpdate) {
                     message = 'Fixture Updated Successfully!';
                 } else {
                     message = 'Fixture Created Successfully!';
                 }
+            } else {
+                notifyEvent(true, 'error', 'Something went wrong.Please contact developer');
+                return false;
             }
 
             //Sent Notification
@@ -367,22 +386,52 @@ export default function Modal(props) {
                     alignItems="left"
                     >
                         {formFields.map((field, index) => (
-                            <Grid item lg={4} md={4} sm={12} xs={12} textAlign="center">
+                            field.type == 'select' ?
+                            <Grid item lg={4} md={4} sm={12} xs={12}> 
+                                <FormControl variant="standard" sx={{ m: 0.7, width: "100%" }}>
+                                <InputLabel id="demo-simple-select-filled-label">{field.label}</InputLabel>
+                                <Select
+                                    fullWidth 
+                                    labelId="demo-simple-select-standard-label"
+                                    id="demo-simple-select-standard"
+                                    label={field.label}
+                                    name={field.fieldName}
+                                    onChange={handleInput}
+                                    value={formData[field.fieldName]}
+                                    renderValue={(selected) => {
+                                        if (selected.length === 0) {
+                                            return <em>Placeholder</em>;
+                                        }
+                            
+                                        return selected
+                                    }}
+                                    >
+                                    {fixutre_types.map((type) => (
+                                        <MenuItem
+                                        key={type}
+                                        value={type}
+                                        >
+                                        {type}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                </FormControl>
+                            </Grid>
+                            :
+                            <Grid item lg={4} md={4} sm={12} xs={12} textAlign="center"> 
                                 <TextField
-                                fullWidth 
-                                label={field.label}
-                                id="outlined-size-small"
-                                name={field.fieldName}
-                                type={field.type}
-                                onChange={handleInput}
-                                size="small"
-                                margin="dense"
-                                variant="standard"
-                                required
-                                value={formData[field.fieldName]}
-                                /* error={field.is_valid == false ? field.helper_text : ''}
-                                helperText={field.is_valid == false ? field.helper_text : ''} */
-                                />
+                                    fullWidth 
+                                    label={field.label}
+                                    id="outlined-size-small"
+                                    name={field.fieldName}
+                                    type={field.type}
+                                    onChange={handleInput}
+                                    size="small"
+                                    margin="dense"
+                                    variant="standard"
+                                    required
+                                    value={formData[field.fieldName]}
+                                    />
                             </Grid>
                         ))}
                     </Grid>
