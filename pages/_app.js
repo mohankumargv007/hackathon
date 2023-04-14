@@ -4,6 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { theme } from "../styles/theme";
 import AdminLayout from '../components/admin/admin-layout';
 import { useRouter } from 'next/router';
+import 'keen-slider/keen-slider.min.css';
 import '../styles/globals.css';
 
 MyApp.getInitialProps = async (ctx) => {

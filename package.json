@@ -17,6 +17,7 @@
     "@mui/material": "^5.11.14",
     "@mui/x-data-grid-generator": "^6.0.3",
     "@supabase/supabase-js": "^2.12.1",
+    "keen-slider": "^6.8.5",
     "lodash": "^4.17.21",
     "luxon": "^3.3.0",
     "next": "13.2.4",

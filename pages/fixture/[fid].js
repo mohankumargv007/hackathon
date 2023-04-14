@@ -27,7 +27,7 @@ export default function Fixture(props) {
     <Layout title="Review Fixture Details">
       <Stack spacing={2}>
         <FixtureDetails fixture={fixture} />
-        <Link href={`/fixture/barcode/${fixture.id}?key=${fixture.key}`} passHref legacyBehavior><Button variant="contained" size="large">Generate Bar Code</Button></Link>
+        <Link href={`/fixture/barcode/${fixture.id}?key=${fixture.key}`} passHref legacyBehavior><Button variant="contained" size="large">Generate QR Code</Button></Link>
       </Stack>
     </Layout>
   )
