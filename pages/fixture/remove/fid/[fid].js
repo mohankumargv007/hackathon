@@ -6,7 +6,9 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import FixtureDetails from './../../../../components/fixture-desc';
 import Layout from '../../../../components/layout';
+
 import { supabaseConnection } from '../../../../utils/supabase';
 
 export async function getServerSideProps(context) {
@@ -35,25 +37,7 @@ export default function Fixture(props) {
   return (
     <Layout title="Review Fixture Details" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}}>
       <Stack spacing={2}>
-        <Stack spacing={1}>
-          <h2 className="no-margig">{fixture.name}</h2>
-          {fixture.type &&<p><b>Type: </b>{fixture.type}</p>}
-          {fixture.component_length && <p><b>Length: </b>{fixture.component_length}</p>}
-          {fixture.component_width && <p><b>Width: </b>{fixture.component_width}</p>}
-          {fixture.component_height && <p><b>Height: </b>{fixture.component_height}</p>}
-          {fixture.front_image && <>
-            <label><b>Front Image</b></label>
-            <img src={fixture.front_image} width="100%" style={{"maxWidth":"400px"}} />
-          </>}
-          {fixture.cad_image && <>
-            <label><b>CAD Image</b></label>
-            <img src={fixture.cad_image} width="100%" style={{"maxWidth":"400px"}} />
-          </>}
-          {fixture.lateral_image && <>
-            <label><b>Lateral Image</b></label>
-            <img src={fixture.lateral_image} width="100%" style={{"maxWidth":"400px"}} />
-          </>}
-        </Stack>
+        <FixtureDetails fixture={fixture} />
         <b>Enter count of Fixtures:</b>
         <OutlinedInput placeholder="Please enter fixtures count" type="number" value={fcount} onChange={handleChange} />
         <Link href={`/fixture/remove/scan/${fid}?count=${fcount}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
