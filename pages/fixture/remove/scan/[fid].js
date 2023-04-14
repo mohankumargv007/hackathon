@@ -16,7 +16,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material'
 import Layout from '../../../../components/layout';
-import Scanner from '../../../../utils/scanner';
 import Notification from "../../../../components/reusable-components/alert"
 import { supabaseConnection } from '../../../../utils/supabase';
 const Scandit = dynamic(() => import('../../../../components/scandit'), {
