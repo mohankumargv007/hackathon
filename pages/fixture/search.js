@@ -3,7 +3,6 @@ import { supabaseConnection } from '../../utils/supabase';
 import SearchFixture from '../../components/fixture/search';
 
 export async function getServerSideProps() {
-  // Fetch data from external API
   const supabase = supabaseConnection();
 
   let { data, error } = await supabase
@@ -15,8 +14,9 @@ export async function getServerSideProps() {
 }
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   return (
-    <Layout title="Select Fixture">
+    <Layout title="Select Fixture" loginDetails={loginDetails}>
       <SearchFixture {...props} />
     </Layout>
   )

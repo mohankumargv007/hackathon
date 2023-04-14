@@ -13,6 +13,13 @@ MyApp.getInitialProps = async (ctx) => {
 	return { ...json }
 }
 
+const loginDetails = {
+	storeId: 60318,
+	conceptCode: 6,
+	conceptName: 'Max',
+	user: 'Atul'
+}
+
 function MyApp({ Component, pageProps, scandit_licence_key }) {
 	const router = useRouter();
 	return (
@@ -21,9 +28,9 @@ function MyApp({ Component, pageProps, scandit_licence_key }) {
 			{
 				router.pathname.includes('admin') ?
 				<AdminLayout>
-					<Component {...pageProps} />
+					<Component {...pageProps} loginDetails={loginDetails} />
 				</AdminLayout> :
-				<Component {...pageProps} scandit_licence_key={scandit_licence_key} />
+				<Component {...pageProps} scandit_licence_key={scandit_licence_key} loginDetails={loginDetails} />
 			}
 		</ThemeProvider>
 		);

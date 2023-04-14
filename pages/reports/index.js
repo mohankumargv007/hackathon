@@ -14,6 +14,7 @@ import {
 import Layout from '../../components/layout';
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   const isServer = typeof window === "undefined";
   let reportData = getReportData(_get(props, 'data', []));
   let width = 350;
@@ -35,7 +36,7 @@ export default function Fixture(props) {
     };
   }
   return (
-    <Layout title="Reports">
+    <Layout title="Reports" loginDetails={loginDetails}>
       <NoSsr>
         <BarChart
           width={width}

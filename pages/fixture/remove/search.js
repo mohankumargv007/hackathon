@@ -17,8 +17,9 @@ export async function getServerSideProps() {
 }
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   return (
-    <Layout title="Select Fixture">
+    <Layout title="Select Fixture" loginDetails={loginDetails}>
       <SearchFixture {...props} />
     </Layout>
   )

@@ -74,6 +74,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   const router = useRouter();
   const fid = _get(router, "query.fid", "");
   const count = _get(router, "query.count", "");
@@ -155,7 +156,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Products" footer={{title:"Go to Map Merchandise", link:"/merchandise/scan-fixture"}}>
+    <Layout title="Scan Products" footer={{title:"Go to Map Merchandise", link:"/merchandise/scan-fixture"}} loginDetails={loginDetails}>
       <Stack spacing={2}>
         <h2 className="no-margig">{fixture.name}</h2>
         Type: {fixture.type}

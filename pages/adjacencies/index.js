@@ -13,6 +13,7 @@ const Scandit = dynamic(() => import('../../components/scandit'), {
 })
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   const router = useRouter();
   const [results, setResults] = useState([]);
   const [error, setError] = useState(false);
@@ -55,7 +56,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Product">
+    <Layout title="Scan Product" loginDetails={loginDetails}>
       <Stack spacing={4}>
         <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
         <Box display="flex">

@@ -24,6 +24,9 @@ a {
 .no-margig {
   margin: 0 !important;
 }
+.fixture-details {
+  max-width: 600px;
+}
 
 .arrow {
   width: 30px;

@@ -1,6 +1,4 @@
 import { useState, useCallback } from "react";
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import _get from 'lodash/get';
 import Alert from '@mui/material/Alert';
@@ -16,8 +14,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material';
 import Layout from '../../components/layout';
-import Notification from "../../components/reusable-components/alert"
-// import Scanner from '../../utils/scanner';
+import Notification from "../../components/reusable-components/alert";
 import { supabaseConnection } from '../../utils/supabase';
 const Scandit = dynamic(() => import('../../components/scandit'), {
   ssr: false,
@@ -39,7 +36,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
-  const router = useRouter();
+  const { loginDetails } = props;
   const [results, setResults] = useState([]);
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
@@ -116,7 +113,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Products" footer={{ title: "Go to Map Adjacencies", link: "/adjacencies" }}>
+    <Layout title="Scan Products" footer={{ title: "Go to Map Adjacencies", link: "/adjacencies" }} loginDetails={loginDetails}>
       <h3>Parent Product Details:</h3>
       <Stack spacing={2}>
         <Stack spacing={1}>

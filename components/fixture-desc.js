@@ -20,70 +20,72 @@ export default function Fixture(props) {
   )
 
   return (
-    <Stack spacing={1}>
-    <h2 className="no-margig">{fixture.name}</h2>
-    {fixture.type &&<p><b>Type: </b>{fixture.type}</p>}
-    {fixture.component_length && <p><b>Length: </b>{fixture.component_length}</p>}
-    {fixture.component_width && <p><b>Width: </b>{fixture.component_width}</p>}
-    {fixture.component_height && <p><b>Height: </b>{fixture.component_height}</p>}
-    <div className="navigation-wrapper">
-      <div ref={sliderRef} className="keen-slider">
-        {fixture.front_image &&
-          <div className="keen-slider__slide number-slide1">
-            <img src={fixture.front_image} width="100%" style={{"maxWidth":"400px"}} />
-          </div>
-        }
-        {fixture.cad_image &&
-          <div className="keen-slider__slide number-slide2">
-            <img src={fixture.cad_image} width="100%" style={{"maxWidth":"400px"}} />
-          </div>
-        }
-        {fixture.lateral_image &&
-          <div className="keen-slider__slide number-slide3">
-            <img src={fixture.lateral_image} width="100%" style={{"maxWidth":"400px"}} />
-          </div>
-        }
-      </div>
-      {loaded && instanceRef.current && (
-        <>
-          <Arrow
-            left
-            onClick={(e) =>
-              e.stopPropagation() || instanceRef.current?.prev()
+    <div className="fixture-details">
+      <Stack spacing={1}>
+        <h3 className="no-margig">{fixture.name}</h3>
+        {fixture.type &&<p><b>Type: </b>{fixture.type}</p>}
+        {fixture.component_length && <p><b>Length: </b>{fixture.component_length}</p>}
+        {fixture.component_width && <p><b>Width: </b>{fixture.component_width}</p>}
+        {fixture.component_height && <p><b>Height: </b>{fixture.component_height}</p>}
+        <div className="navigation-wrapper">
+          <div ref={sliderRef} className="keen-slider">
+            {fixture.front_image &&
+              <div className="keen-slider__slide number-slide1">
+                <img src={fixture.front_image} width="100%" />
+              </div>
             }
-            disabled={currentSlide === 0}
-          />
+            {fixture.cad_image &&
+              <div className="keen-slider__slide number-slide2">
+                <img src={fixture.cad_image} width="100%" />
+              </div>
+            }
+            {fixture.lateral_image &&
+              <div className="keen-slider__slide number-slide3">
+                <img src={fixture.lateral_image} width="100%" />
+              </div>
+            }
+          </div>
+          {loaded && instanceRef.current && (
+            <>
+              <Arrow
+                left
+                onClick={(e) =>
+                  e.stopPropagation() || instanceRef.current?.prev()
+                }
+                disabled={currentSlide === 0}
+              />
 
-          <Arrow
-            onClick={(e) =>
-              e.stopPropagation() || instanceRef.current?.next()
-            }
-            disabled={
-              currentSlide ===
-              instanceRef.current.track.details.slides.length - 1
-            }
-          />
-        </>
-      )}
+              <Arrow
+                onClick={(e) =>
+                  e.stopPropagation() || instanceRef.current?.next()
+                }
+                disabled={
+                  currentSlide ===
+                  instanceRef.current.track.details.slides.length - 1
+                }
+              />
+            </>
+          )}
+        </div>
+        {loaded && instanceRef.current && (
+          <div className="dots">
+            {[
+              ...Array(instanceRef.current.track.details.slides.length).keys(),
+            ].map((idx) => {
+              return (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    instanceRef.current?.moveToIdx(idx)
+                  }}
+                  className={"dot" + (currentSlide === idx ? " active" : "")}
+                ></button>
+              )
+            })}
+          </div>
+        )}
+      </Stack>
     </div>
-    {loaded && instanceRef.current && (
-      <div className="dots">
-        {[
-          ...Array(instanceRef.current.track.details.slides.length).keys(),
-        ].map((idx) => {
-          return (
-            <button
-              key={idx}
-              onClick={() => {
-                instanceRef.current?.moveToIdx(idx)
-              }}
-              className={"dot" + (currentSlide === idx ? " active" : "")}
-            ></button>
-          )
-        })}
-      </div>
-    )}
-    </Stack>
   )
 }
 

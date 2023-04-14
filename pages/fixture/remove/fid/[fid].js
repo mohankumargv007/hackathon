@@ -27,6 +27,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   const router = useRouter();
   const [fcount, setFcount] = useState(1);
   const fid = _get(router, "query.fid", "");
@@ -35,7 +36,7 @@ export default function Fixture(props) {
     setFcount(event.target.value);
   }
   return (
-    <Layout title="Review Fixture Details" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}}>
+    <Layout title="Review Fixture Details" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}} loginDetails={loginDetails}>
       <Stack spacing={2}>
         <FixtureDetails fixture={fixture} />
         <b>Enter count of Fixtures:</b>

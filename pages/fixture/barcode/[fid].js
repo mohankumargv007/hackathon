@@ -64,6 +64,7 @@ const printPageArea = areaID => {
 }
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   const fixture = _get(props, "data", {});
   const fixture_barcode = _get(props, "fbdata", {});
   const store_code = 60318;
@@ -106,7 +107,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="QRCode Fixture" footer={{title:"Go to QRCode a fixture", link:"/fixture/search"}}>
+    <Layout title="QRCode Fixture" footer={{title:"Go to QRCode a fixture", link:"/fixture/search"}} loginDetails={loginDetails}>
       <Stack spacing={2}>
         {saved &&
         <Alert severity="success">QRCode saved successfully!</Alert>

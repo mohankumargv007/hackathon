@@ -52,6 +52,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   const router = useRouter();
   const fid = _get(router, "query.fid", "");
   const count = _get(router, "query.count", "")
@@ -141,7 +142,7 @@ export default function Fixture(props) {
     )
   }
   return (
-    <Layout title="Scan Products" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}}>
+    <Layout title="Scan Products" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}} loginDetails={loginDetails}>
       {fbdata.length && !fbdata[0]?.status ? notification("info", "Fixture removed successfully!") : null}
       <Stack spacing={2}>
         <h3 className="no-margig">{fixture.name}</h3>

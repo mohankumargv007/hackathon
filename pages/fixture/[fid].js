@@ -22,9 +22,10 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   const fixture = _get(props, "data.0", {});
   return (
-    <Layout title="Review Fixture Details">
+    <Layout title="Review Fixture Details" loginDetails={loginDetails}>
       <Stack spacing={2}>
         <FixtureDetails fixture={fixture} />
         <Link href={`/fixture/barcode/${fixture.id}?key=${fixture.key}`} passHref legacyBehavior><Button variant="contained" size="large">Generate QR Code</Button></Link>

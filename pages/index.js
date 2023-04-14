@@ -1,13 +1,12 @@
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import Layout from '../components/layout';
 import styles from '../styles/Home.module.css';
 
-export default function Home(props) {
+export default function Home({loginDetails}) {
   return (
-    <Layout title="SMT">
+    <Layout title="SMT" loginDetails={loginDetails}>
       <Stack spacing={2} sx={{ width: "100%" }}>
         <Link className={styles.btn} href="/merchandise/scan-fixture" passHref legacyBehavior>
           <Button variant="contained" className={styles.btn} size="large">Map Merchandise</Button>

@@ -35,6 +35,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
+  const { loginDetails } = props;
   const [fixtureBarcode, setFixtureBarcode] = useState(_get(props, "fbdata", {}));
   const [fixture, setFixture] = useState(_get(fixtureBarcode, "fixture_library", {}));
   const removeFixture = (fixture) => async () => {
@@ -47,7 +48,7 @@ export default function Fixture(props) {
     setFixtureBarcode(_get(data, "data.0", {}));
   }
   return (
-    <Layout title="Remove Fixture" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}}>
+    <Layout title="Remove Fixture" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}} loginDetails={loginDetails}>
       {!fixtureBarcode.status &&
         <Alert severity="info">Fixture removed successfully!</Alert>
       }
