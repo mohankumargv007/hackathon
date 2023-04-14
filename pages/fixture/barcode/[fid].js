@@ -4,7 +4,8 @@ import _get from 'lodash/get';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Barcode from 'react-barcode';
+// import Barcode from 'react-barcode';
+import QRCode from "react-qr-code";
 import Layout from '../../../components/layout';
 import { supabaseConnection } from '../../../utils/supabase';
 import styles from '../../../styles/Layout.module.css';
@@ -113,7 +114,8 @@ export default function Fixture(props) {
           }
           <div id="printableArea">
             <p>4 way new format stand 125CM</p>
-            <Barcode value={code} />
+            {/* <Barcode value={code} /> */}
+            <QRCode value={code} />
           </div>
           <Button onClick={handlePrint} variant="contained">Print</Button>
           <Link href={`/fixture/${fixture.id}`} passHref legacyBehavior><Button variant="contained">Back</Button></Link>

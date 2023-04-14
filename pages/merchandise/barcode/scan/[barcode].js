@@ -50,7 +50,7 @@ export default function Fixture(props) {
   const [results, setResults] = useState([]);
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
 
   const _onDetected = useCallback((result) => {
@@ -65,7 +65,19 @@ export default function Fixture(props) {
     const { data, error } = await response.json();
     const group = _get(data, "data.0.group", '');
     const department = _get(data, "data.0.department", '');
-    data.length ? setProducts([{ code: productCode, group, department, ...data[0] }, ...products]) : setError(true);
+
+    const found = data.length && products.some((e) => {
+      return e.item == data[0].item
+    })
+
+    data.length && !found ?
+      setProducts([{ code: productCode, group, department, ...data[0] }, ...products])
+      :
+      found ?
+        setError("Scan different product !")
+        :
+        setError("Product not found !");
+
     setResults([]);
   }
 
@@ -105,7 +117,7 @@ export default function Fixture(props) {
       <Box paddingX={"20px"}>
         <Stack spacing={2}>
           <h3>{fixture.name}</h3>
-        Type: {fixture.type}
+          Type: {fixture.type}
           <h4>Add products</h4>
           <Box >
             <TextField
@@ -118,13 +130,13 @@ export default function Fixture(props) {
                 error && setError(false);
               }}
             />
-            {error && notification("error", "Product not found !")}
-            {results[0] ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
+            {error && notification("error", error)}
+            {results[0] && products.length < 20 ? <Button onClick={() => handleProduct(results[0])} variant="contained">add product</Button> : null}
           </Box>
           <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
           <TableContainer component={Paper}>
             <Table aria-label="caption table">
-              <caption>Added {products.length}/5 products</caption>
+              <caption>Added {products.length}/20 products</caption>
               <TableHead>
                 <TableRow>
                   <TableCell>Item Code</TableCell>
