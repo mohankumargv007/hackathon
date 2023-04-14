@@ -13,7 +13,7 @@ export default function Header(props) {
   const router = useRouter();
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar>
         <Toolbar>
           {router.pathname !== '/' &&
           <Box sx={{ display: 'flex' }}>

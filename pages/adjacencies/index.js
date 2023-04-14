@@ -56,40 +56,38 @@ export default function Fixture(props) {
 
   return (
     <Layout title="Scan Product">
-      <Box paddingX="20px" paddingY="40px">
-        <Stack spacing={4}>
-          <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
-          <Box display="flex">
-            <TextField
-              label="Scanned data"
-              style={{ maxWidth: 300 }}
-              fullWidth
-              rowsmax={4}
-              type='text'
-              value={_get(results, "0")}
-              onChange={event => {
-                setResults([event.target.value]);
-                error && setError(false);
-              }}
-              InputProps={{
-                readOnly: !manual
-              }}
-              InputLabelProps={{
-                shrink: true
-              }}
-              color="secondary"
-            />
-            &nbsp;&nbsp;
-            <Button variant="contained" className="to-lowercase manual-btn" onClick={manualEntry} size="small">
-              {manual ? "Disable Manual Entry" : "Add Product manually"}
-            </Button>
-          </Box>
-          {error && notification("error", "Product not found !")}
-          {_get(results, "0") &&
-            <Button onClick={handleProceed} variant="contained" size="large">Proceed</Button>
-          }
-        </Stack>
-      </Box>
+      <Stack spacing={4}>
+        <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+        <Box display="flex">
+          <TextField
+            label="Scanned data"
+            style={{ maxWidth: 300 }}
+            fullWidth
+            rowsmax={4}
+            type='text'
+            value={_get(results, "0")}
+            onChange={event => {
+              setResults([event.target.value]);
+              error && setError(false);
+            }}
+            InputProps={{
+              readOnly: !manual
+            }}
+            InputLabelProps={{
+              shrink: true
+            }}
+            color="secondary"
+          />
+          &nbsp;&nbsp;
+          <Button variant="contained" className="to-lowercase manual-btn" onClick={manualEntry} size="small">
+            {manual ? "Disable Manual Entry" : "Add Product Manually"}
+          </Button>
+        </Box>
+        {error && notification("error", "Product not found !")}
+        {_get(results, "0") &&
+          <Button onClick={handleProceed} variant="contained" size="large">Proceed</Button>
+        }
+      </Stack>
     </Layout>
   )
 }

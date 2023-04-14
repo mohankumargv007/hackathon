@@ -98,79 +98,77 @@ export default function Fixture(props) {
 
   return (
     <Layout title="Scan Products" footer={{title:"Go to Map Adjacencies", link:"/adjacencies"}}>
-      <Box paddingX={"20px"}>
-        <h3>Parent Product Details:</h3>
-        <Stack spacing={2}>
-          <Stack spacing={1}>
-            <b>Item : {parentProd.item}</b>
-            <b>Concept : {parentProd.concept}</b>
-            <b>Department : {parentProd.department}</b>
-            <b>Class : {parentProd.class}</b>
-            <h3>Add Products</h3>
-          </Stack>
-          <Scandit btnText="Scan Child Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
-          <Box paddingTop="10px">
-            <Box display="flex">
-              <TextField
-                label="Scanned product code"
-                style={{ maxWidth: 300 }}
-                fullWidth
-                type='text'
-                value={_get(results, "0", "")}
-                onChange={event => {
-                  setResults([event.target.value]);
-                  error && setError(false);
-                }}
-                InputProps={{
-                  readOnly: !manual
-                }}
-                InputLabelProps={{
-                  shrink: true
-                }}
-                color="secondary"
-              />
-              &nbsp;&nbsp;
-              <Button variant="contained" className="to-lowercase manual-btn" onClick={manualEntry} size="small">
-                {manual ? "Disable Manual Entry" : "Add Product Manually"}
-              </Button>
-            </Box>
-            {error && notification("error", "Product not found!")}
-            {results[0] ?
-              <Box paddingTop="16px">
-                <Button onClick={() => handleProduct(results[0])} variant="contained" size="large">Add Scanned Product</Button>
-              </Box>
-              : null
-            }
-          </Box>
-          <TableContainer component={Paper}>
-            <Table aria-label="caption table">
-              <caption>Added {products.length}/5 products</caption>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Item Code</TableCell>
-                  <TableCell>Group</TableCell>
-                  <TableCell>Department</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {products.map((row, index) => (
-                  <TableRow key={`${row.code}-${index}`}>
-                    <TableCell component="th" scope="row">
-                      {row.code}
-                    </TableCell>
-                    <TableCell>{row.group}</TableCell>
-                    <TableCell>{row.department}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {saved &&
-            <Alert severity="success">Product merchandised successfully!</Alert>
-          }
-          {products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null}
+      <h3>Parent Product Details:</h3>
+      <Stack spacing={2}>
+        <Stack spacing={1}>
+          <b>Item : {parentProd.item}</b>
+          <b>Concept : {parentProd.concept}</b>
+          <b>Department : {parentProd.department}</b>
+          <b>Class : {parentProd.class}</b>
+          <h3>Add Products</h3>
         </Stack>
-      </Box>
+        <Scandit btnText="Scan Child Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+        <Box paddingTop="10px">
+          <Box display="flex">
+            <TextField
+              label="Scanned product code"
+              style={{ maxWidth: 300 }}
+              fullWidth
+              type='text'
+              value={_get(results, "0", "")}
+              onChange={event => {
+                setResults([event.target.value]);
+                error && setError(false);
+              }}
+              InputProps={{
+                readOnly: !manual
+              }}
+              InputLabelProps={{
+                shrink: true
+              }}
+              color="secondary"
+            />
+            &nbsp;&nbsp;
+            <Button variant="contained" className="to-lowercase manual-btn" onClick={manualEntry} size="small">
+              {manual ? "Disable Manual Entry" : "Add Product Manually"}
+            </Button>
+          </Box>
+          {error && notification("error", "Product not found!")}
+          {results[0] ?
+            <Box paddingTop="16px">
+              <Button onClick={() => handleProduct(results[0])} variant="contained" size="large">Add Scanned Product</Button>
+            </Box>
+            : null
+          }
+        </Box>
+        <TableContainer component={Paper}>
+          <Table aria-label="caption table">
+            <caption>Added {products.length}/5 products</caption>
+            <TableHead>
+              <TableRow>
+                <TableCell>Item Code</TableCell>
+                <TableCell>Group</TableCell>
+                <TableCell>Department</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {products.map((row, index) => (
+                <TableRow key={`${row.code}-${index}`}>
+                  <TableCell component="th" scope="row">
+                    {row.code}
+                  </TableCell>
+                  <TableCell>{row.group}</TableCell>
+                  <TableCell>{row.department}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {saved &&
+          <Alert severity="success">Product merchandised successfully!</Alert>
+        }
+        {products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null}
+      </Stack>
     </Layout>
   )
 }

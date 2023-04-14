@@ -37,7 +37,6 @@ export default function Fixture(props) {
   return (
     <Layout title="Reports">
       <NoSsr>
-      <Box paddingX="20px" paddingY="40px">
         <BarChart
           width={width}
           height={height}
@@ -55,7 +54,6 @@ export default function Fixture(props) {
           <Bar dataKey="Shelves&Bins" stackId="a" fill="#3366ff" />
           <Bar dataKey="Tables" stackId="a" fill="#ff00ff" />
         </BarChart>
-      </Box>
       </NoSsr>
     </Layout>
   )
