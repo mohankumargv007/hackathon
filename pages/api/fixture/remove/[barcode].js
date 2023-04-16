@@ -13,6 +13,12 @@ export default async function handler(req, res) {
       .eq('fixture_barcode', barcode)
       .select()
 
+    const { data: fProducts, error: ferror} = await supabase
+      .from('fixture_product_list')
+      .update({ status : false})
+      .eq('fixture_barcode', barcode)
+      .select()
+
       res.status(200).json({data: data, error: error});
     } catch(error) {
       res.status(500).send();

@@ -31,6 +31,7 @@ export default async function handler(req, res) {
       .from('fixture_barcode')
       .select('*')
       .eq('fixture_barcode',barcode)
+      .eq('status', true)
       res.status(200).json({data, error});
       
     } catch (error) {

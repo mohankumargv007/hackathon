@@ -10,7 +10,6 @@ import { supabaseConnection } from '../../../utils/supabase';
 
 export async function getServerSideProps(context) {
   const { barcode } = context.query;
-  const farr = barcode.split('&');
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -21,7 +20,8 @@ export async function getServerSideProps(context) {
     *,
     fixture_library:fixture_key ( * )
   `)
-    .eq('fixture_barcode', barcode);
+    .eq('fixture_barcode', barcode)
+    .eq('status', true);
 
   const fixture_barcode = _get(data, '0', {});
 
