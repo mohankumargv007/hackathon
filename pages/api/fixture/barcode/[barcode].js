@@ -12,9 +12,9 @@ export default async function handler(req, res) {
       const { data, error } = await supabase
       .from('fixture_barcode')
       .insert([{
-        store_id: barcode.slice(0,5),
-        fixture_key: _get(body, "key"),
-        counter : barcode.slice(-3,) ,
+        store_id: _get(body, 'storeId'),
+        fixture_key: _get(body, "fixtureKey"),
+        counter : _get(body, 'counter'),
         fixture_barcode: barcode,
       }])
       .select()
@@ -31,6 +31,7 @@ export default async function handler(req, res) {
       .from('fixture_barcode')
       .select('*')
       .eq('fixture_barcode',barcode)
+      .eq('status', true)
       res.status(200).json({data, error});
       
     } catch (error) {

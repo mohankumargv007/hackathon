@@ -20,6 +20,7 @@ export async function getServerSideProps(context) {
   .from('fixture_library')
   .select('*')
   .eq("id", fid)
+  .eq("status", true)
 
   const fixture_library = _get(fldata, "0", {});
 
@@ -70,13 +71,11 @@ export default function Fixture(props) {
   const store_code = 60318;
   let counter = ''
   if(fixture_barcode.counter) {
-    if(fixture_barcode.counter < 10){
-      counter = `00${fixture_barcode.counter + 1}`
-    } else if (fixture_barcode.counter < 100){
-      counter = `0${fixture_barcode.counter + 1}`
-    } else if (fixture_barcode.counter < 1000){
-      counter = `${fixture_barcode.counter + 1}`
-    }
+    counter = fixture_barcode.counter + 1;
+    counter = counter.toLocaleString('en-US', {
+      minimumIntegerDigits: 3,
+      useGrouping: false
+    })
   } else {
     counter = `001`
   }
@@ -89,9 +88,15 @@ export default function Fixture(props) {
 
   const saveBarcode = (code) => async () => {
     const url = `/api/fixture/barcode/${code}`;
+    let postData = {
+      'storeId' : 60318,
+      'fixtureKey' : fixture.key,
+      'counter' : counter,
+      'barcode' : code
+    }
     const options = {
       method: "POST",
-      body: JSON.stringify(fixture)
+      body: JSON.stringify(postData)
     };
     const response = await fetch(url, options);
     const data = await response.json();

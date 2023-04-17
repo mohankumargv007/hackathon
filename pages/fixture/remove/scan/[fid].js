@@ -38,10 +38,7 @@ export async function getServerSideProps(context) {
   const { data: fbdata, error: fberror } = await supabase
     .from('fixture_barcode')
     .select('*')
-    .eq('fixture_key', fixture.key)
-    .eq('store_id', 60318)
-    .eq('counter', count)
-    .order("id", { ascending: false })
+    .eq('fixture_barcode', "60318" + fixture.key + "001")
     .range(0, 0)
   return {
     props: {
@@ -62,7 +59,7 @@ export default function Fixture(props) {
   const barcode = fbdata.length && fbdata[0].fixture_barcode
   const [results, setResults] = useState([]);
   const [products, setProducts] = useState([])
-  const [saved, setSaved] = useState(false)
+  const [removed, setRemoved] = useState(false)
   const [error, setError] = useState("")
   const [manual, setManual] = useState(false);
 
@@ -101,18 +98,8 @@ export default function Fixture(props) {
       console.log("get product details error: ", error);
     }
   }
-  const removeFixture = (fixture) => async () => {
-    const url = `/api/fixture/remove/${fbdata[0].fixture_barcode}`;
-    const options = {
-      method: "put"
-    };
-    const response = await fetch(url, options);
-    const { data, error } = await response.json();
-    data.length && setFbdata(data)
-  }
-
-  const handleSubmit = async () => {
-    const url = `/api/fixture/merchandise/${barcode}`;
+  const removeFixture = () => async () => {
+    const url = `/api/fixture/removeProducts`;
     const options = {
       method: "POST",
       body: JSON.stringify({
@@ -123,9 +110,8 @@ export default function Fixture(props) {
       })
     }
     const response = await fetch(url, options);
-    const { data, error } = await response.json();
-    data.length && setSaved(true);
-    setResults([])
+    const { removeSuccess, error } = await response.json();
+    removeSuccess && setRemoved(removeSuccess)
   }
 
   const notification = (type, msg) => {
@@ -207,12 +193,12 @@ export default function Fixture(props) {
             </TableBody>
           </Table>
         </TableContainer>
-        {fbdata.length && fbdata[0].status ?
+        {fbdata.length && fbdata[0].status && !removed ?
           <>
             <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>
-            <Button variant="contained" onClick={removeFixture(fixture)} size="large">Yes</Button>
+            <Button variant="contained" onClick={removeFixture()} size="large">Yes</Button>
           </>
-          : fbdata.length && !fbdata[0].status ?
+          : removed ?
             <>
               <Alert severity="success">Fixture removed successfully!</Alert>
             </>
