@@ -6,7 +6,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
-import Card from './card';
+import Card from './../card';
 import styles from '../../styles/Search.module.css';
 
 export default function Home(props) {
@@ -33,7 +33,7 @@ export default function Home(props) {
 
   const listItems = fixtures.map((fixture, index) =>
     <Grid item xs={6} key={`grid-${index}`}>
-      <Card {...fixture} />
+      <Card {...fixture} href={`/fixture/${fixture.id}`} />
     </Grid>
   );
 
