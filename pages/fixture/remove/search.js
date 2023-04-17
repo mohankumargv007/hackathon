@@ -2,7 +2,7 @@ import _filter from 'lodash/filter';
 import _includes from 'lodash/includes';
 import Layout from '../../../components/layout';
 import { supabaseConnection } from '../../../utils/supabase';
-import SearchFixture from '../../../components/fixture/remove/search';
+import SearchFixture from '../../../components/search';
 
 export async function getServerSideProps() {
   // Fetch data from external API
@@ -20,7 +20,7 @@ export default function Fixture(props) {
   const { loginDetails } = props;
   return (
     <Layout title="Select Fixture" loginDetails={loginDetails}>
-      <SearchFixture {...props} />
+      <SearchFixture {...props} merchadiseTypesFlag={true} cardhref={`/fixture/remove/fid/`} />
     </Layout>
   )
 }

@@ -1,6 +1,6 @@
 import Layout from '../../components/layout';
 import { supabaseConnection } from '../../utils/supabase';
-import SearchFixture from '../../components/fixture/search';
+import SearchFixture from '../../components/search';
 
 export async function getServerSideProps() {
   const supabase = supabaseConnection();
@@ -17,7 +17,7 @@ export default function Fixture(props) {
   const { loginDetails } = props;
   return (
     <Layout title="Select Fixture" loginDetails={loginDetails}>
-      <SearchFixture {...props} />
+      <SearchFixture {...props} merchadiseTypesFlag={false} cardhref={`/fixture/`} />
     </Layout>
   )
 }
