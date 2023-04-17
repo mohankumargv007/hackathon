@@ -9,13 +9,13 @@ export default function Home({loginDetails}) {
     <Layout title="SMT" loginDetails={loginDetails}>
       <Stack spacing={2} sx={{ width: "100%" }}>
         <Link className={styles.btn} href="/merchandise/scan-fixture" passHref legacyBehavior>
-          <Button variant="contained" className={styles.btn} size="large">Map Merchandise</Button>
+          <Button role="map-merchandise" variant="contained" className={styles.btn} size="large">Map Merchandise</Button>
         </Link>
         <Link className={styles.btn} href="/fixture/remove" passHref legacyBehavior>
           <Button variant="contained" className={styles.btn} size="large">Remove Fixture</Button>
         </Link>
         <Link className={styles.btn} href="/fixture/search" passHref legacyBehavior>
-          <Button role="button" variant="contained" className={styles.btn} size="large">QRCode a Fixture</Button>
+          <Button variant="contained" className={styles.btn} size="large">QRCode a Fixture</Button>
         </Link>
         <Link className={styles.btn} href="/adjacencies" passHref legacyBehavior>
           <Button variant="contained" className={styles.btn} size="large">Map Adjacencies</Button>
