@@ -7,47 +7,31 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     const supabase = supabaseConnection();
     const body = JSON.parse(req.body);
+    const fixtureCount = body.count ?? 1;
+    const perProductSpace = (body.fixture.linear_meter * fixtureCount) / body.products.length;
     try {
-        const dataFeed = await body.products.map(async (product,i,arr) => {
-            let lm = body.count ? ((body.count*body.fixture.linear_meter)/arr.length) : (body.fixture.linear_meter/arr.length)
-            let {data:getSum, error: sumError} = await supabase
-                .rpc("get_sum_lm", {fbarcode : body.barcode, gname : product.group})
-            if (getSum && getSum > 0) {
-                lm  = (getSum < lm) ? getSum : lm; 
-                let productList = {
-                    fixture_barcode: body.barcode,
-                    store_id : body.barcode.slice(0,5),
-                    item : product.item,
-                    group : product.group,
-                    department : product.department,
-                    class : product.class,
-                    sub_class : product.sub_class,
-                    fixture_key : body.fixture.key,
-                    linear_meter : -lm
-                }
-                let {data : pdata, error : perror} = await supabase
-                    .from('fixture_product_list')
-                    //fixture_barcode  store_id  item  group  department  class  sub_class  fixture_type  linear_meter
-                    .insert(productList)
-                    .select()
-                return productList;
-            } else {
-                return {
-                    fixture_barcode: body.barcode,
-                    store_id : body.barcode.slice(0,5),
-                    item : product.item,
-                    group : product.group,
-                    department : product.department,
-                    class : product.class,
-                    sub_class : product.sub_class,
-                    fixture_key : body.fixture.key,
-                    linear_meter : 0.00
-                }
-            }
-        })
-        let error = null;
-        let removeSuccess = true
-        res.status(200).json({removeSuccess, error});
+      await body.products.map(async (product, i, arr) => {
+        let { data: getSum, error: sumError } = await supabase
+          .rpc("get_sum_lm", { fbarcode: body.barcode, gname: product.group })
+        if (getSum && getSum > 0) {
+          const linearMeter = (getSum < perProductSpace) ? getSum : perProductSpace;
+          const fixtureProduct = {
+            fixture_barcode: body.barcode,
+            store_id: body.barcode.slice(0, 5),
+            item: product.item,
+            group: product.group,
+            department: product.department,
+            class: product.class,
+            sub_class: product.sub_class,
+            fixture_key: body.fixture.key,
+            linear_meter: -linearMeter
+          }
+          await supabase
+            .from('fixture_product_list')
+            .insert(fixtureProduct)
+        }
+      })
+      res.status(200).json({ removeSuccess: true });
     } catch (error) {
       res.status(500).send();
     }
