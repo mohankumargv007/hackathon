@@ -23,17 +23,17 @@ export async function getServerSideProps(context) {
     .single()
   
   
-  let { fixtureBarcode, barerror } = await supabase
+  await supabase
     .from('fixture_barcode')
     .upsert({ store_id: 60318, fixture_key : data.key, counter: 1, fixture_barcode : "60318" + data.key + '001'},{ onConflict: 'fixture_barcode' })
-  let {data: fbdata, error: fberror} = await supabase
+  let {data: fixtureBarcode, error: fixtureBarcodeError} = await supabase
     .from('fixture_barcode')
     .select("*")
-    .eq('fixture_barcode', "60318" + data.key + '001')
+    .eq('fixture_barcode', `60318${data.key}001`)
     .single()
   
   // Pass data to the page via props
-  return { props: { data: data, fixtureBarcode : fbdata } };
+  return { props: { data: data, fixtureBarcode : fixtureBarcode } };
 }
 
 export default function Fixture(props) {

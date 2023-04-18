@@ -38,7 +38,7 @@ export async function getServerSideProps(context) {
   const { data: fbdata, error: fberror } = await supabase
     .from('fixture_barcode')
     .select('*')
-    .eq('fixture_barcode', "60318" + fixture.key + "001")
+    .eq('fixture_barcode', `60318${fixture.key}001`)
     .range(0, 0)
   return {
     props: {
@@ -110,8 +110,11 @@ export default function Fixture(props) {
       })
     }
     const response = await fetch(url, options);
-    const { removeSuccess, error } = await response.json();
-    removeSuccess && setRemoved(removeSuccess)
+    const {removeSuccess} = await response.json();
+    if (removeSuccess) {
+      setRemoved(removeSuccess)
+      setProducts([])
+    }
   }
 
   const notification = (type, msg) => {
