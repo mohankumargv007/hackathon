@@ -57,7 +57,7 @@ export default function Fixture(props) {
   const handleProduct = async (productCode) => {
     const url = `/api/fixture/adjacencies/${productCode}`;
     const response = await fetch(url);
-    const { data, error } = await response.json();
+    const { data } = await response.json();
     const group = _get(data, "data.0.group", '');
     const department = _get(data, "data.0.department", '');
 
@@ -93,8 +93,11 @@ export default function Fixture(props) {
       })
     }
     const response = await fetch(url, options);
-    const { data, error } = await response.json();
-    data.length && setSaved(true);
+    const { mappedSuccess } = await response.json();
+    setSaved(mappedSuccess);
+    if (!mappedSuccess) {
+      setError("Something went wrong!")
+    }
     setResults([])
   }
 
@@ -181,7 +184,7 @@ export default function Fixture(props) {
           </Table>
         </TableContainer>
         {saved &&
-          <Alert severity="success">Product merchandised successfully!</Alert>
+          <Alert severity="success">Product adjacencies saved successfully!</Alert>
         }
         {products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null}
       </Stack>
