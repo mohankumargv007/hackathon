@@ -27,7 +27,7 @@ export default function Fixture(props) {
     const productCode = _get(results, "0");
     const url = `/api/fixture/adjacencies/${productCode}`;
     const response = await fetch(url);
-    const { data, error } = await response.json();
+    const { data } = await response.json();
     if (data.length) {
       router.push(`/adjacencies/${productCode}`);
     } else {

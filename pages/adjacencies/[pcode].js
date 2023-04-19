@@ -57,7 +57,7 @@ export default function Fixture(props) {
   const handleProduct = async (productCode) => {
     const url = `/api/fixture/adjacencies/${productCode}`;
     const response = await fetch(url);
-    const { data, error } = await response.json();
+    const { data } = await response.json();
     const group = _get(data, "data.0.group", '');
     const department = _get(data, "data.0.department", '');
 
