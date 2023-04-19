@@ -93,8 +93,11 @@ export default function Fixture(props) {
       })
     }
     const response = await fetch(url, options);
-    const { data, error } = await response.json();
-    data.length && setSaved(true);
+    const { mappedSuccess } = await response.json();
+    setSaved(mappedSuccess);
+    if (!mappedSuccess) {
+      setError("Something went wrong!")
+    }
     setResults([])
   }
 
@@ -181,7 +184,7 @@ export default function Fixture(props) {
           </Table>
         </TableContainer>
         {saved &&
-          <Alert severity="success">Product merchandised successfully!</Alert>
+          <Alert severity="success">Product adjacencies saved successfully!</Alert>
         }
         {products.length ? <Button onClick={handleSubmit} variant="contained">Submit</Button> : null}
       </Stack>
