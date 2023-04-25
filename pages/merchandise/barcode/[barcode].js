@@ -21,7 +21,7 @@ export async function getServerSideProps(context) {
   `)
     .eq('fixture_barcode', barcode)
 
-  // Pass data to the page via props
+    // Pass data to the page via props
   return { props: { data: data } };
 }
 
@@ -33,7 +33,7 @@ export default function Fixture(props) {
   return (
     <Layout title="Review Fixture Details" loginDetails={loginDetails}>
       <Stack spacing={2}>
-        <FixtureDetails fixture={fixture} />
+        <FixtureDetails fixture={fixture} fixtureBarcode={_get(props, "data.0")}/>
         <Link href={`/merchandise/barcode/scan/${barcode}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
       </Stack>
     </Layout>

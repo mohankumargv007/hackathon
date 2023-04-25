@@ -9,37 +9,49 @@ export default async function handler(req, res) {
     const pid = req.query.pid;
     try {
       const { data, error } = await supabase
-      .from('product_list')
-      .select('*')
-      .eq('item',pid)
-      res.status(200).json({data, error});
-    } catch(error) {
+        .from('product_list')
+        .select('*')
+        .eq('item', pid)
+      res.status(200).json({ data, error });
+    } catch (error) {
       res.status(500).send();
     }
   } else if (req.method === 'POST') {
-    
+
     const supabase = supabaseConnection();
     const body = JSON.parse(req.body);
-    const dataFeed = await body.products.map((product,i,arr)=>{
-      return  {
+    const dataFeed = await body.products.map((product, i, arr) => {
+      return {
         fixture_barcode: body.barcode,
-        store_id : body.barcode.slice(0,5),
-        item : product.item,
-        group : product.group,
-        department : product.department,
-        class : product.class,
-        sub_class : product.sub_class,
-        fixture_key : body.fixture.key,
-        linear_meter : body.count ? ((body.count*body.fixture.linear_meter)/arr.length) : (body.fixture.linear_meter/arr.length)
+        store_id: body.storeId,
+        item: product.item,
+        group: product.group,
+        department: product.department,
+        class: product.class,
+        sub_class: product.sub_class,
+        fixture_key: body.fixture.key,
+        linear_meter: body.count ? ((body.count * body.fixture.linear_meter) / arr.length) : (body.fixture.linear_meter / arr.length)
       }
     })
     try {
-        const {data,error} = await supabase
+      if (body.nonDynamicFixture) {
+        await supabase
+          .from('fixture_barcode')
+          .upsert({ store_id: body.storeId, fixture_key: body.fixture.key, counter: 1, fixture_barcode: `${body.storeId}${body.fixture.key}001` }, { onConflict: 'fixture_barcode' })
+      } else {
+        const now = new Date()
+        const updatedISO = now.toISOString() 
+        const { data, error } = await supabase
+          .from('fixture_barcode')
+          .update({ updated_at: updatedISO })
+          .eq('fixture_barcode', body.barcode)
+      }
+      const { data, error } = await supabase
         .from('fixture_product_list')
         //fixture_barcode  store_id  item  group  department  class  sub_class  fixture_type  linear_meter
         .insert([...dataFeed])
         .select()
-        res.status(200).json({data, error});
+      res.status(200).json({data, error});
     } catch (error) {
       res.status(500).send();
     }

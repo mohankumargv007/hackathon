@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import _get from 'lodash/get';
+import NoSsr from '@mui/base/NoSsr';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
@@ -43,9 +44,11 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { loginDetails } = props;
+  const {storeId} = loginDetails
   const router = useRouter();
   const barcode = _get(router, "query.barcode", "");
   const count = _get(router, "query.count", 1);
+  const nonDynamicFixture = _get(router, "query.ftype", false);
 
   const fixture = _get(props, "data.0.fixture_library", {});
   const [results, setResults] = useState([]);
@@ -67,7 +70,7 @@ export default function Fixture(props) {
   const handleProduct = async (productCode) => {
     const url = `/api/fixture/merchandise/${productCode}`;
     const response = await fetch(url);
-    const { data, error } = await response.json();
+    const { data } = await response.json();
     const group = _get(data, "data.0.group", '');
     const department = _get(data, "data.0.department", '');
 
@@ -94,12 +97,14 @@ export default function Fixture(props) {
         barcode,
         fixture,
         products,
-        count
+        count,
+        nonDynamicFixture,
+        storeId
       })
     }
 
     const response = await fetch(url, options);
-    const { data, error } = await response.json();
+    const { data } = await response.json();
     data.length && setSaved(true);
     setResults([])
   }
@@ -117,14 +122,17 @@ export default function Fixture(props) {
       ></Notification>
     )
   }
-
-  const dt = new Date(_get(props, "data.0.created_at"));
+  
+  const dt = new Date(_get(props, "data.0.updated_at"));
   return (
     <Layout title="Scan Products" footer={{title:"Go to Map Merchandise", link:"/merchandise/scan-fixture"}} loginDetails={loginDetails}>
       <Stack spacing={2}>
         <div>
           <h3 className="no-margig">{fixture.name}</h3>
+          <NoSsr>
           <p>Last updated on: {dt.toLocaleString(DateTime.DATETIME_FULL)}</p>
+          </NoSsr>
+
           <p>Type: {fixture.type}</p>
           <b>Add products</b>
         </div>

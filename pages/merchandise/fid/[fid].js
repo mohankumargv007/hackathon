@@ -23,17 +23,17 @@ export async function getServerSideProps(context) {
     .single()
   
   
-  await supabase
-    .from('fixture_barcode')
-    .upsert({ store_id: 60318, fixture_key : data.key, counter: 1, fixture_barcode : "60318" + data.key + '001'},{ onConflict: 'fixture_barcode' })
-  let {data: fixtureBarcode, error: fixtureBarcodeError} = await supabase
+  // await supabase
+  //   .from('fixture_barcode')
+  //   .upsert({ store_id: 60318, fixture_key : data.key, counter: 1, fixture_barcode : "60318" + data.key + '001'},{ onConflict: 'fixture_barcode' })
+  let {data: fixturecode, error: fixturecodeError} = await supabase
     .from('fixture_barcode')
     .select("*")
     .eq('fixture_barcode', `60318${data.key}001`)
     .single()
-  
+
   // Pass data to the page via props
-  return { props: { data: data, fixtureBarcode : fixtureBarcode } };
+  return { props: { data: data ,fixturecode : fixturecode} };
 }
 
 export default function Fixture(props) {
@@ -42,17 +42,18 @@ export default function Fixture(props) {
   const [fcount, setFcount] = useState(1);
   const fid = _get(router, "query.fid", "");
   const fixture = _get(props, "data", {});
-  const fixtureBarcode = _get(props, "fixtureBarcode", {});
+  const fixturecode = _get(props, "fixturecode", false);
+  const fixtureBarcode = `${loginDetails.storeId}${fixture.key}001`
   const handleChange = (event) => {
     setFcount(event.target.value);
   }
   return (
     <Layout title="Review Fixture Details" loginDetails={loginDetails}>
       <Stack spacing={2}>
-        <FixtureDetails fixture={fixture} fixtureBarcode={fixtureBarcode} />
+        <FixtureDetails fixture={fixture} fixtureBarcode={fixturecode} />
         <b>Enter count of Fixtures:</b>
         <OutlinedInput placeholder="Please enter fixtures count" type="number" value={fcount} onChange={handleChange} />
-        <Link href={`/merchandise/barcode/scan/${fixtureBarcode.fixture_barcode}?count=${fcount}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
+        <Link href={`/merchandise/barcode/scan/${fixtureBarcode}?count=${fcount}&ftype=aps`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
       </Stack>
     </Layout>
   )
