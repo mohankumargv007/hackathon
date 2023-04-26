@@ -20,7 +20,7 @@ const merchadiseTypes = [{
 
 export default function Search(props) {
   const { merchadiseTypesFlag, cardhref } = props;
-  const allfixtures = _get(props, "data", []);
+  const allfixtures = _get(props, "fixtureLibrary", []);
   let fixtures = _cloneDeep(allfixtures);
 
   const [name, setName] = React.useState('');
@@ -42,7 +42,7 @@ export default function Search(props) {
   }
 
   const listItems = _map(fixtures, (fixture, index) =>
-    <Grid item xs={6} key={`grid-${index}`}>
+    <Grid item xs={6} sm={3} key={`grid-${index}`}>
       <Card {...fixture} href={`${cardhref}${fixture.id}`} />
     </Grid>
   );
@@ -52,6 +52,22 @@ export default function Search(props) {
   return (
     <main className={styles.main}>
       <Stack sx={{ width: "100%" }} spacing={2}>
+      <div>
+          <Autocomplete
+            value={type}
+            onChange={(event, newValue) => {
+              setType(newValue);
+            }}
+            inputValue={inputType}
+            onInputChange={(event, newInputType) => {
+              setInputType(newInputType);
+            }}
+            id="search-fixture-type"
+            autoComplete
+            options={typeOptions.map((option) => option.type)}
+            renderInput={(params) => <TextField {...params} label="Filter via Type" />}
+          />
+        </div>
         <div>
           <Autocomplete
             value={name}
@@ -66,22 +82,6 @@ export default function Search(props) {
             autoComplete
             options={_uniqBy(fixtures, 'name').map((option) => option.name)}
             renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
-          />
-        </div>
-        <div>
-          <Autocomplete
-            value={type}
-            onChange={(event, newValue) => {
-              setType(newValue);
-            }}
-            inputValue={inputType}
-            onInputChange={(event, newInputType) => {
-              setInputType(newInputType);
-            }}
-            id="search-fixture-type"
-            autoComplete
-            options={typeOptions.map((option) => option.type)}
-            renderInput={(params) => <TextField {...params} label="Filter via Type" />}
           />
         </div>
         <h3>Fixtures</h3>
