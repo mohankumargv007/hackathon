@@ -19,7 +19,7 @@ export async function getServerSideProps() {
 export default function Fixture(props) {
   const { loginDetails } = props;
   return (
-    <Layout title="Select Fixture" loginDetails={loginDetails}>
+    <Layout title="Select Fixture" loginDetails={loginDetails} footer={{title:"Remove Fixture", link:"/fixture/remove"}}>
       <SearchFixture {...props} merchadiseTypesFlag={true} cardhref={`/fixture/remove/fid/`} />
     </Layout>
   )
