@@ -44,7 +44,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
-  const { loginDetails, fixtureCount } = props;
+  const { loginDetails } = props;
   const mounted = useRef(false);
   const [fixtureLibrary, setFixtureLibrary] = useState(_get(props, "fixtures"));
   const [fixtureCount, setFixtureCount] = useState(_get(props, "fixtureCount"));
