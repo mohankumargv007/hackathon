@@ -13,29 +13,37 @@ const fixturesInPage = publicRuntimeConfig.fixturesInPage;
 export async function getServerSideProps(context) {
   // Fetch data from external API
   const page = _get(context, "query.page", 1);
+  const type = _get(context, "query.type");
+
   const startRange = (page - 1) * fixturesInPage;
   const endRange = (page * fixturesInPage) - 1;
 
   const supabase = supabaseConnection();
 
-  let { data: fixtureLibrary, count: fixtureCount, error } = await supabase
+  let query = supabase
   .from('fixture_library')
   .select('*', { count: 'exact' })
   .eq('status', true)
-  .range(startRange, endRange)
 
-  return { props: { fixtures: fixtureLibrary,  fixtureCount: fixtureCount }};
+  if(type) query.textSearch('type', `'${type}'`)
+  query.range(startRange, endRange)
+
+  const { data: fixtureLibrary, count: fixtureCount, error: fixtureError } = await query;
+  const { data: fixtureTypes, error } = await supabase.rpc('get_fixture_types');
+
+  return { props: { fixtures: fixtureLibrary,  fixtureCount: fixtureCount, fixtureTypes: fixtureTypes }};
 }
 
 export default function Fixture(props) {
-  const { loginDetails, fixtures, fixtureCount } = props;
+  const { loginDetails, fixtures, fixtureCount, fixtureTypes } = props;
   const mounted = useRef(false);
   const [fixtureLibrary, setFixtureLibrary] = useState(fixtures);
   const router = useRouter();
   const page = _get(router, "query.page", 1);
+  const type = _get(router, "query.type", "");
 
   const getFixtureLibrary = async () => {
-    const url = `/api/fixture/fixtureLibrary?page=${_get(router, "query.page", 1)}&type=all`;
+    const url = `/api/fixture/fixtureLibrary?page=${page}&type=${type}`;
     const response = await fetch(url);
     const { fixtureLibrary } = await response.json();
     setFixtureLibrary(fixtureLibrary);
@@ -47,11 +55,11 @@ export default function Fixture(props) {
     } else {
       mounted.current = true;
     }
-  }, [page]);
+  }, [page, type]);
 
   return (
     <Layout title="Select Fixture" loginDetails={loginDetails}>
-      <SearchFixture {...props} fixtureLibrary={fixtureLibrary} merchadiseTypesFlag={false} cardhref={`/fixture/`} />
+      <SearchFixture {...props} fixtureLibrary={fixtureLibrary} fixtureTypes={fixtureTypes} cardhref={`/fixture/`} />
       {fixtureCount/fixturesInPage > 1 &&
         <Pagination fixtureCount={fixtureCount} fixturesInPage={fixturesInPage} pages={Math.ceil(fixtureCount/fixturesInPage)} />
       }

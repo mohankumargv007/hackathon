@@ -13,24 +13,20 @@ export default async function handler(req, res) {
   const endRange = (page * fixturesInPage) - 1;
 
   try {
+    let query = supabase
+    .from('fixture_library')
+    .select('*');
+
     if(type === 'armsprongsshelves') {
-      let { data: fixtureLibrary, error } = await supabase
-      .from('fixture_library')
-      .select('*')
-      .or('type.ilike.%arm%,type.ilike.%prong%,type.ilike.%shelves%')
-      .eq('status', true)
-      .range(startRange, endRange)
-
-      res.status(200).json({fixtureLibrary: fixtureLibrary});
-    } else {
-      let { data: fixtureLibrary, error } = await supabase
-      .from('fixture_library')
-      .select('*')
-      .eq('status', true)
-      .range(startRange, endRange)
-
-      res.status(200).json({fixtureLibrary: fixtureLibrary});
+      query.or('type.ilike.%arm%,type.ilike.%prong%,type.ilike.%shelves%');
+    } else if(type.length > 1) {
+      query.textSearch('type', `'${type}'`)
     }
+    query.eq('status', true);
+    query.range(startRange, endRange);
+
+    const { data: fixtureLibrary, error } = await query;
+    res.status(200).json({fixtureLibrary: fixtureLibrary});
   } catch(error) {
     res.status(500).send();
   }
