@@ -27,15 +27,9 @@ export default function Search(props) {
   const fixtureTypeSearch = () => {
     if(inputType.length > 1) {
       let searchQuery = `?type=${inputType}`;
-      if(inputName.length > 1) {
-        searchQuery = `?type=${inputType}&name=${inputName}`;
-      }
       router.push(searchQuery, undefined, { shallow: true });
     } else if(inputType.length == 0){
       let searchQuery = ``;
-      if(inputName.length > 1) {
-        searchQuery = `?name=${inputName}`;
-      }
       router.push(searchQuery, undefined, { shallow: true });
     }
   }
