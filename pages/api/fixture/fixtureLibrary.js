@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   try {
     let query = supabase
     .from('fixture_library')
-    .select('*');
+    .select('*', { count: 'exact' });
 
     if(type === 'armsprongsshelves') {
       query.or('type.ilike.%arm%,type.ilike.%prong%,type.ilike.%shelves%');
@@ -25,8 +25,8 @@ export default async function handler(req, res) {
     query.eq('status', true);
     query.range(startRange, endRange);
 
-    const { data: fixtureLibrary, error } = await query;
-    res.status(200).json({fixtureLibrary: fixtureLibrary});
+    const { data: fixtureLibrary, count: fixtureCount, error } = await query;
+    res.status(200).json({fixtureLibrary: fixtureLibrary, count: fixtureCount});
   } catch(error) {
     res.status(500).send();
   }

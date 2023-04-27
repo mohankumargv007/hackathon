@@ -35,9 +35,10 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
-  const { loginDetails, fixtures, fixtureCount, fixtureTypes } = props;
+  const { loginDetails, fixtureTypes } = props;
   const mounted = useRef(false);
-  const [fixtureLibrary, setFixtureLibrary] = useState(fixtures);
+  const [fixtureLibrary, setFixtureLibrary] = useState(_get(props, "fixtures"));
+  const [fixtureCount, setFixtureCount] = useState(_get(props, "fixtureCount"));
   const router = useRouter();
   const page = _get(router, "query.page", 1);
   const type = _get(router, "query.type", "");
@@ -45,8 +46,9 @@ export default function Fixture(props) {
   const getFixtureLibrary = async () => {
     const url = `/api/fixture/fixtureLibrary?page=${page}&type=${type}`;
     const response = await fetch(url);
-    const { fixtureLibrary } = await response.json();
+    const { fixtureLibrary, count } = await response.json();
     setFixtureLibrary(fixtureLibrary);
+    setFixtureCount(count);
   };
 
   useEffect(() => {

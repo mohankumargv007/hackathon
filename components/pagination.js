@@ -9,12 +9,12 @@ export default function BasicPagination(props) {
   const router = useRouter();
   const currentPage = useRef(_get(router, "query.page", 1));
   const type = _get(router, "query.type");
-  let searchQuery = `?page=${value}`;
-  if(type) {
-    searchQuery = `?page=${value}&type=${type}`;
-  }
 
   const handleChange = (event, value) => {
+    let searchQuery = `?page=${value}`;
+    if(type) {
+      searchQuery = `?page=${value}&type=${type}`;
+    }
     router.push(searchQuery, undefined, { shallow: true })
   };
 
