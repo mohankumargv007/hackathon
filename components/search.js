@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { useRouter } from 'next/router';
 import _get from 'lodash/get';
 import _map from 'lodash/map';
 import _cloneDeep from 'lodash/cloneDeep';
-import { useRouter } from 'next/router';
 import _uniqBy from 'lodash/uniqBy';
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -11,20 +12,11 @@ import Grid from '@mui/material/Grid';
 import Card from './card';
 import styles from './../styles/Search.module.css';
 
-const merchadiseTypes = [{
-    type: "Arm"
-  }, {
-    type: "Prong"
-  }, {
-    type: "Shelves"
-  }];
-
 export default function Search(props) {
-
-  const { merchadiseTypesFlag, cardhref } = props;
-  const allfixtures = _get(props, "data", []);
-  let fixtures = _cloneDeep(allfixtures);
   const router = useRouter();
+  const { cardhref, fixtureTypes } = props;
+  const allfixtures = _get(props, "fixtureLibrary", []);
+  let fixtures = _cloneDeep(allfixtures);
   const zone = _get(router,'query.zone',"")
   const [name, setName] = React.useState('');
   const [inputName, setInputName] = React.useState('');
@@ -32,60 +24,64 @@ export default function Search(props) {
   const [type, setType] = React.useState('');
   const [inputType, setInputType] = React.useState('');
 
-  if(name) {
-    fixtures = fixtures.filter((fixt) => {
-      return fixt.name.includes(name);
-    })
-  }
-
-  if(type) {
-    fixtures = fixtures.filter((fixt) => {
-      return fixt.type.includes(type);
-    })
+  const fixtureNameTypeSearch = () => {
+    let searchQuery = {};
+    if(inputType.length > 1) {
+      searchQuery.type = encodeURIComponent(inputType);
+    }
+    if(inputName.length > 1) {
+      searchQuery.name = encodeURIComponent(inputName);
+    }
+    router.push({
+      query: searchQuery
+    }, undefined, { shallow: true })
   }
 
   const listItems = _map(fixtures, (fixture, index) =>
-    <Grid item xs={6} key={`grid-${index}`}>
-      <Card {...fixture} href={`${cardhref}${fixture.id}?zone=${zone}`} />
+    <Grid item xs={6} sm={3} key={`grid-${index}`}>
+      <Card {...fixture} href={`${cardhref}${fixture.id}`} />
     </Grid>
-  );
-
-  const typeOptions = merchadiseTypesFlag ? merchadiseTypes : _uniqBy(fixtures, 'type');
+  )
 
   return (
     <main className={styles.main}>
       <Stack sx={{ width: "100%" }} spacing={2}>
-        <div>
-          <Autocomplete
-            value={name}
-            onChange={(event, newValue) => {
-              setName(newValue);
-            }}
-            inputValue={inputName}
-            onInputChange={(event, newInputName) => {
-              setInputName(newInputName);
-            }}
-            id="search-fixture-name"
-            autoComplete
-            options={_uniqBy(fixtures, 'name').map((option) => option.name)}
-            renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
-          />
-        </div>
-        <div>
-          <Autocomplete
-            value={type}
-            onChange={(event, newValue) => {
-              setType(newValue);
-            }}
-            inputValue={inputType}
-            onInputChange={(event, newInputType) => {
-              setInputType(newInputType);
-            }}
-            id="search-fixture-type"
-            autoComplete
-            options={typeOptions.map((option) => option.type)}
-            renderInput={(params) => <TextField {...params} label="Filter via Type" />}
-          />
+        <div className="input-search">
+          <div className="input-autocomplete">
+            <div className="input-text">
+              <Autocomplete
+                value={type}
+                onChange={(event, newValue) => {
+                  setType(newValue);
+                }}
+                inputValue={inputType}
+                onInputChange={(event, newInputType) => {
+                  setInputType(newInputType);
+                }}
+                id="search-fixture-type"
+                autoComplete
+                options={fixtureTypes.map((option) => option.type)}
+                renderInput={(params) => <TextField {...params} label="Filter via Type" />}
+              />
+            </div>
+            <div>
+              <Autocomplete
+                value={name}
+                onChange={(event, newValue) => {
+                  setName(newValue);
+                }}
+                inputValue={inputName}
+                onInputChange={(event, newInputName) => {
+                  setInputName(newInputName);
+                }}
+                id="search-fixture-name"
+                autoComplete
+                options={_uniqBy(fixtures, 'name').map((option) => option.name)}
+                renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
+              />
+            </div>
+          </div>
+          <Button variant="contained" size="large" onClick={fixtureNameTypeSearch}>Go</Button>
         </div>
         <h3>Fixtures</h3>
         <div>

@@ -48,7 +48,7 @@ export default function Fixture(props) {
     setFixtureBarcode(_get(data, "data.0", {}));
   }
   return (
-    <Layout title="Remove Fixture" footer={{title:"Go to Remove Fixture", link:"/fixture/remove"}} loginDetails={loginDetails}>
+    <Layout title="Remove Fixture" footer={{title:"Remove Fixture", link:"/fixture/remove"}} loginDetails={loginDetails}>
       {!fixtureBarcode.status &&
         <Alert severity="info">Fixture removed successfully!</Alert>
       }

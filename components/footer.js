@@ -1,20 +1,40 @@
+import * as React from 'react';
+import { useRouter } from 'next/router';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Link from 'next/link';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import Paper from '@mui/material/Paper';
+import RestoreIcon from '@mui/icons-material/Restore';
+import HomeIcon from '@mui/icons-material/Home';
+import ArrowBack from '@mui/icons-material/ArrowBack';
 import _get from 'lodash/get';
 
-export default function Header(props) {
+export default function FooterNav(props) {
+  const { footer } = props;
+  const router = useRouter();
   return (
-    <>
-    {_get(props, "footer.link") &&
-    <Box sx={{ flexGrow: 1 }} padding="20px">
-      <Link href={_get(props, "footer.link")} passHref legacyBehavior>
-        <Button size="large" fullWidth variant="contained" aria-label="add" className="to-lowercase">
-          {_get(props, "footer.title")}
-        </Button>
-      </Link>
+    <Box>
+      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <BottomNavigation
+          showLabels
+          // value={value}
+          onChange={(event, newValue) => {
+            if(newValue === 0) {
+              router.push("/");
+            } else if (newValue === 1) {
+              router.push(_get(footer, "link", ""))
+            } else {
+              router.back();
+            }
+          }}
+        >
+          <BottomNavigationAction label="Home" icon={<HomeIcon />} />
+          {_get(footer, "title") &&
+          <BottomNavigationAction label={_get(footer, "title", "")} icon={<RestoreIcon />} />
+          }
+          <BottomNavigationAction label="Back" icon={<ArrowBack />} />
+        </BottomNavigation>
+      </Paper>
     </Box>
-    }
-    </>
-  )
+  );
 }

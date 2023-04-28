@@ -9,11 +9,11 @@ import Typography from '@mui/material/Typography';
 export default function MuiCard(props) {
   return (
     <Link href={props.href} passHref legacyBehavior>
-      <Card sx={{ maxWidth: 345 }}>
+      <Card>
         <CardMedia
           sx={{ height: 140 }}
           image={props.front_image}
-          title="green iguana"
+          title={props.name}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
