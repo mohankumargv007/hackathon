@@ -9,6 +9,29 @@ steps:
       SecretsFilter: 'VERCEL-LMG-TOKEN'
       RunAsPreJob: true
 
+  - task: SonarQubePrepare@5
+    inputs:
+      SonarQube: 'SonarQube-LMG K8s'
+      scannerMode: 'CLI'
+      configMode: 'manual'
+      cliProjectKey: 'Space-Management-Tool'
+      cliProjectName: 'space-management-tool'
+      cliSources: '.'
+    condition: eq(variables['build.sourceBranch'], 'refs/heads/dev')
+
+  - task: SonarQubeAnalyze@5
+    condition: eq(variables['build.sourceBranch'], 'refs/heads/dev')
+
+  - task: SonarQubePublish@5
+    inputs:
+      pollingTimeoutSec: '300'
+    condition: eq(variables['build.sourceBranch'], 'refs/heads/dev')
+  
+  - task: sonar-buildbreaker@8
+    inputs:
+      SonarQube: 'SonarQube-LMG K8s'
+    condition: eq(variables['build.sourceBranch'], 'refs/heads/dev')    
+  
   - script: |
         echo '##vso[task.setvariable variable=VERCEL_ORG_ID]$(VERCEL-ORG-ID)'  
         echo '##vso[task.setvariable variable=VERCEL_PROJECT_ID]$(VERCEL-PROJECT-ID)'
