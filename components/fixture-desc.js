@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import NoSsr from '@mui/base/NoSsr';
 import _get from 'lodash/get';
 import Stack from '@mui/material/Stack';
 import { useKeenSlider } from "keen-slider/react";
+import { DateTime } from "luxon";
 
 export default function Fixture(props) {
   const fixture = _get(props, "fixture", {});
+  const fixtureBarcode = _get(props, "fixtureBarcode", {});
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const [loaded, setLoaded] = useState(false);
+  const updatedAt = fixtureBarcode?.updated_at && new Date(fixtureBarcode.updated_at);
   const [sliderRef, instanceRef] = useKeenSlider(
     {
       initial: 0,
@@ -22,11 +26,14 @@ export default function Fixture(props) {
   return (
     <div className="fixture-details">
       <Stack spacing={1}>
+        <NoSsr>
         <h3 className="no-margig">{fixture.name}</h3>
         {fixture.type &&<p><b>Type: </b>{fixture.type}</p>}
         {fixture.component_length && <p><b>Length: </b>{fixture.component_length}</p>}
+        {updatedAt && <p><b>Last updated on: </b>{updatedAt.toLocaleString(DateTime.DATETIME_FULL)}</p>}
         {fixture.component_width && <p><b>Width: </b>{fixture.component_width}</p>}
         {fixture.component_height && <p><b>Height: </b>{fixture.component_height}</p>}
+        </NoSsr>
         <div className="navigation-wrapper">
           <div ref={sliderRef} className="keen-slider">
             {fixture.front_image &&

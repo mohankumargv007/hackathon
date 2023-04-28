@@ -17,7 +17,7 @@ export default function Search(props) {
   const { cardhref, fixtureTypes } = props;
   const allfixtures = _get(props, "fixtureLibrary", []);
   let fixtures = _cloneDeep(allfixtures);
-
+  const zone = _get(router,'query.zone',"")
   const [name, setName] = React.useState('');
   const [inputName, setInputName] = React.useState('');
 

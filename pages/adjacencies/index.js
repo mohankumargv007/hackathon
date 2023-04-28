@@ -15,7 +15,7 @@ const Scandit = dynamic(() => import('../../components/scandit'), {
 export default function Fixture(props) {
   const { loginDetails } = props;
   const router = useRouter();
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([""]);
   const [error, setError] = useState(false);
   const [manual, setManual] = useState(false);
 
@@ -32,12 +32,12 @@ export default function Fixture(props) {
       router.push(`/adjacencies/${productCode}`);
     } else {
       setError(true);
-      setResults([]);
+      setResults([""]);
     }
   }
 
   const _onDetected = useCallback((result) => {
-    setResults([]);
+    setResults([""]);
     setResults([result])
   }, []);
 

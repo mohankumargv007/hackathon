@@ -53,7 +53,7 @@ export default function Fixture(props) {
         <Alert severity="info">Fixture removed successfully!</Alert>
       }
       <Stack spacing={2}>
-        <FixtureDetails fixture={fixture} />
+        <FixtureDetails fixture={fixture} fixtureBarcode={fixtureBarcode} />
         {fixtureBarcode.status ?
           <>
             <Alert severity="error">This will remove fixture mapping. Are you sure?</Alert>

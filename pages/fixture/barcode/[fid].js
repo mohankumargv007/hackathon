@@ -118,8 +118,12 @@ export default function Fixture(props) {
         <Alert severity="success">QRCode saved successfully!</Alert>
         }
         <div id="printableArea">
-          <p>4 way new format stand 125CM</p>
-          <QRCode value={code} />
+          <p>{fixture.name}</p>
+          <div style={{display:'flex'}}>
+            <QRCode value={code} />
+            <div style={{paddingLeft : '20px'}}><img src={fixture.cad_image || fixture.front_image || fixture.lateral_image} width="256" height="256" /></div>
+          </div>
+          <p>{barCode}</p>
         </div>
         <Button onClick={handlePrint} variant="contained" size="large">Print</Button>
       </Stack>

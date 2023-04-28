@@ -8,7 +8,7 @@ export default function Home({loginDetails}) {
   return (
     <Layout title="SMT" loginDetails={loginDetails}>
       <Stack spacing={2} sx={{ width: "100%" }}>
-        <Link className={styles.btn} href="/merchandise/scan-fixture" passHref legacyBehavior>
+        <Link className={styles.btn} href="/merchandise/barcode/zone" passHref legacyBehavior>
           <Button role="map-merchandise" variant="contained" className={styles.btn} size="large">Map Merchandise</Button>
         </Link>
         <Link className={styles.btn} href="/fixture/remove" passHref legacyBehavior>

@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import _get from 'lodash/get';
+import NoSsr from '@mui/base/NoSsr';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
@@ -43,12 +44,14 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { loginDetails } = props;
+  const {storeId} = loginDetails
   const router = useRouter();
+  const zone = _get(router,'query.zone','')
   const barcode = _get(router, "query.barcode", "");
   const count = _get(router, "query.count", 1);
 
   const fixture = _get(props, "data.0.fixture_library", {});
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([""]);
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -59,7 +62,7 @@ export default function Fixture(props) {
   }
 
   const _onDetected = useCallback((result) => {
-    setResults([]);
+    setResults([""]);
     setResults([result]);
     setError(false);
   }, []);
@@ -67,7 +70,7 @@ export default function Fixture(props) {
   const handleProduct = async (productCode) => {
     const url = `/api/fixture/merchandise/${productCode}`;
     const response = await fetch(url);
-    const { data, error } = await response.json();
+    const { data } = await response.json();
     const group = _get(data, "data.0.group", '');
     const department = _get(data, "data.0.department", '');
 
@@ -83,7 +86,7 @@ export default function Fixture(props) {
         :
         setError("Product not found !");
 
-    setResults([]);
+    setResults([""]);
   }
 
   const handleSubmit = async () => {
@@ -94,14 +97,16 @@ export default function Fixture(props) {
         barcode,
         fixture,
         products,
-        count
+        count,
+        storeId,
+        zone
       })
     }
 
     const response = await fetch(url, options);
-    const { data, error } = await response.json();
+    const { data } = await response.json();
     data.length && setSaved(true);
-    setResults([])
+    setResults([""])
   }
 
   const notification = (type, msg) => {
@@ -117,15 +122,20 @@ export default function Fixture(props) {
       ></Notification>
     )
   }
-
-  const dt = new Date(_get(props, "data.0.created_at"));
+  
+  const dt = new Date(_get(props, "data.0.updated_at"));
   return (
-    <Layout title="Scan Products" footer={{title:"Map Merchandise", link:"/merchandise/scan-fixture"}} loginDetails={loginDetails}>
+    <Layout title="Scan Products" footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}} loginDetails={loginDetails}>
       <Stack spacing={2}>
         <div>
           <h3 className="no-margig">{fixture.name}</h3>
+          <NoSsr>
           <p>Last updated on: {dt.toLocaleString(DateTime.DATETIME_FULL)}</p>
+          </NoSsr>
+
           <p>Type: {fixture.type}</p>
+          <h3 className="no-margig">Zone : {zone}</h3>
+
           <b>Add products</b>
         </div>
         <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
