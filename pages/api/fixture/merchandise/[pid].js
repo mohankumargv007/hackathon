@@ -30,22 +30,18 @@ export default async function handler(req, res) {
         class: product.class,
         sub_class: product.sub_class,
         fixture_key: body.fixture.key,
-        linear_meter: body.count ? ((body.count * body.fixture.linear_meter) / arr.length) : (body.fixture.linear_meter / arr.length)
+        linear_meter: body.count ? ((body.count * body.fixture.linear_meter) / arr.length) : (body.fixture.linear_meter / arr.length),
+        zone: body.zone
       }
     })
     try {
-      if (body.nonDynamicFixture) {
-        await supabase
-          .from('fixture_barcode')
-          .upsert({ store_id: body.storeId, fixture_key: body.fixture.key, counter: 1, fixture_barcode: `${body.storeId}${body.fixture.key}001` }, { onConflict: 'fixture_barcode' })
-      } else {
         const now = new Date()
         const updatedISO = now.toISOString() 
-        const { data, error } = await supabase
+        const { data:updated, error:uError } = await supabase
           .from('fixture_barcode')
           .update({ updated_at: updatedISO })
           .eq('fixture_barcode', body.barcode)
-      }
+
       const { data, error } = await supabase
         .from('fixture_product_list')
         //fixture_barcode  store_id  item  group  department  class  sub_class  fixture_type  linear_meter
@@ -53,7 +49,7 @@ export default async function handler(req, res) {
         .select()
       res.status(200).json({data, error});
     } catch (error) {
-      res.status(500).send();
+      res.status(500).send(error);
     }
   } else {
     res.status(405).send({ message: 'Only PUT requests allowed' })

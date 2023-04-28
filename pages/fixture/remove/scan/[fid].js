@@ -57,7 +57,7 @@ export default function Fixture(props) {
   const [fbdata, setFbdata] = useState(_get(props, "fbdata"));
   const fixture = _get(props, "data.0", {});
   const barcode = fbdata.length && fbdata[0].fixture_barcode
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([""]);
   const [products, setProducts] = useState([])
   const [removed, setRemoved] = useState(false)
   const [error, setError] = useState("")
@@ -68,7 +68,7 @@ export default function Fixture(props) {
   }
 
   const _onDetected = useCallback((result) => {
-    setResults([]);
+    setResults([""]);
     setResults([result]);
     setError(false);
   }, []);
@@ -93,7 +93,7 @@ export default function Fixture(props) {
           :
           setError("Product not found !");
 
-      setResults([])
+      setResults([""])
     } catch (error) {
       console.log("get product details error: ", error);
     }

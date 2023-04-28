@@ -29,12 +29,13 @@ export default function Fixture(props) {
   const { loginDetails } = props;
   const router = useRouter();
   const barcode = _get(router, "query.barcode", "");
+  const zone = _get(router,'query.zone',"")
   const fixture = _get(props, "data.0.fixture_library", {});
   return (
     <Layout title="Review Fixture Details" loginDetails={loginDetails}>
       <Stack spacing={2}>
         <FixtureDetails fixture={fixture} fixtureBarcode={_get(props, "data.0")}/>
-        <Link href={`/merchandise/barcode/scan/${barcode}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
+        <Link href={`/merchandise/barcode/scan/${barcode}?zone=${zone}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
       </Stack>
     </Layout>
   )

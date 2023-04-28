@@ -17,7 +17,8 @@ const Scandit = dynamic(() => import('../../components/scandit'), {
 export default function Fixture(props) {
   const { loginDetails } = props;
   const router = useRouter();
-  const [results, setResults] = useState([]);
+  const zone = _get(router,'query.zone','')
+  const [results, setResults] = useState([""]);
   const [error, setError] = useState(false);
   const [manual, setManual] = useState(false);
 
@@ -31,15 +32,15 @@ export default function Fixture(props) {
     const response = await fetch(url);
     const { data, error } = await response.json();
     if (data.length) {
-      router.push(`/merchandise/barcode/${code}`);
+      router.push(`/merchandise/barcode/${code}?zone=${zone}`);
     } else {
       setError(true);
-      setResults([]);
+      setResults([""]);
     }
   }
 
   const _onDetected = useCallback((result) => {
-    setResults([]);
+    setResults([""]);
     if (result.length == 13) {
       setResults([result])
     }
@@ -62,7 +63,7 @@ export default function Fixture(props) {
   return (
     <Layout title="Scan Fixture" loginDetails={loginDetails}>
       <Stack spacing={4}>
-        <Link href={`/merchandise/search`} passHref legacyBehavior><Button variant="contained" size="large">Arms, Prongs, Shelves</Button></Link>
+        <Link href={`/merchandise/search?zone=${zone}`} passHref legacyBehavior><Button variant="contained" size="large">Arms, Prongs, Shelves</Button></Link>
         <Scandit btnText="Scan Fixture" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
         <Box display="flex">
           <TextField

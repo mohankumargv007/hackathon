@@ -37,7 +37,7 @@ export async function getServerSideProps(context) {
 
 export default function Fixture(props) {
   const { loginDetails } = props;
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([""]);
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -49,7 +49,7 @@ export default function Fixture(props) {
   }
 
   const _onDetected = useCallback((result) => {
-    setResults([]);
+    setResults([""]);
     setResults([result]);
     setError(false);
   }, []);
@@ -79,7 +79,7 @@ export default function Fixture(props) {
           setError("Product not found !");
     }
 
-    setResults([])
+    setResults([""])
   }
 
 
@@ -98,7 +98,7 @@ export default function Fixture(props) {
     if (!mappedSuccess) {
       setError("Something went wrong!")
     }
-    setResults([])
+    setResults([""])
   }
 
   const notification = (type, msg) => {

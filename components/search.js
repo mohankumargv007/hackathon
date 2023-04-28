@@ -2,6 +2,7 @@ import * as React from 'react';
 import _get from 'lodash/get';
 import _map from 'lodash/map';
 import _cloneDeep from 'lodash/cloneDeep';
+import { useRouter } from 'next/router';
 import _uniqBy from 'lodash/uniqBy';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -19,10 +20,12 @@ const merchadiseTypes = [{
   }];
 
 export default function Search(props) {
+
   const { merchadiseTypesFlag, cardhref } = props;
   const allfixtures = _get(props, "data", []);
   let fixtures = _cloneDeep(allfixtures);
-
+  const router = useRouter();
+  const zone = _get(router,'query.zone',"")
   const [name, setName] = React.useState('');
   const [inputName, setInputName] = React.useState('');
 
@@ -43,7 +46,7 @@ export default function Search(props) {
 
   const listItems = _map(fixtures, (fixture, index) =>
     <Grid item xs={6} key={`grid-${index}`}>
-      <Card {...fixture} href={`${cardhref}${fixture.id}`} />
+      <Card {...fixture} href={`${cardhref}${fixture.id}?zone=${zone}`} />
     </Grid>
   );
 

@@ -16,9 +16,7 @@ const Scandit = dynamic(() => import('../../../../components/scandit'), {
 
 export default function Fixture(props) {
   const { loginDetails } = props;
-  const router = useRouter();
-  const query = _get(router, "query", {});
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([""]);
   const [error, setError] = useState(false);
   const [manual, setManual] = useState(false);
 
@@ -27,7 +25,7 @@ export default function Fixture(props) {
   }
 
   const _onDetected = useCallback((result) => {
-    setResults([]);
+    setResults([""]);
     if (result.length > 5) {
       setResults([result])
     }
@@ -78,7 +76,7 @@ export default function Fixture(props) {
         </Box>
         {error && notification("error", "Barcode not found !")}
         {_get(results, "0") ?
-          <Link href={`/merchandise/barcode/scan/${query.barcode}?count=${query.count}&zone=${_get(results, "0")}`} passHref legacyBehavior><Button variant="contained" size="large">Add Products</Button></Link>
+          <Link href={`/merchandise/scan-fixture?zone=${_get(results, "0")}`} passHref legacyBehavior><Button variant="contained" size="large">Add Products</Button></Link>
           : null
         }
       </Stack>
