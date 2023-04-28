@@ -32,7 +32,7 @@ export default function Fixture(props) {
   const zone = _get(router,'query.zone',"")
   const fixture = _get(props, "data.0.fixture_library", {});
   return (
-    <Layout title="Review Fixture Details" loginDetails={loginDetails}>
+    <Layout title="Review Fixture Details" loginDetails={loginDetails} footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}}>
       <Stack spacing={2}>
         <FixtureDetails fixture={fixture} fixtureBarcode={_get(props, "data.0")}/>
         <Link href={`/merchandise/barcode/scan/${barcode}?zone=${zone}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>

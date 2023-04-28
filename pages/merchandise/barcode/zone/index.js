@@ -46,7 +46,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Zone" loginDetails={loginDetails} footer={{title:"Map Merchandise", link:"/merchandise/scan-fixture"}}>
+    <Layout title="Scan Zone" loginDetails={loginDetails}>
       <Stack spacing={4}>
         <Scandit btnText="Scan Zone" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
         <Box display="flex">
@@ -76,7 +76,7 @@ export default function Fixture(props) {
         </Box>
         {error && notification("error", "Barcode not found !")}
         {_get(results, "0") ?
-          <Link href={`/merchandise/scan-fixture?zone=${_get(results, "0")}`} passHref legacyBehavior><Button variant="contained" size="large">Add Products</Button></Link>
+          <Link href={`/merchandise/scan-fixture?zone=${_get(results, "0")}`} passHref legacyBehavior><Button variant="contained" size="large">Scan Fixture</Button></Link>
           : null
         }
       </Stack>

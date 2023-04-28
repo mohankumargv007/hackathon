@@ -74,7 +74,7 @@ export default function Fixture(props) {
   }, [page, type, name]);
 
   return (
-    <Layout title="Select Fixture" loginDetails={loginDetails}>
+    <Layout title="Select Fixture" loginDetails={loginDetails} footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}}>
       <SearchFixture {...props} fixtureLibrary={fixtureLibrary} fixtureTypes={fixtureTypes} cardhref={`/merchandise/fid/`} />
       {fixtureCount/fixturesInPage > 1 &&
         <Pagination fixtureCount={fixtureCount} fixturesInPage={fixturesInPage} pages={Math.ceil(fixtureCount/fixturesInPage)} />
