@@ -13,7 +13,8 @@ const fixturesInPage = publicRuntimeConfig.fixturesInPage;
 export async function getServerSideProps(context) {
   // Fetch data from external API
   const page = _get(context, "query.page", 1);
-  const type = _get(context, "query.type");
+  const type = decodeURIComponent(_get(context, "query.type", ""));
+  const name = decodeURIComponent(_get(context, "query.name", ""));
 
   const startRange = (page - 1) * fixturesInPage;
   const endRange = (page * fixturesInPage) - 1;
@@ -22,11 +23,14 @@ export async function getServerSideProps(context) {
 
   let query = supabase
   .from('fixture_library')
-  .select('*', { count: 'exact' })
-  .eq('status', true)
+  .select('*', { count: 'exact' });
 
-  if(type) query.textSearch('type', `'${type}'`)
-  query.range(startRange, endRange)
+  if(type.length > 0) {
+    query.eq('type', type);
+  }
+  query.eq('status', true);
+  if(name.length > 0) query.textSearch('name', `'${name}'`);
+  query.range(startRange, endRange);
 
   const { data: fixtureLibrary, count: fixtureCount, error: fixtureError } = await query;
   const { data: fixtureTypes, error } = await supabase.rpc('get_fixture_types');
@@ -42,9 +46,12 @@ export default function Fixture(props) {
   const router = useRouter();
   const page = _get(router, "query.page", 1);
   const type = _get(router, "query.type", "");
+  const name = _get(router, "query.name", "");
 
   const getFixtureLibrary = async () => {
-    const url = `/api/fixture/fixtureLibrary?page=${page}&type=${type}`;
+    let url = `/api/fixture/fixtureLibrary?page=${page}`;
+    if(type) url = `${url}&type=${type}`;
+    if(name) url = `${url}&name=${name}`;
     const response = await fetch(url);
     const { fixtureLibrary, count } = await response.json();
     setFixtureLibrary(fixtureLibrary);
@@ -57,7 +64,7 @@ export default function Fixture(props) {
     } else {
       mounted.current = true;
     }
-  }, [page, type]);
+  }, [page, type, name]);
 
   return (
     <Layout title="Select Fixture" loginDetails={loginDetails}>

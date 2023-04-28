@@ -15,13 +15,15 @@ const fixtureTypes = [{
   }, {
     type: "Prong"
   }, {
-    type: "Shelves"
+    type: "Shelves&Bins"
   }];
 
 export async function getServerSideProps(context) {
   // Fetch data from external API
   const page = _get(context, "query.page", 1);
-  const type = _get(context, "query.type");
+  const type = decodeURIComponent(_get(context, "query.type", ""));
+  const name = decodeURIComponent(_get(context, "query.name", ""));
+
   const startRange = (page - 1) * fixturesInPage;
   const endRange = (page * fixturesInPage) - 1;
 
@@ -31,12 +33,13 @@ export async function getServerSideProps(context) {
   .from('fixture_library')
   .select('*', { count: 'exact' });
 
-  if(type) {
-    query.textSearch('type', `'${type}'`);
+  if(type.length > 0) {
+    query.eq('type', type);
   } else {
     query.or('type.ilike.%arm%,type.ilike.%prong%,type.ilike.%shelves%');
   }
   query.eq('status', true);
+  if(name.length > 0) query.textSearch('name', `'${name}'`);
   query.range(startRange, endRange);
 
   const { data: fixtureLibrary, count: fixtureCount, error: fixtureError } = await query;
@@ -51,9 +54,11 @@ export default function Fixture(props) {
   const router = useRouter();
   const page = _get(router, "query.page", 1);
   const type = _get(router, "query.type", "armsprongsshelves");
+  const name = _get(router, "query.name", "");
 
   const getFixtureLibrary = async () => {
-    const url = `/api/fixture/fixtureLibrary?page=${_get(router, "query.page", 1)}&type=${type}`;
+    let url = `/api/fixture/fixtureLibrary?page=${page}&type=${type}`;
+    if(name) url = `${url}&name=${name}`;
     const response = await fetch(url);
     const { fixtureLibrary, count } = await response.json();
     setFixtureLibrary(fixtureLibrary);
@@ -66,7 +71,7 @@ export default function Fixture(props) {
     } else {
       mounted.current = true;
     }
-  }, [page, type]);
+  }, [page, type, name]);
 
   return (
     <Layout title="Select Fixture" loginDetails={loginDetails} footer={{title:"Remove Fixture", link:"/fixture/remove"}}>

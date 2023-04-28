@@ -91,9 +91,15 @@ a {
 
 .input-search {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-autocomplete {
+  flex-grow: 1;
+  margin-right: 15px;
 }
 
 .input-text {
-  flex-grow: 1;
-  margin-right: 15px;
+  margin-bottom: 15px;
 }

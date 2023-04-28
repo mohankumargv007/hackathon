@@ -24,20 +24,17 @@ export default function Search(props) {
   const [type, setType] = React.useState('');
   const [inputType, setInputType] = React.useState('');
 
-  const fixtureTypeSearch = () => {
+  const fixtureNameTypeSearch = () => {
+    let searchQuery = {};
     if(inputType.length > 1) {
-      let searchQuery = `?type=${inputType}`;
-      router.push(searchQuery, undefined, { shallow: true });
-    } else if(inputType.length == 0){
-      let searchQuery = ``;
-      router.push(searchQuery, undefined, { shallow: true });
+      searchQuery.type = encodeURIComponent(inputType);
     }
-  }
-
-  if(name) {
-    fixtures = fixtures.filter((fixt) => {
-      return fixt.name.includes(name);
-    })
+    if(inputName.length > 1) {
+      searchQuery.name = encodeURIComponent(inputName);
+    }
+    router.push({
+      query: searchQuery
+    }, undefined, { shallow: true })
   }
 
   const listItems = _map(fixtures, (fixture, index) =>
@@ -50,39 +47,41 @@ export default function Search(props) {
     <main className={styles.main}>
       <Stack sx={{ width: "100%" }} spacing={2}>
         <div className="input-search">
-          <Autocomplete
-            value={type}
-            onChange={(event, newValue) => {
-              setType(newValue);
-            }}
-            inputValue={inputType}
-            onInputChange={(event, newInputType) => {
-              setInputType(newInputType);
-            }}
-            className="input-text"
-            id="search-fixture-type"
-            autoComplete
-            options={fixtureTypes.map((option) => option.type)}
-            renderInput={(params) => <TextField {...params} label="Filter via Type" />}
-          />
-          <Button variant="contained" onClick={fixtureTypeSearch}>Go</Button>
-        </div>
-        <div className="input-search">
-          <Autocomplete
-            value={name}
-            onChange={(event, newValue) => {
-              setName(newValue);
-            }}
-            inputValue={inputName}
-            onInputChange={(event, newInputName) => {
-              setInputName(newInputName);
-            }}
-            className="input-text"
-            id="search-fixture-name"
-            autoComplete
-            options={_uniqBy(fixtures, 'name').map((option) => option.name)}
-            renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
-          />
+          <div className="input-autocomplete">
+            <div className="input-text">
+              <Autocomplete
+                value={type}
+                onChange={(event, newValue) => {
+                  setType(newValue);
+                }}
+                inputValue={inputType}
+                onInputChange={(event, newInputType) => {
+                  setInputType(newInputType);
+                }}
+                id="search-fixture-type"
+                autoComplete
+                options={fixtureTypes.map((option) => option.type)}
+                renderInput={(params) => <TextField {...params} label="Filter via Type" />}
+              />
+            </div>
+            <div>
+              <Autocomplete
+                value={name}
+                onChange={(event, newValue) => {
+                  setName(newValue);
+                }}
+                inputValue={inputName}
+                onInputChange={(event, newInputName) => {
+                  setInputName(newInputName);
+                }}
+                id="search-fixture-name"
+                autoComplete
+                options={_uniqBy(fixtures, 'name').map((option) => option.name)}
+                renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
+              />
+            </div>
+          </div>
+          <Button variant="contained" size="large" onClick={fixtureNameTypeSearch}>Go</Button>
         </div>
         <h3>Fixtures</h3>
         <div>
