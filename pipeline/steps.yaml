@@ -43,6 +43,7 @@ steps:
       script: |
         # Write your commands here
         cd $(system.defaultworkingdirectory)
+        rm -rf .vercel
         vercel $(env-parameter) --token=$(VERCEL-LMG-TOKEN)
     env:
         VERCEL_ORG_ID: $(VERCEL_ORG_ID)
