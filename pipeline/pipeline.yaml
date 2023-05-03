@@ -11,7 +11,8 @@ variables:
    
 stages:
   - stage: dev
-    condition: or(eq(variables['Build.Reason'], 'Manual'), eq(variables['build.sourceBranch'], 'refs/heads/dev')) 
+    #condition: or(eq(variables['Build.Reason'], 'Manual'), eq(variables['build.sourceBranch'], 'refs/heads/dev')) 
+    condition: eq(variables['build.sourceBranch'], 'refs/heads/dev')
     displayName: dev
     jobs:
       - deployment: dev
