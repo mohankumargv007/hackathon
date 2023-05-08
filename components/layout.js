@@ -4,9 +4,11 @@ import _get from 'lodash/get';
 import { useRouter } from 'next/router';
 import Header from './header';
 import Footer from './footer';
+import { useUserContext } from './../contexts/userContext';
 
-export default function Layout({children, title, footer, loginDetails}) {
+export default function Layout({children, title, footer}) {
   const router = useRouter();
+  const loginDetails = useUserContext();
   return (
     <>
       <Header title={title} />

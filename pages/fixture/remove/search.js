@@ -47,7 +47,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
-  const { loginDetails } = props;
   const mounted = useRef(false);
   const [fixtureLibrary, setFixtureLibrary] = useState(_get(props, "fixtures"));
   const [fixtureCount, setFixtureCount] = useState(_get(props, "fixtureCount"));
@@ -74,7 +73,7 @@ export default function Fixture(props) {
   }, [page, type, name]);
 
   return (
-    <Layout title="Select Fixture" loginDetails={loginDetails} footer={{title:"Remove Fixture", link:"/fixture/remove"}}>
+    <Layout title="Select Fixture" footer={{title:"Remove Fixture", link:"/fixture/remove"}}>
       <SearchFixture {...props} fixtureLibrary={fixtureLibrary} fixtureTypes={fixtureTypes} cardhref={`/fixture/remove/fid/`} />
       {fixtureCount/fixturesInPage > 1 &&
         <Pagination fixtureCount={fixtureCount} fixturesInPage={fixturesInPage} pages={Math.ceil(fixtureCount/fixturesInPage)} />

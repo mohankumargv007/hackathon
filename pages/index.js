@@ -4,9 +4,9 @@ import Link from 'next/link';
 import Layout from '../components/layout';
 import styles from '../styles/Home.module.css';
 
-export default function Home({loginDetails}) {
+export default function Home() {
   return (
-    <Layout title="SMT" loginDetails={loginDetails}>
+    <Layout title="SMT">
       <Stack spacing={2} sx={{ width: "100%" }}>
         <Link className={styles.btn} href="/merchandise/barcode/zone" passHref legacyBehavior>
           <Button role="map-merchandise" variant="contained" className={styles.btn} size="large">Map Merchandise</Button>

@@ -15,7 +15,6 @@ const Scandit = dynamic(() => import('../../components/scandit'), {
 })
 
 export default function Fixture(props) {
-  const { loginDetails } = props;
   const router = useRouter();
   const zone = _get(router,'query.zone','')
   const [results, setResults] = useState([""]);
@@ -61,7 +60,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Fixture" loginDetails={loginDetails} footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}}>
+    <Layout title="Scan Fixture" footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}}>
       <Stack spacing={4}>
         <Link href={`/merchandise/search?zone=${zone}`} passHref legacyBehavior><Button variant="contained" size="large">Arms, Prongs, Shelves</Button></Link>
         <Scandit btnText="Scan Fixture" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />

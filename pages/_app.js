@@ -4,6 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { theme } from "../styles/theme";
 import AdminLayout from '../components/admin/admin-layout';
 import { useRouter } from 'next/router';
+import { UserProvider } from './../contexts/userContext';
 import 'keen-slider/keen-slider.min.css';
 import '../styles/globals.css';
 
@@ -24,14 +25,17 @@ function MyApp({ Component, pageProps, scandit_licence_key }) {
 	const router = useRouter();
 	return (
 		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			{
-				router.pathname.includes('admin') ?
-				<AdminLayout>
-					<Component {...pageProps} loginDetails={loginDetails} />
-				</AdminLayout> :
-				<Component {...pageProps} scandit_licence_key={scandit_licence_key} loginDetails={loginDetails} />
-			}
+			<UserProvider value={loginDetails}>
+				<CssBaseline />
+				{
+					router.pathname.includes('admin') ?
+					<AdminLayout>
+						<Component {...pageProps} />
+					</AdminLayout>
+					:
+					<Component {...pageProps} scandit_licence_key={scandit_licence_key} />
+				}
+			</UserProvider>
 		</ThemeProvider>
 		);
 	}
