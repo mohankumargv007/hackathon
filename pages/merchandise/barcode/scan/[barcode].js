@@ -20,6 +20,7 @@ import { TextField } from '@mui/material';
 import Layout from '../../../../components/layout';
 import Notification from "../../../../components/reusable-components/alert";
 import { supabaseConnection } from '../../../../utils/supabase';
+import { useUserContext } from './../../../../contexts/userContext';
 const Scandit = dynamic(() => import('../../../../components/scandit'), {
   ssr: false,
 })
@@ -43,7 +44,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
-  const { loginDetails } = props;
+  const loginDetails = useUserContext();
   const {storeId} = loginDetails
   const router = useRouter();
   const zone = _get(router,'query.zone','')
@@ -125,7 +126,7 @@ export default function Fixture(props) {
   
   const dt = new Date(_get(props, "data.0.updated_at"));
   return (
-    <Layout title="Scan Products" footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}} loginDetails={loginDetails}>
+    <Layout title="Scan Products" footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}}>
       <Stack spacing={2}>
         <div>
           <h3 className="no-margig">{fixture.name}</h3>

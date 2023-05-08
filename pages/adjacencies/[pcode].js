@@ -36,7 +36,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
-  const { loginDetails } = props;
   const [results, setResults] = useState([""]);
   const [products, setProducts] = useState([]);
   const [saved, setSaved] = useState(false);
@@ -116,7 +115,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Products" footer={{ title: "Map Adjacencies", link: "/adjacencies" }} loginDetails={loginDetails}>
+    <Layout title="Scan Products" footer={{ title: "Map Adjacencies", link: "/adjacencies" }}>
       <h3>Parent Product Details:</h3>
       <Stack spacing={2}>
         <Stack spacing={1}>
