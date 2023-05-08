@@ -37,9 +37,10 @@ export default function Search(props) {
     }, undefined, { shallow: true })
   }
 
+  const zonequery = zone.length > 0 ? `?zone=${zone}` : "";
   const listItems = _map(fixtures, (fixture, index) =>
     <Grid item xs={6} sm={3} key={`grid-${index}`}>
-      <Card {...fixture} href={`${cardhref}${fixture.id}`} />
+      <Card {...fixture} href={`${cardhref}${fixture.id}${zonequery}`} />
     </Grid>
   )
 
