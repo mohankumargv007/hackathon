@@ -7,15 +7,22 @@ import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
 import styles from '../styles/Login.module.css';
 import Notification from '../components/reusable-components/alert';
+import { useUser } from '@supabase/auth-helpers-react'
 
 export default Login;
 
-function Login() {
+function Login(props) {
     const supabase = createBrowserSupabaseClient();
 
     const router = useRouter();
+    
+    const user = useUser()
 
     const [loading, setLoading] = React.useState(false);
+
+    if (user && loading === false) {
+        router.replace('/')
+    }
 
     const [toastStatus, setToastStatus] = React.useState(false);
 
