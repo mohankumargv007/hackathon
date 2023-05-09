@@ -86,7 +86,7 @@ stages:
                       git push $PROJECT --tags
 
   - stage: prod
-    condition: eq(variables['build.sourceBranch'], 'refs/heads/release')
+    condition: succeeded('tag')
     displayName: prod
     jobs:
       - deployment: prod
