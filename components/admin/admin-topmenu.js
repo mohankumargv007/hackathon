@@ -126,7 +126,8 @@ function Topbar() {
             <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Venkat Mohankumar Goli" src="/static/images/avatar/2.jpg" />
+                        {/* TODO : Need to update the user name once we get user information */}
+                        <Avatar alt="User Name" />
                     </IconButton>
                 </Tooltip>
                 <Menu
