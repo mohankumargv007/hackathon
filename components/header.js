@@ -70,7 +70,7 @@ export default function Header(props) {
             router.push("/login")                
         } catch (error) {
             document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
-            router.reload(window.location.pathname);
+            router.reload();
         }
     }
 

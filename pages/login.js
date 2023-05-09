@@ -63,7 +63,7 @@ function Login() {
             router.push("/");
         } catch (error) {
             document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
-            router.reload(window.location.pathname);
+            router.reload();
             setLoading(false);
         }
     }
