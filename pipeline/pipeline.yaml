@@ -67,7 +67,7 @@ stages:
                 - task: AzureKeyVault@1
                   displayName: PullSecrets
                   inputs:
-                    azureSubscription: $(kvServiceConnection)-$(project)
+                    azureSubscription: $(azureSubscription)-$(project)
                     KeyVaultName: $(KeyVaultName)
                     SecretsFilter: 'PIPELINE-PYTHON-PAT'
                     RunAsPreJob: true
