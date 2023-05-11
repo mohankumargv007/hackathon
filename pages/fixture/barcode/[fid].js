@@ -117,12 +117,19 @@ export default function Fixture(props) {
         <Alert severity="success">QRCode saved successfully!</Alert>
         }
         <div id="printableArea">
-          <p>{fixture.name}</p>
-          <div style={{display:'flex'}}>
+         
+          <div className={styles.printArea}>
+          <div className={styles.flex}>
             <QRCode value={code} />
-            <div style={{paddingLeft : '20px'}}><img src={fixture.cad_image || fixture.front_image || fixture.lateral_image} width="256" height="256" /></div>
-          </div>
-          <p>{barCode}</p>
+            <p className={styles.para}>{barCode}</p>
+           </div>
+          
+            <div className={styles.flexx}>
+              <img src={fixture.cad_image || fixture.front_image || fixture.lateral_image} width="256" height="256" />
+            <p className={styles.para}>{fixture.name}</p>
+            </div>
+            </div>
+    
         </div>
         <Button onClick={handlePrint} variant="contained" size="large">Print</Button>
       </Stack>

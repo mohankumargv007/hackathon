@@ -1,3 +1,22 @@
+.para{
+  text-align : center;
+}
 .container {
   padding: 20px;
+}
+
+.flex{
+  display:flex ;
+   flex-direction:column;
+  }
+
+.flexx{
+  padding-left : 20px;
+  display:flex ;
+  flex-direction:column;
+}
+
+.printArea{
+  display:flex;
+     flex-direction:row;
 }
