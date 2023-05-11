@@ -5,12 +5,12 @@
   padding: 20px;
 }
 
-.flex{
+.qrcode{
   display:flex ;
    flex-direction:column;
   }
 
-.flexx{
+.fixtureImg{
   padding-left : 20px;
   display:flex ;
   flex-direction:column;
@@ -18,5 +18,5 @@
 
 .printArea{
   display:flex;
-     flex-direction:row;
+  flex-direction : row;
 }

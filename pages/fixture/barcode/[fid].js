@@ -119,12 +119,12 @@ export default function Fixture(props) {
         <div id="printableArea">
          
           <div className={styles.printArea}>
-          <div className={styles.flex}>
+          <div className={styles.qrCode}>
             <QRCode value={code} />
             <p className={styles.para}>{barCode}</p>
            </div>
           
-            <div className={styles.flexx}>
+            <div className={styles.fixtureImg}>
               <img src={fixture.cad_image || fixture.front_image || fixture.lateral_image} width="256" height="256" />
             <p className={styles.para}>{fixture.name}</p>
             </div>
