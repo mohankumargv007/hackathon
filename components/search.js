@@ -66,20 +66,12 @@ export default function Search(props) {
               />
             </div>
             <div>
-              <Autocomplete
-                value={name}
-                onChange={(event, newValue) => {
-                  setName(newValue);
-                }}
-                inputValue={inputName}
-                onInputChange={(event, newInputName) => {
-                  setInputName(newInputName);
-                }}
-                id="search-fixture-name"
-                autoComplete
-                options={_uniqBy(fixtures, 'name').map((option) => option.name)}
-                renderInput={(params) => <TextField {...params} label="Search Fixture via name" />}
-              />
+              <TextField value={inputName}
+                fullWidth
+                onChange={(e) => {
+                  setInputName(e.target.value);
+                }} 
+                label="Search Fixture via name" />
             </div>
           </div>
           <Button variant="contained" size="large" onClick={fixtureNameTypeSearch}>Go</Button>
