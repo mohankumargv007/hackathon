@@ -48,7 +48,7 @@ export default function Fixture(props) {
         <FixtureDetails fixture={fixture} fixtureBarcode={fixturecode} />
         <b>Enter count of Fixtures:</b>
         <OutlinedInput placeholder="Please enter fixtures count" type="number" value={fcount} onChange={handleChange} />
-        <Link href={`/fixture/remove/scan/${fid}?count=${fcount}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
+        <Link href={`/fixture/remove/zone/${fid}?count=${fcount}`} passHref legacyBehavior><Button variant="contained" size="large">Confirm</Button></Link>
       </Stack>
     </Layout>
   )

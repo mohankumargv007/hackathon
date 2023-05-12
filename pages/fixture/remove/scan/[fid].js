@@ -52,6 +52,7 @@ export default function Fixture(props) {
   const router = useRouter();
   const fid = _get(router, "query.fid", "");
   const count = _get(router, "query.count", "")
+  const zone = _get(router, "query.zone", "")
 
   const [fbdata, setFbdata] = useState(_get(props, "fbdata"));
   const fixture = _get(props, "data.0", {});
@@ -105,7 +106,8 @@ export default function Fixture(props) {
         barcode,
         fixture,
         products,
-        count
+        count,
+        zone
       })
     }
     const response = await fetch(url, options);

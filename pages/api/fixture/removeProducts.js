@@ -8,11 +8,12 @@ export default async function handler(req, res) {
     const supabase = supabaseConnection();
     const body = JSON.parse(req.body);
     const fixtureCount = body.count ?? 1;
+    const zone = body.zone ?? null;
     const perProductSpace = (body.fixture.linear_meter * fixtureCount) / body.products.length;
     try {
       await body.products.map(async (product, i, arr) => {
         let { data: getSum, error: sumError } = await supabase
-          .rpc("get_sum_lm", { fbarcode: body.barcode, gname: product.group })
+          .rpc("get_sum_lm", { fbarcode: body.barcode, gname: product.group, zname: zone})
         if (getSum && getSum > 0) {
           const linearMeter = (getSum < perProductSpace) ? getSum : perProductSpace;
           const fixtureProduct = {
@@ -24,6 +25,7 @@ export default async function handler(req, res) {
             class: product.class,
             sub_class: product.sub_class,
             fixture_key: body.fixture.key,
+            zone: zone,
             linear_meter: -linearMeter
           }
           await supabase
