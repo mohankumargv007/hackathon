@@ -72,11 +72,11 @@ export default function Fixture(props) {
   if(fixture_barcode.counter) {
     counter = fixture_barcode.counter + 1;
     counter = counter.toLocaleString('en-US', {
-      minimumIntegerDigits: 3,
+      minimumIntegerDigits: 4,
       useGrouping: false
     })
   } else {
-    counter = `001`
+    counter = `0001`
   }
 
   //generating the barcode
