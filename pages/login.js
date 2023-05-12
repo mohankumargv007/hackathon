@@ -162,7 +162,6 @@ function Login(props) {
                     >
                         <LoadingButton
                             style={{width:"100%"}}
-                            color="secondary"
                             onClick={submitCredentials}
                             loading={loading}
                             variant="contained"
