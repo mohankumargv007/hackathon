@@ -1,3 +1,22 @@
+.para{
+  text-align : center;
+}
 .container {
   padding: 20px;
+}
+
+.qrcode{
+  display:flex ;
+   flex-direction:column;
+  }
+
+.fixtureImg{
+  padding-left : 20px;
+  display:flex ;
+  flex-direction:column;
+}
+
+.printArea{
+  display:flex;
+  flex-direction : row;
 }
