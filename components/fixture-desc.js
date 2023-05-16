@@ -38,12 +38,12 @@ export default function Fixture(props) {
           <div ref={sliderRef} className="keen-slider">
             {fixture.front_image &&
               <div className="keen-slider__slide number-slide1">
-                <img src={fixture.front_image} width="100%" />
+                <img src={fixture.cad_image} width="100%" />
               </div>
             }
             {fixture.cad_image &&
               <div className="keen-slider__slide number-slide2">
-                <img src={fixture.cad_image} width="100%" />
+                <img src={fixture.front_image} width="100%" />
               </div>
             }
             {fixture.lateral_image &&

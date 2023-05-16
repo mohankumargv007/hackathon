@@ -10,11 +10,13 @@ export default function MuiCard(props) {
   return (
     <Link href={props.href} passHref legacyBehavior>
       <Card>
-        <CardMedia
-          sx={{ height: 140 }}
-          image={props.front_image}
+        <div style={{height:'200px',display:'flex',alignItems:'center',justifyContent:'center'}}>
+        <img
+          style={{height:'100%'}}
+          src={props.cad_image || props.front_image || props.lateral_image}
           title={props.name}
         />
+        </div>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {props.name}
