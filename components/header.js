@@ -32,6 +32,10 @@ export default function Header(props) {
 
     const profileOptions = [
         {
+            label: "Profile",
+            action: () => router.replace('/profile')
+        },
+        {
             label: "Logout",
             action: () => signOut()
         }
