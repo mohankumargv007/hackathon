@@ -14,6 +14,7 @@ export async function middleware(req) {
   const { data: profile } = await supabase
     .from('profile')
     .select('id, first_name, last_name, store_id')
+    .single()
   if (!profile?.store_id && pathname !== '/profile') {
     url = new URL('/profile', req.url)
     return NextResponse.redirect(url);
