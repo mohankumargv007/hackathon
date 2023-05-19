@@ -28,9 +28,9 @@ async function inactiveSelectedFixture(row) {
 }
 
 //Fetch Fixture Library
-export async function getServerSideProps() {
+export async function getServerSideProps(res,) {
     // Fetch data from external API
-    const supabase = supabaseConnection();
+    const supabase = createBR();
     let { data, error } = await supabase
     .from('fixture_library')
     .select('*')
