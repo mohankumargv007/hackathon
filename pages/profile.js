@@ -126,19 +126,18 @@ export default function Profile(props) {
                             </div>
                             <div className="input-text">
                                 <Autocomplete
-                                    required
-                                    value={storeId.toString()}
+                                    value={storeId ? storeId.toString() : undefined}
                                     onChange={(event, newValue) => {
                                         setStoreId(newValue.toString());
                                     }}
-                                    inputValue={inputStoreId.toString()}
+                                    inputValue={inputStoreId ? inputStoreId.toString() : undefined}
                                     onInputChange={(event, newInputStoreId) => {
                                         setInputStoreId(newInputStoreId.toString());
                                     }}
                                     id="store-field"
                                     autoComplete
                                     options={options}
-                                    renderInput={(params) => <TextField {...params} label="Store" />}
+                                    renderInput={(params) => <TextField required {...params} label="Store" />}
                                 />
                             </div>
                             <LoadingButton
