@@ -2,6 +2,7 @@ import { createMiddlewareSupabaseClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 
 export async function middleware(req) {
+  const pathname = req.nextUrl.pathname;
   const res = NextResponse.next()
   const supabase = createMiddlewareSupabaseClient({ req, res })
   const {data : {session}, error} = await supabase.auth.getSession()
@@ -9,6 +10,13 @@ export async function middleware(req) {
   if (!session) {
     url = new URL('/login', req.url)
     return NextResponse.redirect(url);
+  }
+  const { data: profile } = await supabase
+    .from('profile')
+    .select('id, first_name, last_name, store_id')
+  if (!profile?.store_id && pathname !== '/profile') {
+    // url = new URL('/profile', req.url)
+    // return NextResponse.redirect(url);
   }
   return res;
 }
