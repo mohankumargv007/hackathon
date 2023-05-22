@@ -115,7 +115,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Products" footer={{ title: "Map Adjacencies", link: "/adjacencies" }}>
+    <Layout title="Scan Products" {...props} footer={{ title: "Map Adjacencies", link: "/adjacencies" }}>
       <h3>Parent Product Details:</h3>
       <Stack spacing={2}>
         <Stack spacing={1}>

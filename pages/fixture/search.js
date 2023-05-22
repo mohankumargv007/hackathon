@@ -67,7 +67,7 @@ export default function Fixture(props) {
   }, [page, type, name]);
 
   return (
-    <Layout title="Select Fixture">
+    <Layout title="Select Fixture" {...props}>
       <SearchFixture {...props} fixtureLibrary={fixtureLibrary} fixtureTypes={fixtureTypes} cardhref={`/fixture/`} />
       {fixtureCount/fixturesInPage > 1 &&
         <Pagination fixtureCount={fixtureCount} fixturesInPage={fixturesInPage} pages={Math.ceil(fixtureCount/fixturesInPage)} />

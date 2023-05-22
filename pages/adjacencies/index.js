@@ -55,7 +55,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Product">
+    <Layout title="Scan Product" {...props}>
       <Stack spacing={4}>
         <Scandit btnText="Scan Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
         <Box display="flex">

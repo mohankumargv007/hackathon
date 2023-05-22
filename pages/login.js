@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import cx from 'classnames';
 import { Grid } from "@mui/material";
 import TextField from '@mui/material/TextField';
@@ -12,11 +12,24 @@ import { useUser } from '@supabase/auth-helpers-react'
 export default Login;
 
 function Login(props) {
+    
     const supabase = createBrowserSupabaseClient();
+
+    const getUser = async () => {
+        const {data:profile, error} = await supabase
+            .from('profile')
+            .select('id, first_name, last_name, store_id')
+            .single()
+        props.setUserDetails(profile)
+    };
 
     const router = useRouter();
     
     const user = useUser()
+    useEffect(() => {
+        if (user && loading === false)
+            getUser()
+    }, [user]);
 
     const [loading, setLoading] = React.useState(false);
 
@@ -67,6 +80,7 @@ function Login(props) {
                 setLoading(false);
                 return false;
             }
+            console.log(data)
             router.push("/");
         } catch (error) {
             document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });

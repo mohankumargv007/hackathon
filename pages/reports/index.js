@@ -35,7 +35,7 @@ export default function Fixture(props) {
     };
   }
   return (
-    <Layout title="Reports">
+    <Layout title="Reports" {...props}>
       <NoSsr>
         <BarChart
           width={width}

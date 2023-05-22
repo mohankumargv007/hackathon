@@ -126,7 +126,7 @@ export default function Fixture(props) {
   
   const dt = new Date(_get(props, "data.0.updated_at"));
   return (
-    <Layout title="Scan Products" footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}}>
+    <Layout title="Scan Products" {...props} footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}}>
       <Stack spacing={2}>
         <div>
           <h3 className="no-margig">{fixture.name}</h3>

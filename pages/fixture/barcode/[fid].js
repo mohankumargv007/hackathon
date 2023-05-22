@@ -111,7 +111,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="QRCode Fixture" footer={{title:"QRCode a fixture", link:"/fixture/search"}}>
+    <Layout title="QRCode Fixture" {...props} footer={{title:"QRCode a fixture", link:"/fixture/search"}}>
       <Stack spacing={2}>
         {saved &&
         <Alert severity="success">QRCode saved successfully!</Alert>
