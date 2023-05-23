@@ -13,7 +13,7 @@ export async function middleware(req) {
   }
   const { data: profile } = await supabase
     .from('profile')
-    .select('id, first_name, last_name, store_id')
+    .select('id, first_name, last_name, store_id', 'concept')
     .single()
   if (!profile?.store_id && pathname !== '/profile') {
     url = new URL('/profile', req.url)

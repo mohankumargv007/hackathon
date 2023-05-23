@@ -47,7 +47,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Zone" footer={{title:"Remove Fixture", link:"/fixture/remove"}}>
+    <Layout title="Scan Zone" {...props} footer={{title:"Remove Fixture", link:"/fixture/remove"}}>
       <Stack spacing={4}>
         <Scandit btnText="Scan Zone" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
         <Box display="flex">

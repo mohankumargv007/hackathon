@@ -9,7 +9,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { supabaseConnection } from '../../utils/supabase';
 import { useRouter } from 'next/router';
-import CircularProgress from '@mui/material/CircularProgress';
 import Loading from '../../components/reusable-components/loader';
 import Notification from '../../components/reusable-components/alert'
 
@@ -30,11 +29,11 @@ async function inactiveSelectedFixture(row) {
 //Fetch Fixture Library
 export async function getServerSideProps(res,) {
     // Fetch data from external API
-    const supabase = createBR();
+    const supabase = supabaseConnection();
     let { data, error } = await supabase
-    .from('fixture_library')
-    .select('*')
-    .eq('status', true);
+        .from('fixture_library')
+        .select('*')
+        .eq('status', true);
 
     return { props: { data: data} };
 }
