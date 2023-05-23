@@ -20,6 +20,8 @@
     "@supabase/auth-helpers-nextjs": "^0.6.1",
     "@supabase/auth-helpers-react": "^0.3.1",
     "@supabase/supabase-js": "^2.12.1",
+    "cookie-cutter": "^0.2.0",
+    "cookies": "^0.8.0",
     "keen-slider": "^6.8.5",
     "lodash": "^4.17.21",
     "luxon": "^3.3.0",

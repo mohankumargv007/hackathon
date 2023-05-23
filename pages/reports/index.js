@@ -12,6 +12,7 @@ import {
   Legend
 } from "recharts";
 import Layout from '../../components/layout';
+import Cookies from 'cookies'
 
 export default function Fixture(props) {
   const isServer = typeof window === "undefined";
@@ -59,11 +60,13 @@ export default function Fixture(props) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req, res }) {
+  const cookies = new Cookies(req, res);
+  const storeId = cookies.get('userStoreId') ?? null
   // Fetch data from external API
   const supabase = supabaseConnection();
   let { data, error } = await supabase
-    .rpc('get_report_data', { 'store_id': 60318 })
+    .rpc('get_report_data', { 'store_id': storeId })
   return { props: { data: data } };
 }
 

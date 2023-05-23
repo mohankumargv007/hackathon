@@ -8,6 +8,7 @@ import { LoadingButton } from '@mui/lab';
 import styles from '../styles/Login.module.css';
 import Notification from '../components/reusable-components/alert';
 import { useUser } from '@supabase/auth-helpers-react'
+import cookieCutter from 'cookie-cutter'
 
 export default Login;
 
@@ -20,6 +21,8 @@ function Login(props) {
             .from('profile')
             .select('*')
             .single()
+        cookieCutter.set('userStoreId', profile.store_id)
+        cookieCutter.set('userConceptCode', profile.concept)
         props.setUserDetails(profile)
     };
 
