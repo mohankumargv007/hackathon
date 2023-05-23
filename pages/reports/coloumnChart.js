@@ -115,7 +115,7 @@ export default function ColoumnReport(props) {
 
   return (
 
-    <Layout title="Reports">
+    <Layout title="Reports" {...props}>
       <NoSsr>
         <div id="chart">
           <Chart options={state.options} series={state.series} type="bar" height={350} />
