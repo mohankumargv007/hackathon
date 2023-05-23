@@ -60,7 +60,7 @@ export default function Fixture(props) {
   }
 
   return (
-    <Layout title="Scan Fixture" footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}}>
+    <Layout title="Scan Fixture" {...props} footer={{title:"Map Merchandise", link:"/merchandise/barcode/zone"}}>
       <Stack spacing={4}>
         <Link href={`/merchandise/search?zone=${zone}`} passHref legacyBehavior><Button variant="contained" size="large">Arms, Prongs, Shelves</Button></Link>
         <Scandit btnText="Scan Fixture" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />

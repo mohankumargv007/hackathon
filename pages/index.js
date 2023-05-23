@@ -6,7 +6,7 @@ import styles from '../styles/Home.module.css';
 import { useState } from 'react';
 import SideDrawer from '../components/drawer';
 
-export default function Home() {
+export default function Home(props) {
   const [drawer,setDrawer] = useState(false);
 
   const drawerClose = () => {
@@ -14,7 +14,7 @@ export default function Home() {
   }
 
   return (
-    <Layout title="SMT">
+    <Layout title="SMT" {...props}>
       <Stack spacing={2} sx={{ width: "100%" }}>
         <Link className={styles.btn} href="/merchandise/barcode/zone" passHref legacyBehavior>
           <Button role="map-merchandise" variant="contained" className={styles.btn} size="large">Map Merchandise</Button>

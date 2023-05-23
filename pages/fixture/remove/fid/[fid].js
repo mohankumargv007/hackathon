@@ -43,7 +43,7 @@ export default function Fixture(props) {
     setFcount(event.target.value);
   }
   return (
-    <Layout title="Review Fixture Details" footer={{title:"Remove Fixture", link:"/fixture/remove"}}>
+    <Layout title="Review Fixture Details" {...props} footer={{title:"Remove Fixture", link:"/fixture/remove"}}>
       <Stack spacing={2}>
         <FixtureDetails fixture={fixture} fixtureBarcode={fixturecode} />
         <b>Enter count of Fixtures:</b>
