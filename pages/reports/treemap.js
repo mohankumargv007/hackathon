@@ -7,6 +7,7 @@ import styles from '../../styles/Home.module.css';
 import { useState } from "react";
 import Layout from '../../components/layout';
 import dynamic from 'next/dynamic';
+import Cookies from 'cookies'
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 
@@ -86,16 +87,18 @@ export default function Treemap(props) {
 
 
 }
-export async function getServerSideProps() {
+export async function getServerSideProps({req, res}) {
+  const cookies = new Cookies(req, res);
+  const storeId = cookies.get('userStoreId') ?? null
+  // Fetch data from external API
+  const supabase = supabaseConnection();
+  let { data, error } = await supabase
+      .rpc('get_tree_report_data', { 'store_id': storeId })
+      .select()
 
-    // Fetch data from external API
-    const supabase = supabaseConnection();
-    let { data, error } = await supabase
-        .rpc('get_tree_report_data', { 'store_id': 60318 })
-
-    const reportData = data.map((e)=>{
-      return {x:e.label,y:parseFloat(e.lm).toFixed(2)}
-    })
-    
-    return { props: { data: reportData } };
+  const reportData = data.map((e)=>{
+    return {x:e.label,y:parseFloat(e.lm).toFixed(2)}
+  })
+  
+  return { props: { data: reportData } };
 }
