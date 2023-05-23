@@ -1,7 +1,10 @@
 import _get from 'lodash/get';
 import { supabaseConnection } from '../../utils/supabase';
-import Box from '@mui/material/Box';
 import NoSsr from '@mui/base/NoSsr';
+import SideDrawer from '../../components/drawer';
+import Button from '@mui/material/Button';
+import styles from '../../styles/Home.module.css';
+import {useState} from "react";
 import {
   BarChart,
   Bar,
@@ -13,7 +16,14 @@ import {
 } from "recharts";
 import Layout from '../../components/layout';
 
-export default function Fixture(props) {
+export default function BarChartReport(props) {
+
+  const [drawer,setDrawer] = useState(false);
+
+  const drawerClose = () => {
+    setDrawer(false)
+  }
+
   const isServer = typeof window === "undefined";
   let reportData = getReportData(_get(props, 'data', []));
   let width = 350;
@@ -55,6 +65,8 @@ export default function Fixture(props) {
           <Bar dataKey="Tables" stackId="a" fill="#ff00ff" />
         </BarChart>
       </NoSsr>
+      <Button variant="contained" className={styles.btn} size="large" onClick={() =>setDrawer(true)}>Reports</Button>
+      <SideDrawer handleOpen = {drawer} handleClose = {drawerClose}/>
     </Layout>
   )
 }
@@ -63,7 +75,7 @@ export async function getServerSideProps() {
   // Fetch data from external API
   const supabase = supabaseConnection();
   let { data, error } = await supabase
-    .rpc('get_report_data', { 'store_id': 60318 })
+    .rpc('get_bar_report_data', { 'store_id': 60318 })
   return { props: { data: data } };
 }
 

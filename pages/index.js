@@ -3,8 +3,16 @@ import Button from '@mui/material/Button';
 import Link from 'next/link';
 import Layout from '../components/layout';
 import styles from '../styles/Home.module.css';
+import { useState } from 'react';
+import SideDrawer from '../components/drawer';
 
 export default function Home(props) {
+  const [drawer,setDrawer] = useState(false);
+
+  const drawerClose = () => {
+    setDrawer(false)
+  }
+
   return (
     <Layout title="SMT" {...props}>
       <Stack spacing={2} sx={{ width: "100%" }}>
@@ -20,9 +28,8 @@ export default function Home(props) {
         <Link className={styles.btn} href="/adjacencies" passHref legacyBehavior>
           <Button variant="contained" className={styles.btn} size="large">Map Adjacencies</Button>
         </Link>
-        <Link className={styles.btn} href="/reports" passHref legacyBehavior>
-          <Button variant="contained" className={styles.btn} size="large">Reports</Button>
-        </Link>
+          <Button variant="contained" className={styles.btn} size="large" onClick={() =>setDrawer(true)}>Reports</Button>
+          <SideDrawer handleOpen = {drawer} handleClose = {drawerClose}/>
       </Stack>
     </Layout>
   )
