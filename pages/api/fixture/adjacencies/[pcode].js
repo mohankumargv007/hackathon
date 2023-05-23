@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import _get from 'lodash/get';
 import { supabaseConnection } from '../../../../utils/supabase';
+import Cookies from 'cookies'
 
 // Save barcode
 export default async function handler(req, res) {
@@ -18,6 +19,8 @@ export default async function handler(req, res) {
     }
   } else if (req.method === 'POST') {
 
+    const cookies = new Cookies(req, res);
+    const storeId = cookies.get('userStoreId') ?? null
     const supabase = supabaseConnection();
     const body = JSON.parse(req.body);
     const { parentProd } = body
@@ -33,7 +36,7 @@ export default async function handler(req, res) {
         .select()
         .single()
       return {
-        store_id: 60318,
+        store_id: storeId,
         parent_id: parentProductGroupDepartment.id,
         adjacent_id: groupDepartment.id
       }

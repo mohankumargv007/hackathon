@@ -7,6 +7,7 @@ import styles from '../../styles/Home.module.css';
 import { useState } from "react";
 import Layout from '../../components/layout';
 import dynamic from 'next/dynamic';
+import Cookies from 'cookies'
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 
@@ -131,10 +132,12 @@ export default function ColoumnReport(props) {
 }
 
 
-export async function getServerSideProps() {
-    // Fetch data from external API
-    const supabase = supabaseConnection();
-    let { data, error } = await supabase
-        .rpc('get_bar_report_data', { 'store_id': 60318 })
-    return { props: { data: data } };
+export async function getServerSideProps({res, req}) {
+  const cookies = new Cookies(req, res);
+  const storeId = cookies.get('userStoreId') ?? null
+  // Fetch data from external API
+  const supabase = supabaseConnection();
+  let { data, error } = await supabase
+      .rpc('get_bar_report_data', { 'store_id': storeId })
+  return { props: { data: data } };
 }

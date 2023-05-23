@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Notification from './reusable-components/alert';
 import { LoadingButton } from '@mui/lab';
+import cookieCutter from 'cookie-cutter'
 
 export default function UserProfile(data) {
     const user = _get(data, 'session.session.user', {})
@@ -54,7 +55,7 @@ export default function UserProfile(data) {
 
     const userProfileUpdate = async () => {
         try {
-            if (firstName === '' || lastName === '' || inputStoreId === '' || concept === '') {
+            if (firstName === '' || lastName === '' || storeId === '' || concept === '') {
                 notifyEvent(true, 'warning', 'Please fill the required fields');
                 setLoading(false);
                 return false;
@@ -63,8 +64,8 @@ export default function UserProfile(data) {
                 id: user.id,
                 first_name: firstName,
                 last_name: lastName,
-                store_id: inputStoreId,
-                concept: inputConcept,
+                store_id: storeId,
+                concept: concept,
             };
             setLoading(true)
             let { error } = await supabase.from('profile').upsert(updates);
@@ -73,6 +74,8 @@ export default function UserProfile(data) {
                 throw error;
             }
             data.setUserDetails(updates)
+            cookieCutter.set('userStoreId', updates.store_id)
+            cookieCutter.set('userConceptCode', updates.concept)
             notifyEvent(true, 'success', 'User Profile updated successfully.');
             setLoading(false)
         } catch (error) {
@@ -135,11 +138,11 @@ export default function UserProfile(data) {
                             </div>
                             <div className="input-text">
                                 <Autocomplete
-                                    value={concept ?? undefined}
+                                    value={concept}
                                     onChange={(event, newValue) => {
                                         setConcept(newValue);
                                     }}
-                                    inputValue={inputConcept ?? undefined}
+                                    inputValue={inputConcept}
                                     onInputChange={(event, newInputConcept) => {
                                         setInputConcept(newInputConcept);
                                     }}

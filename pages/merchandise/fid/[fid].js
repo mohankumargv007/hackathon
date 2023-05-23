@@ -7,11 +7,15 @@ import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FixtureDetails from './../../../components/fixture-desc';
 import Layout from '../../../components/layout';
+import Cookies from 'cookies'
 
 import { supabaseConnection } from '../../../utils/supabase';
 
-export async function getServerSideProps(context) {
-  const { fid } = context.query;
+export async function getServerSideProps({ req, res, query }) {
+  const { fid } = query;
+  const cookies = new Cookies(req, res);
+  const storeId = cookies.get('userStoreId') ?? null
+
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -25,14 +29,8 @@ export async function getServerSideProps(context) {
   
  const {data:fixturecode,error:fixturecodeError} = await supabase
     .from('fixture_barcode')
-    .upsert({ store_id: 60318, fixture_key : data.key, counter: 1, fixture_barcode : "60318" + data.key + '001'},{ onConflict: 'fixture_barcode' })
+    .upsert({ store_id: storeId, fixture_key : data.key, counter: 1, fixture_barcode : storeId + data.key + '0001'},{ onConflict: 'fixture_barcode' })
     .select()
-    console.log(fixturecode,fixturecodeError,"araaraaraaraayoremarodholna");
-  // let {data: fixturecode, error: fixturecodeError} = await supabase
-  //   .from('fixture_barcode')
-  //   .select("*")
-  //   .eq('fixture_barcode', `60318${data.key}001`)
-  //   .single()
 
   // Pass data to the page via props
   return { props: { data: data ,fixturecode : fixturecode} };

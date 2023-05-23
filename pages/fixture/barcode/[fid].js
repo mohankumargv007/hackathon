@@ -9,9 +9,12 @@ import QRCode from "react-qr-code";
 import Layout from '../../../components/layout';
 import { supabaseConnection } from '../../../utils/supabase';
 import styles from '../../../styles/Layout.module.css';
+import Cookies from 'cookies'
 
-export async function getServerSideProps(context) {
-  const { fid } = context.query;
+export async function getServerSideProps({ req, res, query }) {
+  const { fid } = query;
+  const cookies = new Cookies(req, res);
+  const storeId = cookies.get('userStoreId') ?? null
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -27,7 +30,7 @@ export async function getServerSideProps(context) {
   let { data: fbdata, error: fberror } = await supabase
   .from('fixture_barcode')
   .select('*')
-  .eq("store_id", 60318)
+  .eq("store_id", storeId)
   .eq("fixture_key", fixture_library.key)
   .order("counter", {ascending: false})
   .range(0,0)
@@ -67,7 +70,7 @@ const printPageArea = areaID => {
 export default function Fixture(props) {
   const fixture = _get(props, "data", {});
   const fixture_barcode = _get(props, "fbdata", {});
-  const store_code = 60318;
+  const store_code = props.userDetails?.store_id;
   let counter = ''
   if(fixture_barcode.counter) {
     counter = fixture_barcode.counter + 1;
@@ -88,7 +91,7 @@ export default function Fixture(props) {
   const saveBarcode = (code) => async () => {
     const url = `/api/fixture/barcode/${code}`;
     let postData = {
-      'storeId' : 60318,
+      'storeId' : store_code,
       'fixtureKey' : fixture.key,
       'counter' : counter,
       'barcode' : code

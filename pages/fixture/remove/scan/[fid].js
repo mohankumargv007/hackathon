@@ -18,12 +18,15 @@ import { TextField } from '@mui/material'
 import Layout from '../../../../components/layout';
 import Notification from "../../../../components/reusable-components/alert"
 import { supabaseConnection } from '../../../../utils/supabase';
+import Cookies from 'cookies'
 const Scandit = dynamic(() => import('../../../../components/scandit'), {
   ssr: false,
 })
 
-export async function getServerSideProps(context) {
-  const { fid, count } = context.query;
+export async function getServerSideProps({ req, res, query }) {
+  const { fid, count } = query;
+  const cookies = new Cookies(req, res);
+  const storeId = cookies.get('userStoreId') ?? null
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -38,7 +41,7 @@ export async function getServerSideProps(context) {
   const { data: fbdata, error: fberror } = await supabase
     .from('fixture_barcode')
     .select('*')
-    .eq('fixture_barcode', `60318${fixture.key}001`)
+    .eq('fixture_barcode', `${storeId}${fixture.key}0001`)
     .range(0, 0)
   return {
     props: {

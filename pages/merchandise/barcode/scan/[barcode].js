@@ -20,7 +20,6 @@ import { TextField } from '@mui/material';
 import Layout from '../../../../components/layout';
 import Notification from "../../../../components/reusable-components/alert";
 import { supabaseConnection } from '../../../../utils/supabase';
-import { useUserContext } from './../../../../contexts/userContext';
 const Scandit = dynamic(() => import('../../../../components/scandit'), {
   ssr: false,
 })
@@ -44,8 +43,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function Fixture(props) {
-  const loginDetails = useUserContext();
-  const {storeId} = loginDetails
+  const storeId = props.userDetails?.store_id
   const router = useRouter();
   const zone = _get(router,'query.zone','')
   const barcode = _get(router, "query.barcode", "");

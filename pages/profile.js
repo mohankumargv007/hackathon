@@ -16,7 +16,7 @@ export async function getServerSideProps({ req, res }) {
     let { data: session} = await supabase.auth.getSession()
     let { data: profile } = await supabase
         .from('profile')
-        .select('id, first_name, last_name, store_id','concept')
+        .select('*')
         .single()
     return { props: { stores: stores, session, profile: profile } };
 }

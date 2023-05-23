@@ -8,11 +8,14 @@ import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FixtureDetails from './../../../../components/fixture-desc';
 import Layout from '../../../../components/layout';
+import Cookies from 'cookies'
 
 import { supabaseConnection } from '../../../../utils/supabase';
 
-export async function getServerSideProps(context) {
-  const { fid } = context.query;
+export async function getServerSideProps({ req, res, query }) {
+  const { fid } = query;
+  const cookies = new Cookies(req, res);
+  const storeId = cookies.get('userStoreId') ?? null
 
   // Fetch data from external API
   const supabase = supabaseConnection();
@@ -26,7 +29,7 @@ export async function getServerSideProps(context) {
     let {data: fixturecode, error: fixturecodeError} = await supabase
     .from('fixture_barcode')
     .select("*")
-    .eq('fixture_barcode', `60318${data[0]?.key}001`)
+    .eq('fixture_barcode', `${storeId}${data[0]?.key}0001`)
     .single()
 
   // Pass data to the page via props
