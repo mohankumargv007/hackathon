@@ -1,7 +1,10 @@
 import _get from 'lodash/get';
 import { supabaseConnection } from '../../utils/supabase';
-import Box from '@mui/material/Box';
 import NoSsr from '@mui/base/NoSsr';
+import SideDrawer from '../../components/drawer';
+import Button from '@mui/material/Button';
+import styles from '../../styles/Home.module.css';
+import {useState} from "react";
 import {
   BarChart,
   Bar,
@@ -14,7 +17,14 @@ import {
 import Layout from '../../components/layout';
 import Cookies from 'cookies'
 
-export default function Fixture(props) {
+export default function BarChartReport(props) {
+
+  const [drawer,setDrawer] = useState(false);
+
+  const drawerClose = () => {
+    setDrawer(false)
+  }
+
   const isServer = typeof window === "undefined";
   let reportData = getReportData(_get(props, 'data', []));
   let width = 350;
@@ -56,6 +66,8 @@ export default function Fixture(props) {
           <Bar dataKey="Tables" stackId="a" fill="#ff00ff" />
         </BarChart>
       </NoSsr>
+      <Button variant="contained" className={styles.btn} size="large" onClick={() =>setDrawer(true)}>Reports</Button>
+      <SideDrawer handleOpen = {drawer} handleClose = {drawerClose}/>
     </Layout>
   )
 }
