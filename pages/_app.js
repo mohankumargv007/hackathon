@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps = {}, scandit_licence_key }) {
 	const getUser = async () => {
 		const {data:profile, error} = await supabaseClient
 			.from('profile')
-			.select('id, first_name, last_name, store_id', 'concept')
+			.select('*')
 			.single()
 		setUserDetails(profile)
 	};

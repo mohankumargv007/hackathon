@@ -18,7 +18,7 @@ function Login(props) {
     const getUser = async () => {
         const {data:profile, error} = await supabase
             .from('profile')
-            .select('id, first_name, last_name, store_id')
+            .select('*')
             .single()
         props.setUserDetails(profile)
     };
@@ -26,10 +26,6 @@ function Login(props) {
     const router = useRouter();
     
     const user = useUser()
-    useEffect(() => {
-        if (user && loading === false)
-            getUser()
-    }, [user]);
 
     const [loading, setLoading] = React.useState(false);
 
@@ -80,7 +76,8 @@ function Login(props) {
                 setLoading(false);
                 return false;
             }
-            console.log(data)
+            if (data)
+                getUser()
             router.push("/");
         } catch (error) {
             document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
