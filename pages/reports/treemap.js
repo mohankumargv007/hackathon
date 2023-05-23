@@ -93,9 +93,7 @@ export async function getServerSideProps({req, res}) {
   // Fetch data from external API
   const supabase = supabaseConnection();
   let { data, error } = await supabase
-      .rpc('get_tree_report_data', { 'store_id': storeId })
-      .select()
-
+      .rpc('get_tree_report_data', { '__store_id': storeId })
   const reportData = data.map((e)=>{
     return {x:e.label,y:parseFloat(e.lm).toFixed(2)}
   })

@@ -74,8 +74,8 @@ export default function UserProfile(data) {
                 throw error;
             }
             data.setUserDetails(updates)
-            cookieCutter.set('userStoreId', updates.store_id)
-            cookieCutter.set('userConceptCode', updates.concept)
+            cookieCutter.set('userStoreId', updates.store_id, {path: '/'})
+            cookieCutter.set('userConceptCode', updates.concept, {path: '/'})
             notifyEvent(true, 'success', 'User Profile updated successfully.');
             setLoading(false)
         } catch (error) {
