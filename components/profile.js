@@ -22,9 +22,11 @@ export default function UserProfile(data) {
     const concepts = [
         'Max',
         'Homecentre',
-        'Centrepoint',
+        'Babyshop',
+        'Homebox',
+        'Splash',
         'Lifestyle',
-        'Emax'
+        'Shotmart'
     ];
 
     const [toastStatus, setToastStatus] = React.useState(false);
