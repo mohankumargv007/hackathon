@@ -25,7 +25,7 @@ export default function Fixture(props) {
 
   const _onDetected = useCallback((result) => {
     setResults([""]);
-    if (result.length > 5) {
+    if (result.length < 6) {
       setResults([result])
     }
   }, []);
