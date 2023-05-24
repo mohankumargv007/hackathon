@@ -138,6 +138,6 @@ export async function getServerSideProps({res, req}) {
   // Fetch data from external API
   const supabase = supabaseConnection();
   let { data, error } = await supabase
-      .rpc('get_bar_report_data', { 'store_id': storeId })
+      .rpc('get_bar_report_data', { '__store_id': storeId })
   return { props: { data: data } };
 }

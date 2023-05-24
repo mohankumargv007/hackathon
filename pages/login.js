@@ -21,8 +21,8 @@ function Login(props) {
             .from('profile')
             .select('*')
             .single()
-        cookieCutter.set('userStoreId', profile.store_id)
-        cookieCutter.set('userConceptCode', profile.concept)
+        cookieCutter.set('userStoreId', profile.store_id, {path: '/'})
+        cookieCutter.set('userConceptCode', profile.concept, {path: '/'})
         props.setUserDetails(profile)
     };
 
