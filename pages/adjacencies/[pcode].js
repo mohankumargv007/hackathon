@@ -125,7 +125,7 @@ export default function Fixture(props) {
           <b>Class : {parentProd.class}</b>
           <h3>Add Products</h3>
         </Stack>
-        <Scandit btnText="Scan Child Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
+        <Scandit btnText="Scan Adjacent Product" onDetected={_onDetected} scandit_licence_key={_get(props, "scandit_licence_key")} />
         <Box paddingTop="10px">
           <Box display="flex">
             <TextField
