@@ -1,0 +1,9 @@
+{
+    "version": 2,
+    "env": {
+      "API_URL": "@api-url",
+      "DEBUG_MODE": "@debug-mode"
+    },
+    "alias": "hackathon-dev-alpha-neon.vercel.app/",
+    "name": "my-app-dev"
+}
