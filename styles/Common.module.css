@@ -12,3 +12,44 @@
 .marginTop {
     margin-top: 10%;
 }
+
+.dropFilesBox {
+    padding: 7% 0px 4% 0px;
+    border: 2px dashed;
+    background: #f1f5f7;
+    margin: 6%;
+}
+
+.selectFromComputer {
+    color: #6559f5;
+    cursor: pointer;
+}
+
+
+.updateDropFilesBox {
+    padding: 12% 0px 8% 0px;
+    border: 2px dashed;
+    background: #f1f5f7;
+}
+
+.sampleCsvLine {
+    font-size: medium;
+    color: gray;
+    font-weight: 500;
+    margin: 0px 0px 25px;
+}
+
+.margin {
+    margin: 10px 0px 0px 0px;
+}
+
+.conceptStyle {
+    text-transform: uppercase;
+    padding-left: 20px;
+}
+
+.conceptStyleEmail {
+    text-transform: uppercase;
+    padding-left: 20px;
+    margin: 20% 43%;
+}

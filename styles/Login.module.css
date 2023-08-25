@@ -1,6 +1,6 @@
 
 .form-signin {
-    border: 1px solid #c4e3fa;
+    border: 2px solid #6aa5b4;
     width: 100%;
     max-width: 377px;
     padding: 26px;
@@ -12,7 +12,7 @@
 
 .login-card {
     width: 100%;
-    max-width: 330px;
+    max-width: 600px;
     padding: 0px 0px 15px 15px;
     margin: auto;
 }

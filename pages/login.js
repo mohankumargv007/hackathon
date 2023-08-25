@@ -7,24 +7,16 @@ import { useRouter } from 'next/router';
 import { LoadingButton } from '@mui/lab';
 import styles from '../styles/Login.module.css';
 import Notification from '../components/reusable-components/alert';
-import { useUser } from '@supabase/auth-helpers-react'
-import cookieCutter from 'cookie-cutter'
+import { useUser } from '@supabase/auth-helpers-react';
+import cookieCutter from 'cookie-cutter';
+
 
 export default Login;
+
 
 function Login(props) {
     
     const supabase = createBrowserSupabaseClient();
-
-    const getUser = async () => {
-        const {data:profile, error} = await supabase
-            .from('profile')
-            .select('*')
-            .single()
-        cookieCutter.set('userStoreId', profile.store_id, {path: '/'})
-        cookieCutter.set('userConceptCode', profile.concept, {path: '/'})
-        props.setUserDetails(profile)
-    };
 
     const router = useRouter();
     
@@ -33,7 +25,7 @@ function Login(props) {
     const [loading, setLoading] = React.useState(false);
 
     if (user && loading === false) {
-        router.replace('/')
+       router.push('/cc/inward')
     }
 
     const [toastStatus, setToastStatus] = React.useState(false);
@@ -79,9 +71,33 @@ function Login(props) {
                 setLoading(false);
                 return false;
             }
-            if (data)
-                getUser()
-            router.push("/");
+            var user_type = '';
+            if(credentials.email.includes('concept')) {
+                user_type = 'concept';
+            } else {
+                user_type = 'studio';
+            }
+
+            var user_concept = '';
+            if(credentials.email.includes('max')) {
+                user_concept = 'max';
+            }
+
+            if(credentials.email.includes('homecentre')) {
+                user_concept = 'homecentre';
+            }
+
+            if(credentials.email.includes('homebox')) {
+                user_concept = 'homebox';
+            }
+
+            if(credentials.email.includes('homebox')) {
+                user_concept = 'lifestyle';
+            }
+            
+            localStorage.setItem('user_type', user_type);
+            localStorage.setItem('user_concept', user_concept);
+            router.push("/cc/inward");
         } catch (error) {
             document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
             router.reload();
@@ -119,7 +135,7 @@ function Login(props) {
             <style global jsx>{`
                 body {
                     background-repeat: no-repeat;
-                    background: url("/smt_bg.jpg");
+                    background: url("/login_bg_2.webp");
                     -webkit-background-size: 100%;
                     -moz-background-size: 100%;
                     -o-background-size: 100%;
@@ -130,7 +146,7 @@ function Login(props) {
         <main className={cx(styles["form-signin"] ,"text-center","mt-5")}>
             <div className={styles["login-card"]}>
                 <form autoComplete="off">
-                    <h2 style={{textAlign:"center"}}>SMT LOGIN</h2>
+                    <h2 style={{textAlign:"center"}}>LOGIN</h2>
                     <Grid container spacing={2}
                     direction="row"
                     justifyContent="center"
@@ -179,6 +195,7 @@ function Login(props) {
                             onClick={submitCredentials}
                             loading={loading}
                             variant="contained"
+                            color="secondary"
                             >
                             <span>Sign In</span>
                             </LoadingButton>
