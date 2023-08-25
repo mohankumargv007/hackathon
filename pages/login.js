@@ -117,6 +117,8 @@ function Login(props) {
         setToastMessage(message);
     }
     
+    const apiKey = process.env.ENV_NAME;
+
     return (
         <>
         <div>
@@ -146,7 +148,7 @@ function Login(props) {
         <main className={cx(styles["form-signin"] ,"text-center","mt-5")}>
             <div className={styles["login-card"]}>
                 <form autoComplete="off">
-                    <h2 style={{textAlign:"center"}}>FT New</h2>
+                    <h2 style={{textAlign:"center"}}>{apiKey}</h2>
                     <Grid container spacing={2}
                     direction="row"
                     justifyContent="center"
