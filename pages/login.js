@@ -9,6 +9,7 @@ import styles from '../styles/Login.module.css';
 import Notification from '../components/reusable-components/alert';
 import { useUser } from '@supabase/auth-helpers-react';
 import cookieCutter from 'cookie-cutter';
+import ApiKeyComponent from '../components/ApiKeyComponent'
 
 
 export default Login;
@@ -148,7 +149,7 @@ function Login(props) {
         <main className={cx(styles["form-signin"] ,"text-center","mt-5")}>
             <div className={styles["login-card"]}>
                 <form autoComplete="off">
-                    <h2 style={{textAlign:"center"}}>{apiKey}</h2>
+                    <h2 style={{textAlign:"center"}}><ApiKeyComponent /></h2>
                     <Grid container spacing={2}
                     direction="row"
                     justifyContent="center"
