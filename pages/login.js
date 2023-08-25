@@ -146,7 +146,7 @@ function Login(props) {
         <main className={cx(styles["form-signin"] ,"text-center","mt-5")}>
             <div className={styles["login-card"]}>
                 <form autoComplete="off">
-                    <h2 style={{textAlign:"center"}}>LOGIN DEV</h2>
+                    <h2 style={{textAlign:"center"}}>FT</h2>
                     <Grid container spacing={2}
                     direction="row"
                     justifyContent="center"
