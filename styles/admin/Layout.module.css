@@ -1,0 +1,80 @@
+.listItem, .listItemActive {
+    padding: 12px;
+}
+
+.listItemActive {
+    background-color: #2582c5;
+    color: white;
+    border-radius: 5px;
+}
+
+.listItem .active {
+    background-color: #2582c5;
+    color: white;
+    border-radius: 5px;
+}
+
+.mainLayout {
+    margin: 25px 0px 0px 0px;
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    height: 97%;
+    border: 1px solid #ddd4d4;
+}
+
+.blockMainHight {
+    min-height: 100px;
+    background-color: #cbd0d8;
+    color: black;
+}
+
+.tablePadding {
+    padding: 25px;
+    margin-top: 25px;
+}
+
+.innderModalPadd {
+    padding: 40px !important;
+}
+
+.marginLeft0 {
+    margin-left: 0px;
+}
+
+.loader {
+    width: 40px !important;
+    height: 40px !important;
+    position: fixed !important;
+    display: block !important;
+    top: 45% !important;
+    left: 50% !important;
+    text-align: center !important;
+    z-index: 2000 !important;
+}
+
+.iconPadd {
+    margin-left: 0px !important;
+}
+
+.logo {
+    height: 36px;
+    margin: 40px;
+}
+
+/* Media Query for Laptops and Desktops */
+@media (min-width: 1025px) and (max-width: 1280px){
+    .stylesModal {
+        width: 50%;
+        float: right;
+    }
+}
+  
+/* Media Query for Large screens */
+@media (min-width: 1281px) {
+    .stylesModal {
+        width: 50%;
+        float: right;
+    }
+}
+
