@@ -24,3 +24,5 @@ yarn dev
   2. npm install --production
   3. npm run build
   4. npm run start => Default port is 3000   OR   PORT=8003 npm run start => PORT from command line
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/3ff8cfdb-1c44-4ab7-b2cf-75bfda4fec90/deploy-status)](https://app.netlify.com/sites/stately-chimera-70e459/deploys)
